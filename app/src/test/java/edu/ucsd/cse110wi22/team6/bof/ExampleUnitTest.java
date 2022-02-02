@@ -14,4 +14,10 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void name_isCorrect(){
+        BoF tmp = new BoF("Alex");
+        assertEquals(tmp.getName(), "Alex");
+    }
 }
