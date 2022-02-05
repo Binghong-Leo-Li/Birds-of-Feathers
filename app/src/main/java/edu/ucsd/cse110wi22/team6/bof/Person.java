@@ -8,6 +8,12 @@ public class Person implements IPerson {
     List<Course> courseList;
     String photoURL;
 
+    public Person(String name, List<Course> courseList, String photoURL) {
+        this.name = name;
+        this.courseList = courseList;
+        this.photoURL = photoURL;
+    }
+
     @Override
     public String getName() {
         return name;

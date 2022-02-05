@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected BoFsViewAdapter personsViewAdapter;
 
     // Dummy
-    public List<BoF> dummyBofs = Arrays.asList(
-            new BoF("John Appleseed"),
-            new BoF("William Griswold")
+    public List<Person> dummyPeople = Arrays.asList(
+            new Person("John Appleseed", new ArrayList<>(), ""),
+            new Person("William Griswold", new ArrayList<>(), "")
     );
 
     @Override
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         personsLayoutManager = new LinearLayoutManager(this);
         bofRecyclerView.setLayoutManager(personsLayoutManager);
 
-        personsViewAdapter = new BoFsViewAdapter(dummyBofs);
+        personsViewAdapter = new BoFsViewAdapter(dummyPeople);
         bofRecyclerView.setAdapter(personsViewAdapter);
     }
 }
