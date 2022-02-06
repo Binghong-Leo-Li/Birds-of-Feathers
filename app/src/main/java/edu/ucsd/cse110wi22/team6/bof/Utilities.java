@@ -1,5 +1,8 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,6 +18,21 @@ public class Utilities {
         }
         return Arrays.stream(courseList.split(",")).map(Utilities::parseCourse)
                 .collect(Collectors.toList());
+    }
+
+    public static void showAlert(Activity activity, String message) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
+
+        alertBuilder
+                .setTitle("Alert!")
+                .setMessage(message)
+                .setPositiveButton("Ok", (dialog, id) -> {
+                    dialog.cancel();
+                })
+                .setCancelable(true);
+
+        AlertDialog alertDialog = alertBuilder.create();
+        alertDialog.show();
     }
 
     // No input validation is performed
