@@ -3,19 +3,19 @@ package edu.ucsd.cse110wi22.team6.bof;
 
 
 public class Course {
-    String year;
+    int year;
     String quarter;
-    String courseName;
-    String courseNumber;
+    String subject;
+    int courseNumber;
 
-    Course(String year, String quarter, String courseName, String courseNumber) {
+    Course(int year, String quarter, String subject, int courseNumber) {
         this.year = year;
         this.quarter = quarter;
-        this.courseName = courseName;
+        this.subject = subject;
         this.courseNumber = courseNumber;
     }
 
-    String getYear() {
+    int getYear() {
         return year;
     }
 
@@ -23,11 +23,11 @@ public class Course {
         return quarter;
     }
 
-    String getCourseName() {
-        return courseName;
+    String getSubject() {
+        return subject;
     }
 
-    String getCourseNumber() {
+    int getCourseNumber() {
         return courseNumber;
     }
 
