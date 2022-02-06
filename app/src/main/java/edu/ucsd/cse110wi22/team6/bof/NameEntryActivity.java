@@ -28,7 +28,16 @@ public class NameEntryActivity extends AppCompatActivity {
         EditText firstNameView = findViewById(R.id.first_name_view);
         editor.putString("name", firstNameView.getText().toString());
 
+        String nameEntered = firstNameView.getText().toString();
+
+        if (nameEntered.length() == 0) {
+            Utilities.showAlert(this, "Please enter non-empty name!");
+            return;
+        }
+
         editor.apply();
+
+
 
         // Sample Photo URL: Kevin's GitHub avatar
         editor.putString("photoUrl", "https://avatars.githubusercontent.com/u/32375681?v=4");
