@@ -5,6 +5,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,9 +21,26 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void name_isCorrect(){
+    public void testPerson(){
         List<Course> courses = new ArrayList<>();
         IPerson tmp = new Person("Alex", courses, "https://www.example.com/nothing");
-        assertEquals(tmp.getName(), "Alex");
+        assertEquals("Alex", tmp.getName());
+        assertTrue(tmp.getCourseList().isEmpty());
+        assertEquals("https://www.example.com/nothing", tmp.getUrl());
+    }
+
+    @Test
+    public void testParseCourse() {
+        assertEquals(new Course(2020, "WI", "CSE", "15L"), Utilities.parseCourse("2020 WI CSE 15L"));
+    }
+
+    @Test
+    public void testParseCourseList() {
+        assertEquals(Collections.emptyList(), Utilities.parseCourseList(""));
+        assertEquals(Collections.singletonList(new Course(2019, "SP", "ECE", "65")),
+                Utilities.parseCourseList("2019 SP ECE 65"));
+        assertEquals(Arrays.asList(new Course(2019, "SP", "ECE", "65"),
+                new Course(2018, "FA", "CSE", "100")),
+                Utilities.parseCourseList("2019 SP ECE 65,2018 FA CSE 100"));
     }
 }
