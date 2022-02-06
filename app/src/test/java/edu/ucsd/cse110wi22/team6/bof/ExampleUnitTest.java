@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,10 +17,7 @@ import java.util.List;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
+
 
     @Test
     public void testPerson(){
@@ -32,6 +31,51 @@ public class ExampleUnitTest {
     @Test
     public void testParseCourse() {
         assertEquals(new Course(2020, "WI", "CSE", "15L"), Utilities.parseCourse("2020 WI CSE 15L"));
+    }
+
+    @Test
+    public void testCourseConstructor() {
+        Course exampleCourse = new Course(2021, "Fall", "CSE", "110");
+        assertEquals(2021, exampleCourse.year);
+        assertEquals("Fall", exampleCourse.quarter);
+        assertEquals("CSE", exampleCourse.subject);
+        assertEquals("110", exampleCourse.courseNumber);
+    }
+
+    @Test
+    public void testCourseGetter() {
+        Course exampleCourse = new Course(2021, "Fall", "CSE", "110");
+        assertEquals(2021, exampleCourse.getYear());
+        assertEquals("Fall", exampleCourse.getQuarter());
+        assertEquals("CSE", exampleCourse.getSubject());
+        assertEquals("110", exampleCourse.getCourseNumber());
+    }
+
+    @Test
+    public void testCourseToString() {
+        Course exampleCourse = new Course(2021, "Fall", "CSE", "110");
+        assertEquals("2021 Fall CSE 110", exampleCourse.toString());
+    }
+
+    @Test
+    public void testCourseEquals() {
+        Course exampleCourse1 = new Course(2021, "Fall", "CSE", "110");
+        Course exampleCourse2 = new Course(2021, "Fall", "CSE", "110");
+        assertEquals(true, exampleCourse1.equals(exampleCourse2));
+    }
+
+    @Test
+    public void testCourseNotEquals() {
+        Course exampleCourse1 = new Course(2021, "Fall", "CSE", "110");
+        Course exampleCourse2 = new Course(2022, "Winter", "CSE", "110");
+        assertEquals(false, exampleCourse1.equals(exampleCourse2));
+    }
+
+    @Test
+    public void testCourseHasCode() {
+        Course exampleCourse1 = new Course(2021, "Fall", "CSE", "110");
+        assertEquals("-2134766286", String.valueOf(exampleCourse1.hashCode()));
+
     }
 
     @Test
