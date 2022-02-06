@@ -1,5 +1,6 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHolder> {
-    private final List<? extends BoF> bofs;
+    private List<? extends IPerson> people;
 
-    public BoFsViewAdapter(List<? extends BoF> bofs) {
+    public BoFsViewAdapter(List<? extends IPerson> people) {
         super();
-        this.bofs = bofs;
+        this.people = people;
     }
 
     @NonNull
@@ -30,19 +31,25 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull BoFsViewAdapter.ViewHolder holder, int position) {
-        holder.setBof(bofs.get(position));
+        holder.setPerson(people.get(position));
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setPeopleList(List<? extends IPerson> newPeople) {
+        people = newPeople;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return this.bofs.size();
+        return this.people.size();
     }
 
     public static class ViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         private final TextView personNameView;
-        private BoF person;
+        private IPerson person;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -50,7 +57,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
             itemView.setOnClickListener(this);
         }
 
-        public void setBof(BoF person) {
+        public void setPerson(IPerson person) {
             this.person = person;
             this.personNameView.setText(person.getName());
         }
