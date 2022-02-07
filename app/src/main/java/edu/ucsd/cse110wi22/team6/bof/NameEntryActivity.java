@@ -6,8 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class NameEntryActivity extends AppCompatActivity {
 
@@ -27,15 +35,27 @@ public class NameEntryActivity extends AppCompatActivity {
         EditText firstNameView = findViewById(R.id.first_name_view);
         storage.setName(firstNameView.getText().toString());
 
+        EditText URLView = findViewById(R.id.URL_view);
+        storage.setPhotoUrl(URLView.getText().toString());
+
+
         String nameEntered = firstNameView.getText().toString();
+        String URLEntered = URLView.getText().toString();
 
         if (nameEntered.length() == 0) {
             Utilities.showAlert(this, "Please enter non-empty name!");
             return;
         }
-        // Sample Photo URL: Kevin's GitHub avatar
-        storage.setPhotoUrl("https://avatars.githubusercontent.com/u/32375681?v=4");
-        // TODO: actually ask for photo URL
+
+        if (URLEntered.length() == 0) {
+            Utilities.showAlert(this, "Please enter non-empty URL!");
+            return;
+        }
+
+        if(!URLUtil.isValidUrl(URLEntered)) {
+            Utilities.showAlert(this, "Please enter valid photo URL!");
+            return;
+        }
 
         Intent intent = new Intent(this, CourseEntryActivity.class);
         startActivity(intent);
