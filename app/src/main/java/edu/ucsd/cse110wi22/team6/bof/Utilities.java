@@ -8,6 +8,7 @@ import android.content.Context;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -73,5 +74,14 @@ public class Utilities {
         Set<Course> aCourseList = new HashSet<>(a.getCourseList());
         aCourseList.retainAll(new HashSet<>(b.getCourseList()));
         return aCourseList.size();
+    }
+
+    public static List<IPerson> getBofList(IPerson user, List<IPerson> nearbyPeople) {
+        return nearbyPeople
+                .stream()
+                .filter(person -> Utilities.numCoursesTogether(user, person) > 0)
+                .sorted(Comparator.comparingInt((IPerson person) ->
+                        Utilities.numCoursesTogether(user, person)).reversed())
+                .collect(Collectors.toList());
     }
 }

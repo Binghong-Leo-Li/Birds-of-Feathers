@@ -56,11 +56,8 @@ public class MainActivity extends AppCompatActivity {
                         Utilities.numCoursesTogether(user, person) +
                         " classes in common");
             }
-            personsViewAdapter.setPeopleList(dummyNearbyPeople
-                    .stream()
-                    .sorted(Comparator.comparingInt((IPerson person) ->
-                            Utilities.numCoursesTogether(user, person)).reversed())
-                    .collect(Collectors.toList()));
+
+            personsViewAdapter.setPeopleList(Utilities.getBofList(user, dummyNearbyPeople));
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");
