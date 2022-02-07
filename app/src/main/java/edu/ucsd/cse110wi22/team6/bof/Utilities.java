@@ -1,7 +1,10 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,6 +14,20 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Utilities {
+    private static boolean persistence = false;
+
+    public static IUserInfoStorage getStorageInstance(Context context) {
+        if (persistence) {
+            return new SharedPreferencesStorage(context.getSharedPreferences(Constants.PREFERENCE_STRING, MODE_PRIVATE));
+        } else {
+            return InMemoryStorage.getInstance();
+        }
+    }
+
+    public static void setPersistence(boolean persistence) {
+        Utilities.persistence = persistence;
+    }
+
     // TODO: write unit tests for this
     public static List<Course> parseCourseList(String courseList) {
         if (courseList.isEmpty()) {
@@ -47,6 +64,10 @@ public class Utilities {
     }
 
     // TODO: do the inverse: construct string from course list
+
+    public static String encodeCourseList(List<Course> courses) {
+        return courses.stream().map(Course::toString).collect(Collectors.joining(","));
+    }
 
     public static int numCoursesTogether(IPerson a, IPerson b) {
         Set<Course> aCourseList = new HashSet<>(a.getCourseList());
