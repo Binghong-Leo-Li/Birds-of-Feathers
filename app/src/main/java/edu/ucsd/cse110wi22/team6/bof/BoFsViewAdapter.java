@@ -14,6 +14,10 @@ import java.util.List;
 public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHolder> {
     private List<? extends IPerson> people;
 
+    public List<? extends IPerson> getListBoFs(){
+        return this.people;
+    }
+
     public BoFsViewAdapter(List<? extends IPerson> people) {
         super();
         this.people = people;
