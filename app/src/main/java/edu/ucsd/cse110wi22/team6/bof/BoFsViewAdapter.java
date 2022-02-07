@@ -54,6 +54,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
         ViewHolder(View itemView) {
             super(itemView);
             this.personNameView = itemView.findViewById(R.id.bof_row_name);
+
             itemView.setOnClickListener(this);
         }
 

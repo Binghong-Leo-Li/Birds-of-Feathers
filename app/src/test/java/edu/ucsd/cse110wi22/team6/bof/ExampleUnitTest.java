@@ -74,7 +74,8 @@ public class ExampleUnitTest {
     @Test
     public void testCourseHasCode() {
         Course exampleCourse1 = new Course(2021, "Fall", "CSE", "110");
-        assertEquals("-2134766286", String.valueOf(exampleCourse1.hashCode()));
+        Course exampleCourse2 = new Course(2021, "Fall", "CSE", "110");
+        assertEquals(exampleCourse1.hashCode(), exampleCourse1.hashCode());
 
     }
 
