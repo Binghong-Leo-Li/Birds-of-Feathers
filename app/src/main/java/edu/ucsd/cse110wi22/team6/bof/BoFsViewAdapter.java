@@ -13,6 +13,7 @@ import java.util.List;
 
 public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHolder> {
     private List<? extends IPerson> people;
+    private IPerson user;
 
     public List<? extends IPerson> getListBoFs(){
         return this.people;
@@ -30,7 +31,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
                 .from(parent.getContext())
                 .inflate(R.layout.bof_row, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(user, view);
     }
 
     @Override
@@ -44,6 +45,12 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void setUser(IPerson user) {
+        this.user = user;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return this.people.size();
@@ -53,17 +60,24 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         private final TextView personNameView;
+        private final TextView numCommonCoursesView;
+        private final IPerson user;
         private IPerson person;
 
-        ViewHolder(View itemView) {
+        ViewHolder(IPerson user, View itemView) {
             super(itemView);
+            this.user = user;
             this.personNameView = itemView.findViewById(R.id.bof_row_name);
+            this.numCommonCoursesView = itemView.findViewById(R.id.num_common_courses_view);
             itemView.setOnClickListener(this);
         }
 
         public void setPerson(IPerson person) {
             this.person = person;
             this.personNameView.setText(person.getName());
+            if (user != null)
+                this.numCommonCoursesView.setText(
+                        String.valueOf(Utilities.numCoursesTogether(user, person)));
         }
 
         @Override
