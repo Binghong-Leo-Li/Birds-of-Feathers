@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     protected RecyclerView.LayoutManager personsLayoutManager;
     protected BoFsViewAdapter personsViewAdapter;
     private IPerson user;
+    private IUserInfoStorage storage;
 
     // Dummy
     public List<IPerson> nobody = Collections.emptyList();
@@ -43,12 +44,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "MainActivity.onStart() called");
-        SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE_STRING, MODE_PRIVATE);
-        if (prefs.getBoolean("initialized", false)) {
+        if (storage.isInitialized()) {
             Log.d(TAG, "App has gone through first time setup already");
-            user = new Person(prefs.getString("name", ""),
-                    Utilities.parseCourseList(prefs.getString("courses", "")),
-                    prefs.getString("photoUrl", ""));
+            user = new Person(storage.getName(),
+                    storage.getCourseList(),
+                    storage.getPhotoUrl());
 
             for (IPerson person : dummyNearbyPeople) {
                 Log.d(TAG, person.getName() +
@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "MainActivity.onCreate() called");
+
+        storage = Utilities.getStorageInstance(this);
 
         bofRecyclerView = findViewById(R.id.bof_list);
 

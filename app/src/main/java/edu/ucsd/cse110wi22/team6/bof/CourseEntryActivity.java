@@ -26,16 +26,14 @@ public class CourseEntryActivity extends AppCompatActivity {
     }
 
     private void onDone(View view) {
-        SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE_STRING, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        IUserInfoStorage storage = Utilities.getStorageInstance(this);
 
         // TODO: Currently just use a hardcoded string for list of classes to exemplify
         // the format of the data
-        editor.putString("courses",
-                "2022 WI CSE 110,2021 FA CSE 100,2021 FA ECE 65,2020 FA CSE 11");
-        editor.putBoolean("initialized", true);
-
-        editor.apply();
+        storage.setCourseList(Utilities.parseCourseList(
+                "2022 WI CSE 110,2021 FA CSE 100,2021 FA ECE 65,2020 FA CSE 11"
+        ));
+        storage.setInitialized(true);
 
         // Return to home
         Intent intent = new Intent(this, MainActivity.class);

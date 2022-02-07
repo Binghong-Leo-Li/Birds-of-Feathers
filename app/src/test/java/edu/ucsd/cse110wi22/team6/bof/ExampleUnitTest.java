@@ -43,4 +43,10 @@ public class ExampleUnitTest {
                 new Course(2018, "FA", "CSE", "100")),
                 Utilities.parseCourseList("2019 SP ECE 65,2018 FA CSE 100"));
     }
+
+    @Test
+    public void testEncodeCourseList() {
+        assertEquals("2019 SP ECE 65,2018 FA CSE 100", Utilities.encodeCourseList(Arrays.asList(new Course(2019, "SP", "ECE", "65"),
+                new Course(2018, "FA", "CSE", "100"))));
+    }
 }
