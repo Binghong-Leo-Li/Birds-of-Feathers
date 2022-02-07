@@ -30,6 +30,30 @@ public class ExampleUnitTest {
     }
 
     @Test
+    public void testPerson2(){
+        List<Course> courses = new ArrayList<Course>();
+        courses.add(new Course(2019, "SP", "ECE", "65"));
+        courses.add(new Course(2018, "FA", "CSE", "30"));
+        courses.add(new Course(2017, "WI", "CSE", "21"));
+        courses.add(new Course(2016, "FA", "MATH", "171"));
+        courses.add(new Course(2016, "FA", "CSE", "20"));
+
+        Person tmp = new Person("Alex", courses, "https://www.example.com/nothing");
+
+        assertEquals(tmp.getCourseList(), courses);
+        assertEquals("https://www.example.com/nothing", tmp.getUrl());
+
+        assertEquals("Alex", tmp.getName());
+        tmp.setName("Bob");
+        assertEquals("Bob", tmp.getName());
+
+        tmp.addCourse(new Course(2019, "FA", "HUM", "1"));
+        courses.add(new Course(2019, "FA", "HUM", "1"));
+        assertEquals(tmp.getCourseList(), courses);
+
+    }
+
+    @Test
     public void testParseCourse() {
         assertEquals(new Course(2020, "WI", "CSE", "15L"), Utilities.parseCourse("2020 WI CSE 15L"));
     }
