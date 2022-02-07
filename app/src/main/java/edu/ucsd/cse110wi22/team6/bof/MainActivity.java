@@ -12,9 +12,7 @@ import android.view.View;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -58,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             personsViewAdapter.setPeopleList(Utilities.getBofList(user, dummyNearbyPeople));
+            personsViewAdapter.setUser(user);
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");

@@ -32,6 +32,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/num_common_courses_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/thumbnail"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="8" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
