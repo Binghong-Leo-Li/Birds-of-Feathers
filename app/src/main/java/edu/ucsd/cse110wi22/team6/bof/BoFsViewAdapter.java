@@ -87,7 +87,8 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
             Context context = view.getContext();
             Intent intent = new Intent(context, BoFsDetails.class);
             intent.putExtra("name", this.person.getName());
-            intent.putExtra("courseListParsing", Utilities.encodeCourseList(Utilities.getCoursesTogether(user)));
+            intent.putExtra("courseListParsing", Utilities.encodeCourseList(
+                    Utilities.getCoursesTogether(user, this.person)));
             intent.putExtra("url", this.person.getUrl());
             context.startActivity(intent);
             // TODO: view BoF details
