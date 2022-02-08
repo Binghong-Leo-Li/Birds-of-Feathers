@@ -11,17 +11,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="141dp"
+        android:layout_marginTop="31dp"
         android:layout_marginEnd="142dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/bof_course_info"
+        android:layout_marginBottom="37dp"
+        app:layout_constraintBottom_toTopOf="@+id/bof_courses_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
+
 
     <Button
         android:id="@+id/returnHome"
-        android:layout_width="413dp"
+        android:layout_width="wrap_content"
         android:layout_height="66dp"
         android:layout_marginTop="1dp"
         android:layout_marginBottom="1dp"
@@ -29,18 +32,19 @@
         android:text="Home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bof_course_info" />
-
+        app:layout_constraintTop_toBottomOf="@+id/bof_courses_info"
+        app:layout_constraintVertical_bias="0.591" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bof_courses_info"
-        android:layout_width="399dp"
-        android:layout_height="480dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="59dp"
         app:layout_constraintBottom_toTopOf="@+id/returnHome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
         <activity
-            android:name=".bof_details"
+            android:name=".BoFsDetails"
             android:exported="false" />
         <activity
             android:name=".CourseEntryActivity"

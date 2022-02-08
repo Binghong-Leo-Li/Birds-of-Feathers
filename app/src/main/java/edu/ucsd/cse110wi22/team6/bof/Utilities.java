@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -71,9 +72,13 @@ public class Utilities {
     }
 
     public static int numCoursesTogether(IPerson a, IPerson b) {
+        return getCoursesTogether(a, b).size();
+    }
+
+    public static List<Course> getCoursesTogether(IPerson a, IPerson b) {
         Set<Course> aCourseList = new HashSet<>(a.getCourseList());
         aCourseList.retainAll(new HashSet<>(b.getCourseList()));
-        return aCourseList.size();
+        return new ArrayList<>(aCourseList);
     }
 
     public static List<IPerson> getBofList(IPerson user, List<IPerson> nearbyPeople) {
