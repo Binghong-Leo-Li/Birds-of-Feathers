@@ -5,3 +5,5 @@
 # Additional ones
 /misc.xml
 /gradle.xml
+
+/deploymentTargetDropDown.xml

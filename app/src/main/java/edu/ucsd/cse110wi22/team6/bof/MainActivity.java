@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");
-            Intent intent = new Intent(this, NameEntryActivity.class);
+            Intent intent = new Intent(this, CourseEntryActivity.class);
             startActivity(intent);
         }
     }

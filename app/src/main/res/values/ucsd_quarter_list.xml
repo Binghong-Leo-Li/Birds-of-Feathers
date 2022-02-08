@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="quarter_list">
+        <item>FA</item>
+        <item>WI</item>
+        <item>SP</item>
+        <item tools:ignore="Typos">SS1</item>
+        <item>SS2</item>
+        <item>SSS</item>
+    </string-array>
+</resources>

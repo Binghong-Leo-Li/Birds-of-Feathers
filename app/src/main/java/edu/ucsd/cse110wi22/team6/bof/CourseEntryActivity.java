@@ -23,6 +23,13 @@ public class CourseEntryActivity extends AppCompatActivity {
 
         Button doneButton = findViewById(R.id.course_entry_done_button);
         doneButton.setOnClickListener(this::onDone);
+        Button addOneClassButton = findViewById(R.id.add_one_class_button);
+        addOneClassButton.setOnClickListener(this::onAddCourse);
+    }
+
+    private void onAddCourse(View view) {
+        Intent intent = new Intent(this, AddNewCourseActivity.class);
+        startActivity(intent);
     }
 
     private void onDone(View view) {
