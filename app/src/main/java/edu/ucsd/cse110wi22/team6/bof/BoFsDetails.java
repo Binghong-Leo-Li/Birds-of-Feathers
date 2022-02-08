@@ -47,8 +47,6 @@ public class BoFsDetails extends AppCompatActivity {
     }
 
     public void onGoBackClicked(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        setContentView(R.layout.activity_bof_details);
+        finish();
     }
 }
