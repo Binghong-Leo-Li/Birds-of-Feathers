@@ -16,8 +16,14 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class NameEntryActivity extends AppCompatActivity {
+
+    private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
+    private Future<Void> future;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +59,27 @@ public class NameEntryActivity extends AppCompatActivity {
         }
 
         if(!URLUtil.isValidUrl(URLEntered)) {
-            Utilities.showAlert(this, "Please enter valid photo URL!");
+            Utilities.showAlert(this, "Please enter valid URL!");
             return;
         }
 
-        Intent intent = new Intent(this, CourseEntryActivity.class);
-        startActivity(intent);
+
+        this.future = backgroundThreadExecutor.submit(() -> {
+            URL photo = new URL(URLEntered);
+            URLConnection connection = photo.openConnection();
+            String contentType = connection.getHeaderField("Content-Type");
+            boolean img = contentType.startsWith("image/");
+            if (!img) {
+                runOnUiThread(() -> {
+                    Utilities.showAlert(this, "Please enter valid photo URL!");
+                    return;
+                });
+
+            } else {
+                Intent intent = new Intent(this, CourseEntryActivity.class);
+                startActivity(intent);
+            }
+            return null;
+        });
     }
 }
