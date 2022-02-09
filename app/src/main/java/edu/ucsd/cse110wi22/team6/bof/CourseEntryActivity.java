@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 public class CourseEntryActivity extends AppCompatActivity {
     // TODO: Implement the UI for entering classes
@@ -20,6 +22,14 @@ public class CourseEntryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("Enter past courses");
         setContentView(R.layout.activity_course_entry);
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.quarter_selector);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.quarter_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
 
         Button doneButton = findViewById(R.id.course_entry_done_button);
         doneButton.setOnClickListener(this::onDone);
