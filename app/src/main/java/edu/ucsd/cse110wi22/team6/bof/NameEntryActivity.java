@@ -76,6 +76,7 @@ public class NameEntryActivity extends AppCompatActivity {
                 });
 
             } else {
+                this.future.cancel(true);
                 Intent intent = new Intent(this, CourseEntryActivity.class);
                 startActivity(intent);
             }
