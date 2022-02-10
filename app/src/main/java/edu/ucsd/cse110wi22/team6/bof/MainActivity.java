@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");
-            Intent intent = new Intent(this, CourseEntryActivity.class);
+            Intent intent = new Intent(this, NameEntryActivity.class);
             startActivity(intent);
         }
     }
@@ -84,9 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onForceReset(View view) {
         // DEBUG feature
-        SharedPreferences prefs = getSharedPreferences(Constants.PREFERENCE_STRING, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean("initialized", false);
-        editor.apply();
+        storage.setInitialized(false);
+        Intent intent = new Intent(this, CourseEntryActivity.class);
+        startActivity(intent);
     }
 }

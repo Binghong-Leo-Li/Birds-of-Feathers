@@ -19,7 +19,7 @@
       app:layout_constraintStart_toStartOf="parent" />
 
   <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recyclerView"
+      android:id="@+id/added_course_list"
       android:layout_width="409dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
@@ -36,6 +36,6 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+      app:layout_constraintTop_toBottomOf="@+id/added_course_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
