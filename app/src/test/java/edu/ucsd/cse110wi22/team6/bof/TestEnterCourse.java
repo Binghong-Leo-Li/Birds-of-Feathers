@@ -39,7 +39,7 @@ public class TestEnterCourse {
             Button enterButton = activity.findViewById(R.id.add_new_course_enter_button);
 
             yearDropDown.setSelection(0);
-            quarterDropDown.setSelection(2); // SP in R.array.quarter_list
+            quarterDropDown.setSelection(1); // SP in R.array.quarter_list
             subjectEntryView.setText("MATH");
             courseNumberEntryView.setText("31CH");
 
@@ -61,7 +61,7 @@ public class TestEnterCourse {
             Spinner quarterDropDown = activity.findViewById(R.id.quarter_dropdown);
             Button enterButton = activity.findViewById(R.id.add_new_course_enter_button);
 
-            quarterDropDown.setSelection(3); // SS1 in R.array.quarter_list
+            quarterDropDown.setSelection(2); // SS1 in R.array.quarter_list
 
             enterButton.performClick();
         });

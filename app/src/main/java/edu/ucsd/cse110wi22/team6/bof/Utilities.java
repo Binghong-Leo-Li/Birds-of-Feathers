@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Utilities {
-    private static boolean persistence = false;
+    private static boolean persistence = true;
 
     public static IUserInfoStorage getStorageInstance(Context context) {
         if (persistence) {

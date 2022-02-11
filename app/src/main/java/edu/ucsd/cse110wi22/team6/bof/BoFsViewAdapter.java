@@ -11,7 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHolder> {
     private List<? extends IPerson> people;
@@ -85,10 +88,17 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
+
+            Comparator<Course> courseComparator = new CourseComparator(Arrays.asList
+                    (context.getResources().getStringArray(R.array.quarter_list)));
+
             Intent intent = new Intent(context, BoFsDetails.class);
             intent.putExtra("name", this.person.getName());
             intent.putExtra("courseListParsing", Utilities.encodeCourseList(
-                    Utilities.getCoursesTogether(user, this.person)));
+                    Utilities.getCoursesTogether(user, this.person)
+                            .stream()
+                            .sorted(courseComparator)
+                            .collect(Collectors.toList())));
             intent.putExtra("url", this.person.getUrl());
             context.startActivity(intent);
             // TODO: view BoF details
