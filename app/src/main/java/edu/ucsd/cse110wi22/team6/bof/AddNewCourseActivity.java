@@ -20,6 +20,12 @@ public class AddNewCourseActivity extends AppCompatActivity {
     private TextView courseNumberEntryView;
     // TODO: add a cancel button
 
+    private static int mockCurrentYear;
+
+    public static void setMockCurrentYear(int mockCurrentYear) {
+        AddNewCourseActivity.mockCurrentYear = mockCurrentYear;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +37,7 @@ public class AddNewCourseActivity extends AppCompatActivity {
 
 //        String[] yearsChoices = new String[]{"2022", "2021", "2020", "2019"};
         String[] yearsChoices = new String[NUM_YEARS_BACK];
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int currentYear = mockCurrentYear == 0 ? Calendar.getInstance().get(Calendar.YEAR) : mockCurrentYear;
         for (int i = 0; i < NUM_YEARS_BACK; i++) {
             yearsChoices[i] = String.valueOf(currentYear - i);
         }

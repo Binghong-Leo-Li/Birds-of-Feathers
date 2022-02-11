@@ -24,7 +24,7 @@ public class CourseEntryActivity extends AppCompatActivity {
     private LinearLayoutManager courseLayoutManager;
     private final List<Course> courses = new ArrayList<>();
     private CourseViewAdapter courseViewAdapter; // TODO: Allow deleting courses
-    private Course previousEntry; // TODO: save it in bundle on shutdown
+    private Course previousEntry;
 
     ActivityResultLauncher<Intent> courseEntryFormLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
