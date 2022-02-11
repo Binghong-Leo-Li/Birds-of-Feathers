@@ -1,8 +1,5 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.ViewHolder> {
-    private List<? extends Course> courses;
+    private List<Course> courses;
 
-    public List<? extends Course> getListCourses(){
+    public List<Course> getListCourses(){
         return this.courses;
     }
 
-    public CourseViewAdapter(List<? extends Course> courses) {
+    public CourseViewAdapter(List<Course> courses) {
         super();
         this.courses = courses;
     }
@@ -39,10 +36,9 @@ public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.Vi
         holder.setCourse(courses.get(position));
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setCoursesList(List<? extends Course> newCourses) {
-        courses = newCourses;
-        notifyDataSetChanged();
+    public void addCourse(Course course) {
+        courses.add(course);
+        notifyItemInserted(courses.size() - 1);
     }
 
     @Override
@@ -51,33 +47,19 @@ public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.Vi
     }
 
     public static class ViewHolder
-            extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+            extends RecyclerView.ViewHolder {
         private final TextView courseInfoView;
         private Course course;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.courseInfoView = itemView.findViewById(R.id.bof_course_info);
-            itemView.setOnClickListener(this);
         }
 
         public void setCourse(Course course) {
             this.course = course;
             System.out.print(course.toString());
             this.courseInfoView.setText(course.toString());
-        }
-
-        @Override
-        public void onClick(View view) {
-//            Context context = view.getContext();
-//            Intent intent = new Intent(context, bof_details.class);
-//            intent.putExtra("name", this.person.getName());
-//            intent.putExtra("courseListParsing", Utilities.encodeCourseList(this.person.getCourseList()));
-//            intent.putExtra("url", this.person.getUrl());
-//            context.startActivity(intent);
-            // TODO: view BoF details
-            // TODO: maybe add some logging here
         }
     }
 }
