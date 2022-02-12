@@ -1,17 +1,14 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.nearby.messages.Message;
 
 public class MockingPasting extends AppCompatActivity {
     private static final String TAG = "MockingPasting";
@@ -39,8 +36,8 @@ public class MockingPasting extends AppCompatActivity {
             Utilities.showAlert(this, "Something went wrong. Check the format.");
             return;
         }
-        // TODO: actually mock arrival
         Log.d(TAG, "Mock person arrival: " + person);
         input.getText().clear();
+        MockedMessageListener.mockReceiveMessage(new Message(Utilities.serializePerson(person)));
     }
 }

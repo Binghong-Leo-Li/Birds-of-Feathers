@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Utilities {
-    private static boolean persistence = false;
+    private static boolean persistence = true;
     private static final int SIZE_OF_INT = 4;
 
     public static IUserInfoStorage getStorageInstance(Context context) {
@@ -47,9 +47,7 @@ public class Utilities {
         alertBuilder
                 .setTitle("Alert!")
                 .setMessage(message)
-                .setPositiveButton("Ok", (dialog, id) -> {
-                    dialog.cancel();
-                })
+                .setPositiveButton("Ok", (dialog, id) -> dialog.cancel())
                 .setCancelable(true);
 
         AlertDialog alertDialog = alertBuilder.create();

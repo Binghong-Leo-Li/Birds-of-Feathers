@@ -11,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="AIzaSyCA2O6jY8ZSA7YGD_Jk-Q5AG75ptPFZy0A" />
         <activity
             android:name=".BoFsDetails"
             android:exported="false" />
