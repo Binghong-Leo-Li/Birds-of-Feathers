@@ -10,11 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.ViewHolder> {
-    private List<Course> courses;
-
-    public List<Course> getListCourses(){
-        return this.courses;
-    }
+    private final List<Course> courses;
 
     public CourseViewAdapter(List<Course> courses) {
         super();
