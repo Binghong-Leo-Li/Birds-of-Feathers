@@ -1,5 +1,7 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class Person implements IPerson {
@@ -37,5 +39,15 @@ public class Person implements IPerson {
     @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", courseList=" + courseList +
+                ", photoURL='" + photoURL + '\'' +
+                '}';
     }
 }

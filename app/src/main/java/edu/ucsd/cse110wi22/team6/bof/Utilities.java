@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,7 +18,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Utilities {
-    private static boolean persistence = false;
+    private static boolean persistence = true;
+    private static final int SIZE_OF_INT = 4;
 
     public static IUserInfoStorage getStorageInstance(Context context) {
         if (persistence) {
@@ -44,9 +47,7 @@ public class Utilities {
         alertBuilder
                 .setTitle("Alert!")
                 .setMessage(message)
-                .setPositiveButton("Ok", (dialog, id) -> {
-                    dialog.cancel();
-                })
+                .setPositiveButton("Ok", (dialog, id) -> dialog.cancel())
                 .setCancelable(true);
 
         AlertDialog alertDialog = alertBuilder.create();
@@ -68,7 +69,6 @@ public class Utilities {
         return courses.stream().map(Course::toString).collect(Collectors.joining(","));
     }
 
-    // TODO: write unit tests for the methods below
     public static int numCoursesTogether(IPerson a, IPerson b) {
         return getCoursesTogether(a, b).size();
     }
@@ -86,5 +86,48 @@ public class Utilities {
                 .sorted(Comparator.comparingInt((IPerson person) ->
                         Utilities.numCoursesTogether(user, person)).reversed())
                 .collect(Collectors.toList());
+    }
+
+    public static IPerson parsePersonFromCSV(String csv) {
+        String[] lines = csv.split("\r?\n");
+        String name = lines[0].split(",")[0];
+        String photoURL = lines[1].split(",")[0];
+        List<Course> courses = new ArrayList<>();
+        for (int i = 2; i < lines.length; i++) {
+            String[] lineSplit = lines[i].split(",");
+            courses.add(new Course(
+                    Integer.parseInt(lineSplit[0]), // Year
+                    lineSplit[1], // Quarter
+                    lineSplit[2], // Subject
+                    lineSplit[3])); // Number
+        }
+        return new Person(name, courses, photoURL);
+    }
+
+    public static byte[] serializePerson(IPerson person) {
+        byte[] name = person.getName().getBytes(StandardCharsets.UTF_8);
+        byte[] url = person.getUrl().getBytes(StandardCharsets.UTF_8);
+        byte[] classList = encodeCourseList(person.getCourseList()).getBytes(StandardCharsets.UTF_8);
+        int totalSize = 3 * SIZE_OF_INT + name.length + url.length + classList.length; // 3 fields
+        ByteBuffer buffer = ByteBuffer.allocate(totalSize);
+        buffer.putInt(name.length);
+        buffer.put(name);
+        buffer.putInt(classList.length);
+        buffer.put(classList);
+        buffer.putInt(url.length);
+        buffer.put(url);
+        return buffer.array();
+    }
+
+    private static String readString(ByteBuffer buffer) {
+        int length = buffer.getInt();
+        byte[] encodedString = new byte[length];
+        buffer.get(encodedString, 0, length);
+        return new String(encodedString, StandardCharsets.UTF_8);
+    }
+
+    public static IPerson deserializePerson(byte[] data) {
+        ByteBuffer buffer = ByteBuffer.wrap(data);
+        return new Person(readString(buffer), Utilities.parseCourseList(readString(buffer)), readString(buffer));
     }
 }
