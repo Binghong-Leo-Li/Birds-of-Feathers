@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
@@ -106,13 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    public void onForceReset(View view) {
-        // DEBUG feature
-        storage.setInitialized(false);
-        Intent intent = new Intent(this, CourseEntryActivity.class);
-        startActivity(intent);
     }
 
     @Override
