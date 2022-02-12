@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Utilities {
-    private static boolean persistence = true;
+    private static boolean persistence = false;
 
     public static IUserInfoStorage getStorageInstance(Context context) {
         if (persistence) {
@@ -30,7 +30,6 @@ public class Utilities {
         Utilities.persistence = persistence;
     }
 
-    // TODO: write unit tests for this
     public static List<Course> parseCourseList(String courseList) {
         if (courseList.isEmpty()) {
             return Collections.emptyList();
@@ -65,12 +64,11 @@ public class Utilities {
         );
     }
 
-    // TODO: do the inverse: construct string from course list
-
     public static String encodeCourseList(List<Course> courses) {
         return courses.stream().map(Course::toString).collect(Collectors.joining(","));
     }
 
+    // TODO: write unit tests for the methods below
     public static int numCoursesTogether(IPerson a, IPerson b) {
         return getCoursesTogether(a, b).size();
     }
