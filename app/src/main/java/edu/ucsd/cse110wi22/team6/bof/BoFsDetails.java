@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -36,7 +39,13 @@ public class BoFsDetails extends AppCompatActivity {
 //        TextView counterView = findViewById(R.id.bof_name_info);
 //        counterView.setText(String.valueOf(this.name));
 
-        //TODO show image
+        ImageView image = findViewById(R.id.thumbnail);
+        Glide.with(this)
+                .load(url)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .into(image);
+
 
         coursesRecyclerView = findViewById(R.id.bof_courses_info);
         coursesLayoutManager = new LinearLayoutManager(this);
