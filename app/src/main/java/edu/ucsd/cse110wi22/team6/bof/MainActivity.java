@@ -80,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
 
         personsViewAdapter = new BoFsViewAdapter(nobody);
         bofRecyclerView.setAdapter(personsViewAdapter);
+
+        findViewById(R.id.mock_ui_button).setOnClickListener(view -> {
+            Intent intent = new Intent(this, MockingPasting.class);
+            startActivity(intent);
+        });
     }
 
     public void onForceReset(View view) {

@@ -7,25 +7,36 @@
     tools:context=".MockingPasting">
 
     <Button
-        android:id="@+id/returnHome"
+        android:id="@+id/mocking_return_home_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="361dp"
-        android:onClick="onGoBackClicked"
+        android:layout_marginBottom="16dp"
         android:text="HOME"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bof_info_pasted" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/bof_info_pasted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="106dp"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="92dp"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="Enter CSV data here"
         android:inputType="textMultiLine"
+        android:lines="4"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/mocking_enter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Enter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bof_info_pasted" />
 </androidx.constraintlayout.widget.ConstraintLayout>

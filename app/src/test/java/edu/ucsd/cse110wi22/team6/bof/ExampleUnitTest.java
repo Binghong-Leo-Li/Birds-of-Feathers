@@ -108,4 +108,19 @@ public class ExampleUnitTest {
         assertArrayEquals(boFs.toArray(), Utilities.getBofList(p1,allClassmates).toArray());
 
     }
+
+    @Test
+    public void testCSVParsing() {
+        // Scatter both \r\n (Windows line ending) and \n (Unix line ending)
+        String csv = "Bill,,,\r\n" +
+                "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n" +
+                "2021,FA,CSE,210\n" +
+                "2022,WI,CSE,110\r\n" +
+                "2022,SP,CSE,110\n";
+        IPerson person = Utilities.parsePersonFromCSV(csv);
+        assertEquals("Bill", person.getName());
+        assertEquals(Utilities.parseCourseList("2021 FA CSE 210,2022 WI CSE 110,2022 SP CSE 110"), person.getCourseList());
+        assertEquals("https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0",
+                person.getUrl());
+    }
 }

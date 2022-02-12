@@ -68,7 +68,6 @@ public class Utilities {
         return courses.stream().map(Course::toString).collect(Collectors.joining(","));
     }
 
-    // TODO: write unit tests for the methods below
     public static int numCoursesTogether(IPerson a, IPerson b) {
         return getCoursesTogether(a, b).size();
     }
@@ -86,5 +85,21 @@ public class Utilities {
                 .sorted(Comparator.comparingInt((IPerson person) ->
                         Utilities.numCoursesTogether(user, person)).reversed())
                 .collect(Collectors.toList());
+    }
+
+    public static IPerson parsePersonFromCSV(String csv) {
+        String[] lines = csv.split("\r?\n");
+        String name = lines[0].split(",")[0];
+        String photoURL = lines[1].split(",")[0];
+        List<Course> courses = new ArrayList<>();
+        for (int i = 2; i < lines.length; i++) {
+            String[] lineSplit = lines[i].split(",");
+            courses.add(new Course(
+                    Integer.parseInt(lineSplit[0]), // Year
+                    lineSplit[1], // Quarter
+                    lineSplit[2], // Subject
+                    lineSplit[3])); // Number
+        }
+        return new Person(name, courses, photoURL);
     }
 }
