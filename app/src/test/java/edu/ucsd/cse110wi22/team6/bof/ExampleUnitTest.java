@@ -75,4 +75,37 @@ public class ExampleUnitTest {
         assertEquals("2019 SP ECE 65,2018 FA CSE 100", Utilities.encodeCourseList(Arrays.asList(new Course(2019, "SP", "ECE", "65"),
                 new Course(2018, "FA", "CSE", "100"))));
     }
+
+    @Test
+    public void testNumCoursesTogether() {
+        IPerson p1 = new Person("Rick", Utilities.parseCourseList("2022 WI CSE 110"), "");
+        IPerson p2 = new Person("Jim", Utilities.parseCourseList("2022 WI CSE 110,2021 FA CSE 100,2021 FA ECE 65,2020 FA CSE 11"), "");
+        assertEquals(1, Utilities.numCoursesTogether(p1,p2));
+    }
+
+    @Test
+    public void testGetCoursesTogether() {
+        IPerson p1 = new Person("Rick", Utilities.parseCourseList("2021 FA CSE 100"), "");
+        IPerson p2 = new Person("Jim", Utilities.parseCourseList("2022 WI CSE 110,2021 FA CSE 100,2021 FA ECE 65,2020 FA CSE 11"), "");
+        ArrayList<Course> coursesTogether = new ArrayList<Course>();
+        coursesTogether.add(new Course(2021, "FA", "CSE", "100"));
+        assertArrayEquals(coursesTogether.toArray(), Utilities.getCoursesTogether(p1,p2).toArray());
+    }
+
+    @Test
+    public void testGetBoFs(){
+        IPerson p1 = new Person("Diego", Utilities.parseCourseList("2021 FA CSE 100"), "");
+        IPerson p2 = new Person("April", Utilities.parseCourseList("2022 WI CSE 110,2021 FA CSE 100,2021 FA ECE 65,2020 FA CSE 11"), "");
+        IPerson p3 = new Person("Harrison", Utilities.parseCourseList("2020 WI HIEU 128,2021 FA ECE 101"), "");
+        IPerson p4 = new Person("Josh", Utilities.parseCourseList("2021 FA CSE 100,2020 WI CSE 105"), "");
+        List<IPerson> allClassmates = new ArrayList<IPerson>();
+        allClassmates.add(p2);
+        allClassmates.add(p3);
+        allClassmates.add(p4);
+        List<IPerson> boFs = new ArrayList<IPerson>();
+        boFs.add(p2);
+        boFs.add(p4);
+        assertArrayEquals(boFs.toArray(), Utilities.getBofList(p1,allClassmates).toArray());
+
+    }
 }
