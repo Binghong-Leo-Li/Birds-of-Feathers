@@ -32,19 +32,11 @@ public class MainActivity extends AppCompatActivity {
     // Dummy
     private final List<IPerson> nobody = Collections.emptyList();
 
-    // User has 2022 WI CSE 110,2021 FA CSE 100,2021 FA ECE 65,2020 FA CSE 11
-//    public List<IPerson> dummyNearbyPeople = Arrays.asList(
-//            /*1*/ new Person("Rick", Utilities.parseCourseList("2022 WI CSE 110"), "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0"),
-//            /*1*/ new Person("Gary", Utilities.parseCourseList("2021 FA CSE 100"), "S**T BRO"),
-//            /*0*/ new Person("Guy", Utilities.parseCourseList(""), ""),
-//            /*0*/ new Person("Greg", Utilities.parseCourseList("2022 SP CSE 110,2021 FA MATH 100,2021 FA ECE 35,2019 FA CSE 11"), ""),
-//            /*2*/ new Person("Bill", Utilities.parseCourseList("2021 FA ECE 65,2020 FA CSE 11"), ""),
-//            /*2*/ new Person("Will", Utilities.parseCourseList("2020 FA CSE 11,2021 FA ECE 65"), ""),
-//            /*4*/ new Person("Replicant", Utilities.parseCourseList("2022 WI CSE 110,2021 FA CSE 100,2021 FA ECE 65,2020 FA CSE 11"), ""),
-//            /*1*/ new Person("Bob", Utilities.parseCourseList("2020 FA CSE 11,2022 WI CSE 11"), "")
-//    );
+    private static List<IPerson> nearbyPeople = new ArrayList<>();
 
-    private final List<IPerson> nearbyPeople = new ArrayList<>();
+    public static void setNearbyPeople(List<IPerson> nearbyPeople) {
+        MainActivity.nearbyPeople = nearbyPeople;
+    }
 
     @Override
     protected void onStart() {
@@ -57,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
                     storage.getPhotoUrl());
 
             personsViewAdapter.setUser(user);
-            updateUI();
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");
@@ -68,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Nearby.getMessagesClient(this).subscribe(messageListener);
     }
 
-    private void updateUI() {
+    public void updateUI() {
         for (IPerson person : nearbyPeople) {
             Log.d(TAG, person.getName() +
                     ": " +
