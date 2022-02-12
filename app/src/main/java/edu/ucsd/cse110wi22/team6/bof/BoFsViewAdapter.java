@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -66,6 +69,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
             implements View.OnClickListener {
         private final TextView personNameView;
         private final TextView numCommonCoursesView;
+        private final ImageView personThumbnailView;
         private final IPerson user;
         private IPerson person;
 
@@ -74,12 +78,18 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
             this.user = user;
             this.personNameView = itemView.findViewById(R.id.bof_row_name);
             this.numCommonCoursesView = itemView.findViewById(R.id.num_common_courses_view);
+            this.personThumbnailView = itemView.findViewById(R.id.thumbnail);
             itemView.setOnClickListener(this);
         }
 
         public void setPerson(IPerson person) {
             this.person = person;
             this.personNameView.setText(person.getName());
+            Glide.with(itemView)
+                    .load(this.person.getUrl())
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(this.personThumbnailView);
             if (user != null)
                 this.numCommonCoursesView.setText(
                         String.valueOf(Utilities.numCoursesTogether(user, person)));

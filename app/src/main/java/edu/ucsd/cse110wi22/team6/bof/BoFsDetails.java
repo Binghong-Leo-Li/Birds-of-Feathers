@@ -39,7 +39,7 @@ public class BoFsDetails extends AppCompatActivity {
 //        TextView counterView = findViewById(R.id.bof_name_info);
 //        counterView.setText(String.valueOf(this.name));
 
-        ImageView image = findViewById(R.id.thumbnail);
+        ImageView image = findViewById(R.id.imageView);
         Glide.with(this)
                 .load(url)
                 .placeholder(R.drawable.placeholder)
