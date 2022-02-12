@@ -35,7 +35,6 @@ public class AddNewCourseActivity extends AppCompatActivity {
         Button button = findViewById(R.id.add_new_course_enter_button);
         button.setOnClickListener(this::onEnter);
 
-//        String[] yearsChoices = new String[]{"2022", "2021", "2020", "2019"};
         String[] yearsChoices = new String[NUM_YEARS_BACK];
         int currentYear = mockCurrentYear == 0 ? Calendar.getInstance().get(Calendar.YEAR) : mockCurrentYear;
         for (int i = 0; i < NUM_YEARS_BACK; i++) {

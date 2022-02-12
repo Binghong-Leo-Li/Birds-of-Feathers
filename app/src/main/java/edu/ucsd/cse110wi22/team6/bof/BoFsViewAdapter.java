@@ -23,10 +23,6 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
     private List<? extends IPerson> people;
     private IPerson user;
 
-    public List<? extends IPerson> getListBoFs(){
-        return this.people;
-    }
-
     public BoFsViewAdapter(List<? extends IPerson> people) {
         super();
         this.people = people;
@@ -111,8 +107,6 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
                             .collect(Collectors.toList())));
             intent.putExtra("url", this.person.getUrl());
             context.startActivity(intent);
-            // TODO: view BoF details
-            // TODO: maybe add some logging here
         }
     }
 }
