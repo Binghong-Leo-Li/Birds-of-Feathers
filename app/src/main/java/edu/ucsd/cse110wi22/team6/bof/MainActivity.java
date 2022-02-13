@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     storage.getPhotoUrl());
 
             personsViewAdapter.setUser(user);
+            updateUI();
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");
@@ -98,11 +99,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Received message: " + Arrays.toString(content));
                 try {
                     nearbyPeople.add(Utilities.deserializePerson(content));
-                    updateUI();
                 } catch (RuntimeException e) {
                     e.printStackTrace();
                     Log.w(TAG, "Invalid message!");
+//                    return; // Uncomment these lines if not mocking
                 }
+//                updateUI();
             }
         });
     }

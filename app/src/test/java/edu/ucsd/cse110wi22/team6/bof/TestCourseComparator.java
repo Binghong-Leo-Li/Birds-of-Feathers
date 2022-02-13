@@ -1,6 +1,7 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 
@@ -36,6 +37,16 @@ public class TestCourseComparator {
         assertEquals(Utilities
                 .parseCourseList("2020 SS1 HUM 1,2020 FA MATH 31AH,2021 WI MATH 100A,2021 FA CSE 15L"),
                 courses.stream().sorted(courseComparator).collect(Collectors.toList()));
+    }
+
+    @Test
+    public void testComparator() {
+        assertTrue(courseComparator.compare(Utilities.parseCourse("2021 FA CSE 15L"), Utilities.parseCourse("2021 SP ECE 35")) > 0);
+        assertTrue(courseComparator.compare(Utilities.parseCourse("2021 FA CSE 15L"), Utilities.parseCourse("2021 SP CSE 15L")) > 0);
+        assertTrue(courseComparator.compare(Utilities.parseCourse("2021 SP CSE 15L"), Utilities.parseCourse("2021 WI CSE 15L")) > 0);
+        assertTrue(courseComparator.compare(Utilities.parseCourse("2021 WI CSE 15L"), Utilities.parseCourse("2021 SP CSE 15L")) < 0);
+        assertEquals(0, courseComparator.compare(Utilities.parseCourse("2021 FA CSE 15L"), Utilities.parseCourse("2021 FA MATH 31AH")));
+        assertEquals(0, courseComparator.compare(Utilities.parseCourse("2021 FA CSE 15L"), Utilities.parseCourse("2021 FA CSE 15L")));
     }
 }
 

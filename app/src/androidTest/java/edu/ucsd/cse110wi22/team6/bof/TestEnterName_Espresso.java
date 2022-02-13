@@ -17,6 +17,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -30,6 +31,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,10 +41,18 @@ import org.junit.runner.RunWith;
 public class TestEnterName_Espresso {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class, true, false);
+
+    @Before
+    public void setup() {
+        Utilities.setPersistence(false);
+        NameEntryActivity.noAutoFill();
+    }
 
     @Test
     public void testEnterName_Espresso() {
+        mActivityTestRule.launchActivity(new Intent());
+
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.URL_view),
                         childAtPosition(

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -13,11 +14,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.core.app.ActivityScenario;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 @RunWith(AndroidJUnit4.class)
 public class TestListBoF{
-    @Test
-    public void testListOfBoFsDisplayed() {
+    @Before
+    public void setup() {
         Utilities.setPersistence(false);
         IUserInfoStorage storage = Utilities.getStorageInstance(null);
         storage.setInitialized(true);
@@ -34,22 +36,19 @@ public class TestListBoF{
                 /*4*/ new Person("Replicant", Utilities.parseCourseList("2022 WI CSE 110,2021 FA CSE 100,2021 FA ECE 65,2020 FA CSE 11"), ""),
                 /*1*/ new Person("Bob", Utilities.parseCourseList("2020 FA CSE 11,2022 WI CSE 11"), "")
         ));
+    }
 
+    @Test
+    public void testListOfBoFsDisplayed() {
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
         scenario.onActivity(activity -> {
-            activity.updateUI();
             RecyclerView view = activity.findViewById(R.id.bof_list);
-            assertEquals(6, view.getAdapter().getItemCount());
-            try {
-                FrameLayout framelayout = (FrameLayout) view.getChildAt(0);
-                TextView editText = framelayout.findViewById(R.id.bof_row_name);
-                String info = editText.getText().toString();
-                assertEquals("Replicant", info);
-            }
-            catch(NullPointerException n){
-                System.out.println("Empty List of BoFs");
-            }
+            assertEquals(6, Objects.requireNonNull(view.getAdapter()).getItemCount());
+            FrameLayout framelayout = (FrameLayout) view.getChildAt(0);
+            TextView editText = framelayout.findViewById(R.id.bof_row_name);
+            String info = editText.getText().toString();
+            assertEquals("Replicant", info);
         });
     }
 }
