@@ -8,16 +8,14 @@ import java.util.List;
 
 public class MockedMessageListener extends MessageListener {
     private final MessageListener messageListener;
-    private static final List<MockedMessageListener> instances = new ArrayList<>();
+    private static MockedMessageListener instance;
 
     public static void mockReceiveMessage(Message message) {
-        for (MockedMessageListener instance : instances) {
-            instance.messageListener.onFound(message);
-        }
+        instance.messageListener.onFound(message);
     }
 
     public MockedMessageListener(MessageListener realMessageListener) {
         this.messageListener = realMessageListener;
-        instances.add(this);
+        instance = this;
     }
 }

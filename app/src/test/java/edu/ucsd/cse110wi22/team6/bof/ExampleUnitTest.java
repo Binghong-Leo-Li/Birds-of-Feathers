@@ -131,4 +131,13 @@ public class ExampleUnitTest {
         assertEquals(p1.getUrl(), p2.getUrl());
         assertEquals(p1.getCourseList(), p2.getCourseList());
     }
+
+    @SuppressWarnings("StringOperationCanBeSimplified")
+    @Test
+    public void testCourseHashcode() {
+        Course c1 = new Course(2000, new String("SP"), new String("CSE"), new String("15L"));
+        Course c2 = new Course(2000, new String("SP"), new String("CSE"), new String("15L"));
+        assertEquals(c1, c2);
+        assertEquals(c1.hashCode(), c2.hashCode());
+    }
 }

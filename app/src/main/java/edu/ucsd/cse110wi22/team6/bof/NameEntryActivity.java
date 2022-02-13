@@ -43,6 +43,12 @@ public class NameEntryActivity extends AppCompatActivity {
             }
     );
 
+    private static boolean noGoogleAutoFill;
+
+    public static void noAutoFill() {
+        noGoogleAutoFill = true;
+    }
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -58,7 +64,7 @@ public class NameEntryActivity extends AppCompatActivity {
     }
 
     private void updateUI(GoogleSignInAccount account) {
-        if (account != null)
+        if (account != null && !noGoogleAutoFill)
             this.<TextView>findViewById(R.id.first_name_view).setText(account.getGivenName());
     }
 
