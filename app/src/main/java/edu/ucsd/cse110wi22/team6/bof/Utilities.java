@@ -18,21 +18,28 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Utilities {
+    // Device persistence status
     private static boolean persistence = true;
     private static final int SIZE_OF_INT = 4;
 
+
+    // Helper function to extract device storage if persistence is set
     public static IUserInfoStorage getStorageInstance(Context context) {
         if (persistence) {
-            return new SharedPreferencesStorage(context.getSharedPreferences(Constants.PREFERENCE_STRING, MODE_PRIVATE));
+            return new SharedPreferencesStorage(context.getSharedPreferences(
+                    Constants.PREFERENCE_STRING, MODE_PRIVATE
+            ));
         } else {
             return InMemoryStorage.getInstance();
         }
     }
 
+    // Initializing the persistence setting
     public static void setPersistence(boolean persistence) {
         Utilities.persistence = persistence;
     }
 
+    // Helper function to decode the encoded courseList string to retrieve list of courses
     public static List<Course> parseCourseList(String courseList) {
         if (courseList.isEmpty()) {
             return Collections.emptyList();
@@ -41,6 +48,7 @@ public class Utilities {
                 .collect(Collectors.toList());
     }
 
+    // Helper function to generate Alerts with selected message
     public static void showAlert(Activity activity, String message) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
 
@@ -55,39 +63,46 @@ public class Utilities {
     }
 
     // No input validation is performed
+    // Helper function to parse Course Strings
     public static Course parseCourse(String course) {
         String[] fields = course.split(" ");
         return new Course(
-                Integer.parseInt(fields[0]),
-                fields[1],
-                fields[2],
-                fields[3]
+                Integer.parseInt(fields[0]), // Year
+                fields[1], // Quarter
+                fields[2], // Subject
+                fields[3]  //
         );
     }
 
+    // Helper function to encode the course list into a hashable string
     public static String encodeCourseList(List<Course> courses) {
         return courses.stream().map(Course::toString).collect(Collectors.joining(","));
     }
 
+    // Helper function to obtain number of overlapping courses between two people
     public static int numCoursesTogether(IPerson a, IPerson b) {
         return getCoursesTogether(a, b).size();
     }
 
+    // Helper function to obtain the overlapping courses between two people
     public static List<Course> getCoursesTogether(IPerson a, IPerson b) {
         Set<Course> aCourseList = new HashSet<>(a.getCourseList());
         aCourseList.retainAll(new HashSet<>(b.getCourseList()));
         return new ArrayList<>(aCourseList);
     }
 
+    // Helper function to obtain the list of BoFs from all nearbyPeople
     public static List<IPerson> getBofList(IPerson user, List<IPerson> nearbyPeople) {
         return nearbyPeople
                 .stream()
                 .filter(person -> Utilities.numCoursesTogether(user, person) > 0)
+                                    // if have courses together then generate list
                 .sorted(Comparator.comparingInt((IPerson person) ->
                         Utilities.numCoursesTogether(user, person)).reversed())
                 .collect(Collectors.toList());
     }
 
+    // Helper function to parse information from CSV file into a new person object
     public static IPerson parsePersonFromCSV(String csv) {
         String[] lines = csv.split("\r?\n");
         String name = lines[0].split(",")[0];
@@ -104,6 +119,7 @@ public class Utilities {
         return new Person(name, courses, photoURL);
     }
 
+    // Helper function to parse person into storable data into buffers
     public static byte[] serializePerson(IPerson person) {
         byte[] name = person.getName().getBytes(StandardCharsets.UTF_8);
         byte[] url = person.getUrl().getBytes(StandardCharsets.UTF_8);
@@ -119,6 +135,7 @@ public class Utilities {
         return buffer.array();
     }
 
+    // Helper function to read String from selected buffer
     private static String readString(ByteBuffer buffer) {
         int length = buffer.getInt();
         byte[] encodedString = new byte[length];
@@ -126,8 +143,11 @@ public class Utilities {
         return new String(encodedString, StandardCharsets.UTF_8);
     }
 
+    // Helper function to separate extract Person information from stored data
     public static IPerson deserializePerson(byte[] data) {
         ByteBuffer buffer = ByteBuffer.wrap(data);
-        return new Person(readString(buffer), Utilities.parseCourseList(readString(buffer)), readString(buffer));
+        return new Person(readString(buffer), Utilities.parseCourseList(
+                readString(buffer)), readString(buffer)
+        );
     }
 }
