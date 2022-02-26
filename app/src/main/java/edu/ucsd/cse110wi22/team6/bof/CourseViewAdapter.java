@@ -9,9 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+// Adapter from course to view
 public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.ViewHolder> {
     private final List<Course> courses;
 
+    // constructor
     public CourseViewAdapter(List<Course> courses) {
         super();
         this.courses = courses;
@@ -32,26 +35,30 @@ public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.Vi
         holder.setCourse(courses.get(position));
     }
 
+    // Adding to view
     public void addCourse(Course course) {
         courses.add(course);
-        notifyItemInserted(courses.size() - 1);
+        notifyItemInserted(courses.size() - 1); // Updating recycler view
     }
 
+    // getter
     @Override
     public int getItemCount() {
         return this.courses.size();
     }
 
-    public static class ViewHolder
-            extends RecyclerView.ViewHolder {
+    // ViewHolder class of CourseViewAdapter
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView courseInfoView;
         private Course course;
 
+        // Constructor
         ViewHolder(View itemView) {
             super(itemView);
             this.courseInfoView = itemView.findViewById(R.id.bof_course_info);
         }
 
+        // Setter to update
         public void setCourse(Course course) {
             this.course = course;
             System.out.print(course.toString());
