@@ -1,13 +1,13 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+// Activity to display List of BoFs
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static List<IPerson> nearbyPeople = new ArrayList<>();
 
+    // Setter
     public static void setNearbyPeople(List<IPerson> nearbyPeople) {
         MainActivity.nearbyPeople = nearbyPeople;
     }
@@ -43,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "MainActivity.onStart() called");
         if (storage.isInitialized()) {
             Log.d(TAG, "App has gone through first time setup already");
-            user = new Person(storage.getName(),
-                    storage.getCourseList(),
-                    storage.getPhotoUrl());
+            user = new Person(storage.getName(), // Name
+                    storage.getCourseList(), // Course List
+                    storage.getPhotoUrl()); // Photo Url
 
             personsViewAdapter.setUser(user);
             updateUI();
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         Nearby.getMessagesClient(this).subscribe(messageListener);
     }
 
+    // Updating UI to display all nearbyPeople
     public void updateUI() {
         for (IPerson person : nearbyPeople) {
             Log.d(TAG, person.getName() +
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     " classes in common");
         }
 
+        // the Adapter handles updating display
         personsViewAdapter.setPeopleList(Utilities.getBofList(user, nearbyPeople));
     }
 
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Applying Mocked data
         this.messageListener = new MockedMessageListener(new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
@@ -113,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        // Stop nearby
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
 }
