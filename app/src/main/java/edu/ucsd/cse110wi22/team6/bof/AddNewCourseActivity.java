@@ -16,6 +16,8 @@ public class AddNewCourseActivity extends AppCompatActivity {
     private static final int NUM_YEARS_BACK = 6;
     private Spinner yearDropDown;
     private Spinner quarterDropDown;
+    private Spinner sizeDropDown;
+
     private TextView subjectEntryView;
     private TextView courseNumberEntryView;
     // TODO: add a cancel button
@@ -40,6 +42,12 @@ public class AddNewCourseActivity extends AppCompatActivity {
         for (int i = 0; i < NUM_YEARS_BACK; i++) {
             yearsChoices[i] = String.valueOf(currentYear - i);
         }
+
+        sizeDropDown=findViewById(R.id.dropdownClassSize);
+        ArrayAdapter<CharSequence>sizeAdapter=ArrayAdapter.createFromResource(this, R.array.classSizes, android.R.layout.simple_spinner_item);
+
+        sizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        sizeDropDown.setAdapter(sizeAdapter);
 
         yearDropDown = findViewById(R.id.year_dropdown);
         ArrayAdapter<String> yearAdapter =
