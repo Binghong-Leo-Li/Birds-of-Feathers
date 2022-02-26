@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Birds of a Feather</string>
     <string name="add_button">1</string>
+
     <string-array name="classSizes">
         <item>Tiny (0-40)</item>
         <item>Small (40-75)</item>
@@ -15,5 +16,12 @@
         <item>Spring</item>
         <item>Summer Session 1</item>
         <item>Summer Session 2</item>
+
+    <string-array name="preferences">
+        <item>Sort by number of classes in common</item>
+        <item>prioritize small classes</item>
+        <item>prioritize recent</item>
+        <item>this quarter only</item>
+
     </string-array>
 </resources>

@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -82,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
 
         personsViewAdapter = new BoFsViewAdapter(nobody);
         bofRecyclerView.setAdapter(personsViewAdapter);
+
+        Spinner preferences_dropdown=findViewById(R.id.preferences_dropdown);
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.preferences, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        preferences_dropdown.setAdapter(adapter);
 
         findViewById(R.id.mock_ui_button).setOnClickListener(view -> {
             Intent intent = new Intent(this, MockingPasting.class);
