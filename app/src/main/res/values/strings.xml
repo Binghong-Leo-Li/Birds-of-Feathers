@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Birds of a Feather</string>
     <string name="add_button">1</string>
+    <string-array name="preferences">
+        <item>Sort by number of classes in common</item>
+        <item>prioritize small classes</item>
+        <item>prioritize recent</item>
+        <item>this quarter only</item>
+    </string-array>
 </resources>
