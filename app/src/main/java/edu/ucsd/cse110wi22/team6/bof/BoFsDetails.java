@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -52,5 +53,18 @@ public class BoFsDetails extends AppCompatActivity {
 
     public void onGoBackClicked(View view) {
         finish();
+    }
+
+    public void onFavoriteClicked(View view) {
+        Toast.makeText(this, "favorited!",
+                Toast.LENGTH_LONG).show();
+
+        //TODO　add to favorite list
+    }
+    public void onWaveClicked(View view) {
+        Toast.makeText(this, "waved!",
+                Toast.LENGTH_LONG).show();
+
+        //TODO send wave through nearby
     }
 }

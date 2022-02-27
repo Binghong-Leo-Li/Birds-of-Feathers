@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
         <activity
+
             android:name=".HomeActivity"
             android:exported="true">
             <intent-filter>
@@ -20,6 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".FavoriteListActivity"
+            android:exported="false" />
+
 
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
