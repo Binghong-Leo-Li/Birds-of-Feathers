@@ -102,7 +102,7 @@ public class CourseEntryActivity extends AppCompatActivity {
         storage.setInitialized(true);
 
         // Return to home
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
