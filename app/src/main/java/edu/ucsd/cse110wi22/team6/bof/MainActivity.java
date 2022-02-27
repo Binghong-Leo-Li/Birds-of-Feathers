@@ -1,13 +1,20 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
@@ -18,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+// Activity to display List of BoFs
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
@@ -33,32 +41,30 @@ public class MainActivity extends AppCompatActivity {
 
     private static List<IPerson> nearbyPeople = new ArrayList<>();
 
+    // Setter
     public static void setNearbyPeople(List<IPerson> nearbyPeople) {
         MainActivity.nearbyPeople = nearbyPeople;
     }
 
+    // handling start up of the app
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "MainActivity.onStart() called");
-        if (storage.isInitialized()) {
-            Log.d(TAG, "App has gone through first time setup already");
-            user = new Person(storage.getName(),
-                    storage.getCourseList(),
-                    storage.getPhotoUrl());
 
-            personsViewAdapter.setUser(user);
-            updateUI();
-        } else {
-            // First time setup
-            Log.d(TAG, "First time setup detected");
-            Intent intent = new Intent(this, NameEntryActivity.class);
-            startActivity(intent);
-        }
+        Log.d(TAG, "MainActivity.onStart() called");
+
+        Log.d(TAG, "App has gone through first time setup already");
+        user = new Person(storage.getName(),
+                storage.getCourseList(),
+                storage.getPhotoUrl());
+
+        personsViewAdapter.setUser(user);
+        updateUI();
 
         Nearby.getMessagesClient(this).subscribe(messageListener);
     }
 
+    // Updating UI to display all nearbyPeople
     public void updateUI() {
         for (IPerson person : nearbyPeople) {
             Log.d(TAG, person.getName() +
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     " classes in common");
         }
 
+        // the Adapter handles updating display
         personsViewAdapter.setPeopleList(Utilities.getBofList(user, nearbyPeople));
     }
 
@@ -75,6 +82,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "MainActivity.onCreate() called");
+
+        Button stop_button= (Button)findViewById(R.id.stop_button);
+
+        stop_button.setOnClickListener(new View.OnClickListener(){
+            public void onClick(final View view){
+                final EditText edittext = new EditText(MainActivity.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setView(edittext);
+                alert.setTitle("Save Session");
+                alert.setMessage("Enter Session Name");
+                alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String session_name = edittext.getText().toString();
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        //startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    }
+                });
+                alert.show();
+            }
+        });
 
         storage = Utilities.getStorageInstance(this);
 
@@ -86,11 +117,19 @@ public class MainActivity extends AppCompatActivity {
         personsViewAdapter = new BoFsViewAdapter(nobody);
         bofRecyclerView.setAdapter(personsViewAdapter);
 
+        Spinner preferences_dropdown=findViewById(R.id.preferences_dropdown);
+        ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.preferences, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        preferences_dropdown.setAdapter(adapter);
+
         findViewById(R.id.mock_ui_button).setOnClickListener(view -> {
+            // for mocking purpose
             Intent intent = new Intent(this, MockingPasting.class);
             startActivity(intent);
         });
 
+
+        // Applying Mocked data
         this.messageListener = new MockedMessageListener(new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
@@ -113,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        // Stop nearby
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
+
 }
