@@ -16,7 +16,7 @@
         <item>Spring</item>
         <item>Summer Session 1</item>
         <item>Summer Session 2</item>
-
+    </string-array>>
     <string-array name="preferences">
         <item>Sort by number of classes in common</item>
         <item>prioritize small classes</item>
