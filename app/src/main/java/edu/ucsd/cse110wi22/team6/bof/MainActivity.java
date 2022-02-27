@@ -5,7 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import android.content.Intent;
@@ -76,6 +81,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "MainActivity.onCreate() called");
 
+        Button stop_button= (Button)findViewById(R.id.stop_button);
+
+        stop_button.setOnClickListener(new View.OnClickListener(){
+            public void onClick(final View view){
+                final EditText edittext = new EditText(MainActivity.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setView(edittext);
+                alert.setTitle("Save Session");
+                alert.setMessage("Enter Session Name");
+                alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String session_name = edittext.getText().toString();
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        //startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    }
+                });
+                alert.show();
+            }
+        });
+
         storage = Utilities.getStorageInstance(this);
 
         bofRecyclerView = findViewById(R.id.bof_list);
@@ -95,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MockingPasting.class);
             startActivity(intent);
         });
+
 
         this.messageListener = new MockedMessageListener(new MessageListener() {
             @Override
@@ -120,4 +150,5 @@ public class MainActivity extends AppCompatActivity {
 
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
+
 }
