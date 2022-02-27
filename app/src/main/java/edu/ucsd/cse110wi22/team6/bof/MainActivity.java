@@ -43,21 +43,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "MainActivity.onStart() called");
-        if (storage.isInitialized()) {
-            Log.d(TAG, "App has gone through first time setup already");
-            user = new Person(storage.getName(),
-                    storage.getCourseList(),
-                    storage.getPhotoUrl());
 
-            personsViewAdapter.setUser(user);
-            updateUI();
-        } else {
-            // First time setup
-            Log.d(TAG, "First time setup detected");
-            Intent intent = new Intent(this, NameEntryActivity.class);
-            startActivity(intent);
-        }
+        Log.d(TAG, "MainActivity.onStart() called");
+
+        Log.d(TAG, "App has gone through first time setup already");
+        user = new Person(storage.getName(),
+                storage.getCourseList(),
+                storage.getPhotoUrl());
+
+        personsViewAdapter.setUser(user);
+        updateUI();
+
+
 
         Nearby.getMessagesClient(this).subscribe(messageListener);
     }
