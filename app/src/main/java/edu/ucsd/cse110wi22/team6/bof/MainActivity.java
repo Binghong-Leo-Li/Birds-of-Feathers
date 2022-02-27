@@ -1,10 +1,17 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         Log.d(TAG, "MainActivity.onStart() called");
+
+        Log.d(TAG, "App has gone through first time setup already");
+        user = new Person(storage.getName(),
+                storage.getCourseList(),
+                storage.getPhotoUrl());
+
+        personsViewAdapter.setUser(user);
+        updateUI();
 
         Nearby.getMessagesClient(this).subscribe(messageListener);
     }
@@ -103,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         bofRecyclerView.setAdapter(personsViewAdapter);
 
         Spinner preferences_dropdown=findViewById(R.id.preferences_dropdown);
-        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.preferences, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.preferences, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         preferences_dropdown.setAdapter(adapter);
 
@@ -112,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MockingPasting.class);
             startActivity(intent);
         });
+
 
         // Applying Mocked data
         this.messageListener = new MockedMessageListener(new MessageListener() {
