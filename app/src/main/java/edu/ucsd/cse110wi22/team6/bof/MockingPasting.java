@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.nearby.messages.Message;
 
+// Class for mocking nearby people to enable testing
 public class MockingPasting extends AppCompatActivity {
     private static final String TAG = "MockingPasting";
 
@@ -25,12 +26,13 @@ public class MockingPasting extends AppCompatActivity {
                 .setOnClickListener(this::onEnterClicked);
     }
 
+    // Handling when Enter button is clicked
     private void onEnterClicked(View view) {
         EditText input = findViewById(R.id.bof_info_pasted);
         IPerson person;
         try {
             person = Utilities.parsePersonFromCSV(input.getText().toString());
-        } catch (RuntimeException exception) {
+        } catch (RuntimeException exception) { // If anything doesn't parse
             Log.w(TAG, "Invalid CSV format!");
             exception.printStackTrace();
             Utilities.showAlert(this, "Something went wrong. Check the format.");

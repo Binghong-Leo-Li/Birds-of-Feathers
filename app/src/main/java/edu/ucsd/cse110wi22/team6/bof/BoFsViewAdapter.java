@@ -19,15 +19,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Adapter from boFs to view, handle displaying BoF list
 public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHolder> {
     private List<? extends IPerson> people;
     private IPerson user;
 
+    // Constructor
     public BoFsViewAdapter(List<? extends IPerson> people) {
         super();
         this.people = people;
     }
 
+    // initialization
     @NonNull
     @Override
     public BoFsViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,37 +41,44 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
         return new ViewHolder(user, view);
     }
 
+    // binding
     @Override
     public void onBindViewHolder(@NonNull BoFsViewAdapter.ViewHolder holder, int position) {
         holder.setPerson(people.get(position));
     }
 
+    // setter
     @SuppressLint("NotifyDataSetChanged")
     public void setPeopleList(List<? extends IPerson> newPeople) {
         people = newPeople;
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // notifying recycler view
     }
 
+    // setter
     @SuppressLint("NotifyDataSetChanged")
     public void setUser(IPerson user) {
         this.user = user;
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // notifying recycler view
     }
 
+    // getter
     @Override
     public int getItemCount() {
         return this.people.size();
     }
 
+    // viewHolder for this BoFsViewAdapter
     public static class ViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
+
         private final TextView personNameView;
         private final TextView numCommonCoursesView;
         private final ImageView personThumbnailView;
         private final IPerson user;
         private IPerson person;
 
+        // constructor
         ViewHolder(IPerson user, View itemView) {
             super(itemView);
             this.user = user;
@@ -78,19 +88,23 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
             itemView.setOnClickListener(this);
         }
 
+        // setter
         public void setPerson(IPerson person) {
             this.person = person;
             this.personNameView.setText(person.getName());
+
+            // using glide to load in image
             Glide.with(itemView)
                     .load(this.person.getUrl())
-                    .placeholder(R.drawable.placeholder)
-                    .error(R.drawable.placeholder)
+                    .placeholder(R.drawable.placeholder) // filling in place holder
+                    .error(R.drawable.placeholder)       // if any part fails, display place holder
                     .into(this.personThumbnailView);
             if (user != null)
-                this.numCommonCoursesView.setText(
+                this.numCommonCoursesView.setText( // displaying correct text on recycler view
                         String.valueOf(Utilities.numCoursesTogether(user, person)));
         }
 
+        // handling clicking on an individual in the list, proceeding to BoFsDetails Activity
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
@@ -98,6 +112,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
             Comparator<Course> courseComparator = new CourseComparator(Arrays.asList
                     (context.getResources().getStringArray(R.array.quarter_list)));
 
+            // saving data, moving on to BoFsDetails
             Intent intent = new Intent(context, BoFsDetails.class);
             intent.putExtra("name", this.person.getName());
             intent.putExtra("courseListParsing", Utilities.encodeCourseList(

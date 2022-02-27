@@ -1,21 +1,20 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
@@ -26,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+// Activity to display List of BoFs
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
@@ -41,10 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static List<IPerson> nearbyPeople = new ArrayList<>();
 
+    // Setter
     public static void setNearbyPeople(List<IPerson> nearbyPeople) {
         MainActivity.nearbyPeople = nearbyPeople;
     }
 
+    // handling start up of the app
     @Override
     protected void onStart() {
         super.onStart();
@@ -59,11 +61,10 @@ public class MainActivity extends AppCompatActivity {
         personsViewAdapter.setUser(user);
         updateUI();
 
-
-
         Nearby.getMessagesClient(this).subscribe(messageListener);
     }
 
+    // Updating UI to display all nearbyPeople
     public void updateUI() {
         for (IPerson person : nearbyPeople) {
             Log.d(TAG, person.getName() +
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     " classes in common");
         }
 
+        // the Adapter handles updating display
         personsViewAdapter.setPeopleList(Utilities.getBofList(user, nearbyPeople));
     }
 
@@ -116,16 +118,18 @@ public class MainActivity extends AppCompatActivity {
         bofRecyclerView.setAdapter(personsViewAdapter);
 
         Spinner preferences_dropdown=findViewById(R.id.preferences_dropdown);
-        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.preferences, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.preferences, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         preferences_dropdown.setAdapter(adapter);
 
         findViewById(R.id.mock_ui_button).setOnClickListener(view -> {
+            // for mocking purpose
             Intent intent = new Intent(this, MockingPasting.class);
             startActivity(intent);
         });
 
 
+        // Applying Mocked data
         this.messageListener = new MockedMessageListener(new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
@@ -148,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        // Stop nearby
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
 
