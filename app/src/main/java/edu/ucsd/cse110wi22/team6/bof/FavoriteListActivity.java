@@ -63,7 +63,7 @@ public class FavoriteListActivity extends AppCompatActivity {
 
         storage = Utilities.getStorageInstance(this);
 
-        bofRecyclerView = findViewById(R.id.bof_list);
+        bofRecyclerView = findViewById(R.id.favorite_list);
 
         personsLayoutManager = new LinearLayoutManager(this);
         bofRecyclerView.setLayoutManager(personsLayoutManager);
