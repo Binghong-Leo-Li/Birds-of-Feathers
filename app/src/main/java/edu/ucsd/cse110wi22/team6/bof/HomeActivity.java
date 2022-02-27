@@ -104,9 +104,9 @@ public class HomeActivity extends AppCompatActivity {
 
 
         // go to favorites
-        //Intent intent = new Intent(this, activity_favorites.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //startActivity(intent);
+        Intent intent = new Intent(this, FavoriteListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
 }
