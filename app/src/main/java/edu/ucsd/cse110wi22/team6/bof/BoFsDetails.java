@@ -3,6 +3,7 @@ package edu.ucsd.cse110wi22.team6.bof;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -56,5 +57,18 @@ public class BoFsDetails extends AppCompatActivity {
     // handling the back button being clicked
     public void onGoBackClicked(View view) {
         finish();
+    }
+
+    public void onFavoriteClicked(View view) {
+        Toast.makeText(this, "favorited!",
+                Toast.LENGTH_LONG).show();
+
+        //TODO　add to favorite list
+    }
+    public void onWaveClicked(View view) {
+        Toast.makeText(this, "waved!",
+                Toast.LENGTH_LONG).show();
+
+        //TODO send wave through nearby
     }
 }

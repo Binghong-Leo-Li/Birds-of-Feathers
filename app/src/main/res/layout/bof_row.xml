@@ -43,6 +43,28 @@
             app:layout_constraintEnd_toStartOf="@+id/thumbnail"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="8" />
+
+        <ImageView
+            android:id="@+id/favorited"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/num_common_courses_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
+
+        <ImageView
+            android:id="@+id/waved"
+            android:layout_width="143dp"
+            android:layout_height="26dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/favorited"
+            app:layout_constraintStart_toEndOf="@+id/bof_row_name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/wave" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
