@@ -39,11 +39,12 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.nearbyPeople = nearbyPeople;
     }
 
+    // handling start up of the app
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "MainActivity.onStart() called");
-        if (storage.isInitialized()) {
+        if (storage.isInitialized()) { // if something is stored, hence not first time user
             Log.d(TAG, "App has gone through first time setup already");
             user = new Person(storage.getName(), // Name
                     storage.getCourseList(), // Course List
@@ -51,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
             personsViewAdapter.setUser(user);
             updateUI();
-        } else {
-            // First time setup
+        } else { // if nothing is stored, hence implying first time user
+
+            // First time setup, move on to the set up page in NameEntryActivity
             Log.d(TAG, "First time setup detected");
             Intent intent = new Intent(this, NameEntryActivity.class);
             startActivity(intent);
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         bofRecyclerView.setAdapter(personsViewAdapter);
 
         findViewById(R.id.mock_ui_button).setOnClickListener(view -> {
+            // for mocking purpose
             Intent intent = new Intent(this, MockingPasting.class);
             startActivity(intent);
         });

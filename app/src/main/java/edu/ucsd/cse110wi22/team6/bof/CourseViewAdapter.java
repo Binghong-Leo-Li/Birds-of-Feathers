@@ -20,6 +20,7 @@ public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.Vi
         this.courses = courses;
     }
 
+    // Initialization
     @NonNull
     @Override
     public CourseViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

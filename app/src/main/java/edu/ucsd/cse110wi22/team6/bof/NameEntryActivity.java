@@ -155,7 +155,7 @@ public class NameEntryActivity extends AppCompatActivity {
                 runOnUiThread(() -> Utilities.showAlert(
                         this, "Please enter valid photo URL!"
                 ));
-            } else { // If not return and show alert
+            } else { // If not return and show alert, restart the activity and reinitialize and reset
                 this.future.cancel(true);
                 Intent intent = new Intent(this, CourseEntryActivity.class);
                 startActivity(intent);
