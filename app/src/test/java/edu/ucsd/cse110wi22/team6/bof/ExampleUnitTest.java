@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,6 +27,16 @@ public class ExampleUnitTest {
         assertEquals("Alex", tmp.getName());
         assertTrue(tmp.getCourseList().isEmpty());
         assertEquals("https://www.example.com/nothing", tmp.getUrl());
+    }
+
+    @Test
+    public void testJSONMethod() throws IOException {
+        List<Course> courses = new ArrayList<>();
+        Person tmp = new Person("Alex", courses, "https://www.example.com/nothing");
+        String toJSON = Utilities.toJSON(tmp);
+        Person tmpFork = (Person) Utilities.parsePersonFromJSON(toJSON);
+        assertEquals(tmp.getName(), tmpFork.getName());
+        assertEquals(tmp.getUrl(), tmpFork.getUrl());
     }
 
     @Test
