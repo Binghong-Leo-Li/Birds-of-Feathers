@@ -1,6 +1,7 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
 import java.util.List;
+import java.util.UUID;
 
 // Interface for all types of person may be used
 public interface IPerson {
@@ -9,4 +10,5 @@ public interface IPerson {
     String getUrl();
     void addCourse(Course course);
     void setName(String name);
+    UUID getUUID();
 }
