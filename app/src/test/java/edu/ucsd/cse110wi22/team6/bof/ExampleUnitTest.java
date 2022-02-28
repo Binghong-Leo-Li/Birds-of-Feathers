@@ -33,7 +33,7 @@ public class ExampleUnitTest {
         List<Course> courses = new ArrayList<>();
         Person tmp = new Person("Alex", courses, "https://www.example.com/nothing");
         String toJSON = tmp.toJSON();
-        Person tmpFork = (Person) Utilities.parsePersonFromJSON(toJSON);
+        IPerson tmpFork = Utilities.parsePersonFromJSON(toJSON);
         assertEquals(tmp.getName(), tmpFork.getName());
         assertEquals(tmp.getUrl(), tmpFork.getUrl());
     }
