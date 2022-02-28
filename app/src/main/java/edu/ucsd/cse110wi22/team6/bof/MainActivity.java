@@ -128,6 +128,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        findViewById(R.id.time_mocking_btn).setOnClickListener(view -> {
+            Intent intent = new Intent(this, MockingTime.class);
+            startActivity(intent);
+        });
+
 
         // Applying Mocked data
         this.messageListener = new MockedMessageListener(new MessageListener() {
