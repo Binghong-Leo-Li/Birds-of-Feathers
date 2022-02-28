@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Utilities {
     // Device persistence status
@@ -149,5 +152,15 @@ public class Utilities {
         return new Person(readString(buffer), Utilities.parseCourseList(
                 readString(buffer)), readString(buffer)
         );
+    }
+
+    public static String toJSON(IPerson person) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(person);
+    }
+
+    public static IPerson parsePersonFromJSON(String IPersonJSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(IPersonJSON, IPerson.class);
     }
 }
