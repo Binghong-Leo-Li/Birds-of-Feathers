@@ -29,6 +29,16 @@ public class ExampleUnitTest {
     }
 
     @Test
+    public void testJSONMethod() {
+        List<Course> courses = new ArrayList<>();
+        Person tmp = new Person("Alex", courses, "https://www.example.com/nothing");
+        String toJSON = tmp.toJSON();
+        IPerson tmpFork = Utilities.parsePersonFromJSON(toJSON);
+        assertEquals(tmp.getName(), tmpFork.getName());
+        assertEquals(tmp.getUrl(), tmpFork.getUrl());
+    }
+
+    @Test
     public void testPerson2(){
         List<Course> courses = new ArrayList<>();
         courses.add(new Course(2019, "SP", "ECE", "65"));

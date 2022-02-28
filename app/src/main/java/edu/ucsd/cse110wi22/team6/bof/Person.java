@@ -2,6 +2,8 @@ package edu.ucsd.cse110wi22.team6.bof;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -71,5 +73,10 @@ public class Person implements IPerson {
                 ", courseList=" + courseList +
                 ", photoURL='" + photoURL + '\'' +
                 '}';
+    }
+
+    public String toJSON(){
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
