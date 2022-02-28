@@ -9,4 +9,5 @@ public interface IPerson {
     String getUrl();
     void addCourse(Course course);
     void setName(String name);
+    String toJSON();
 }

@@ -2,6 +2,8 @@ package edu.ucsd.cse110wi22.team6.bof;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 // Person Class to represent student objects
@@ -57,5 +59,10 @@ public class Person implements IPerson {
                 ", courseList=" + courseList +
                 ", photoURL='" + photoURL + '\'' +
                 '}';
+    }
+
+    public String toJSON(){
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
