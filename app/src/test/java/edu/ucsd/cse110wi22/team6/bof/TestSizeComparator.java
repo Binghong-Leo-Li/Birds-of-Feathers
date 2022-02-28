@@ -31,7 +31,7 @@ public class TestSizeComparator {
                         "2017 FA MATH 31CH");
 
         url = "https://avatars.githubusercontent.com/u/32375681?v";
-        user = new Person("Leo", userCourses,url);
+        user = new Person("Leo", userCourses,url); // mocked user
 
         // f to mock the real mapping from course to course size
         f = c -> {

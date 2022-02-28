@@ -5,8 +5,6 @@ import java.util.List;
 
 public class RecencyComparator implements Comparator<IPerson> {
 
-    private static final String TAG = "Course Comparator";
-
     IPerson user;
     String currentQuarter;
     int currentYear;

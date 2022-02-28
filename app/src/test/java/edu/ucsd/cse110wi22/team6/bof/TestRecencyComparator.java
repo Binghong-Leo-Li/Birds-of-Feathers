@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
+// Test RecencyComparator Class
 @RunWith(AndroidJUnit4.class)
 public class TestRecencyComparator {
 
@@ -31,7 +32,7 @@ public class TestRecencyComparator {
                         "2019 FA MATH 31AH");
 
         url = "https://avatars.githubusercontent.com/u/32375681?v";
-        user = new Person("Leo", userCourses,url);
+        user = new Person("Leo", userCourses,url); // mocked user
         currentQuarter = "WI";
         currentYear = 2022;
 
@@ -82,14 +83,14 @@ public class TestRecencyComparator {
 
     @Test
     public void testCalculateScore() {
-        List<Course> clA = Utilities.parseCourseList(
+        List<Course> clA = Utilities.parseCourseList( // some course overlap
                 "2021 FA CSE 105," +
                 "2021 WI CSE 15L," +
                 "2022 SS2 HUM 2"
         );
         IPerson a = new Person("Aike", clA, url);
 
-        List<Course> clB = Utilities.parseCourseList(
+        List<Course> clB = Utilities.parseCourseList( // zero course overlap
                 "2023 FA CSE 105," +
                 "2312 WI CSE 15L," +
                 "1999 SS2 HUM 2"
@@ -107,10 +108,10 @@ public class TestRecencyComparator {
                 "2021 WI CSE 15L," +
                 "2022 SS2 HUM 2"
         );
-        IPerson a = new Person("Aike", clA, url);
-        IPerson c = new Person("Bike", clA, url);
+        IPerson a = new Person("Aike", clA, url); // some course overlap
+        IPerson c = new Person("Bike", clA, url); // duplicate for a
 
-        List<Course> clB = Utilities.parseCourseList(
+        List<Course> clB = Utilities.parseCourseList( // zero course overlap
                 "2023 FA CSE 105," +
                 "2312 WI CSE 15L," +
                 "1999 SS2 HUM 2"
@@ -124,7 +125,7 @@ public class TestRecencyComparator {
     }
 
     @Test
-    public void testScoreDetailed() {
+    public void testScoreDetailed() { // refined test
         List<Course> clA = Utilities
                 .parseCourseList("2022 WI CSE 110," +
                         "2021 FA CSE 105," +
