@@ -45,10 +45,21 @@
         android:id="@+id/stop_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="23dp"
+        android:layout_marginBottom="24dp"
         android:text="Stop"
         app:layout_constraintBottom_toTopOf="@+id/mock_ui_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.151"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/time_mocking_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="31dp"
+        android:layout_marginBottom="24dp"
+        android:text="Time Mocking"
+        app:layout_constraintBottom_toTopOf="@+id/mock_ui_button"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
