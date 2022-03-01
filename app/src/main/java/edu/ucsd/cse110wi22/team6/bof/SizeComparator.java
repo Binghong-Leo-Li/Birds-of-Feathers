@@ -19,9 +19,7 @@ public class SizeComparator implements Comparator<IPerson> {
 
     @Override
     public int compare(IPerson a, IPerson b) {
-        if (calculatePersonScore(a) > calculatePersonScore(b)) return 1;
-        else if (calculatePersonScore(a) == calculatePersonScore(b)) return 0;
-        return -1;
+        return Double.compare(calculatePersonScore(a), calculatePersonScore(b));
     }
 
     // Calculates the total score of a person regarding all the overlapping courses

@@ -113,8 +113,8 @@ public class TestSizeComparator {
                         "1 FA MATH 31CH");
         IPerson b = new Person("Bike", clB, url);
 
-        Assert.assertEquals(1, sc.compare(a,b));
-        Assert.assertEquals(-1, sc.compare(b,a));
+        Assert.assertEquals(1, Integer.signum(sc.compare(a,b)));
+        Assert.assertEquals(-1, Integer.signum(sc.compare(b,a)));
         Assert.assertEquals(0, sc.compare(c,a));
         Assert.assertEquals(0, sc.compare(a,c));
     }
