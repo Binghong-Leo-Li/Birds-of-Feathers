@@ -1,8 +1,12 @@
-package edu.ucsd.cse110wi22.team6.bof;
+package edu.ucsd.cse110wi22.team6.bof.model;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+
+import edu.ucsd.cse110wi22.team6.bof.Course;
+import edu.ucsd.cse110wi22.team6.bof.IPerson;
+import edu.ucsd.cse110wi22.team6.bof.Utilities;
 
 // Essentially sorter for the "sort by class" size option
 public class SizeComparator implements Comparator<IPerson> {

@@ -11,6 +11,9 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.function.Function;
 
+import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
+import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
+
 // Testing SizeComparator Class
 @RunWith(AndroidJUnit4.class)
 public class TestSizeComparator {
