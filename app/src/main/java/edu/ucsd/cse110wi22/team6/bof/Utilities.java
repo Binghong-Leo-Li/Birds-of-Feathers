@@ -121,11 +121,6 @@ public class Utilities {
         return new Person(name, courses, photoURL);
     }
 
-    public static IPerson parsePersonFromJSON(String PersonJSON) {
-        Gson gson = new Gson();
-        return gson.fromJson(PersonJSON, Person.class);
-    }
-
     // Helper function to parse person into storable data into buffers
     public static byte[] serializePerson(IPerson person) {
         byte[] name = person.getName().getBytes(StandardCharsets.UTF_8);

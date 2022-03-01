@@ -74,7 +74,7 @@ public class SessionManager extends MessageListener {
         super.onFound(message);
         String messageContent = new String(message.getContent());
         Log.d(TAG, "onFound: " + messageContent);
-        // TODO: update list of bof in session, possibly handle wave
+        // TODO: add to list of bof in session, possibly handle wave
     }
 
     @Override
@@ -82,6 +82,6 @@ public class SessionManager extends MessageListener {
         super.onLost(message);
         String messageContent = new String(message.getContent());
         Log.d(TAG, "onLost: " + messageContent);
-        // TODO: update list of bof in session, possibly handle wave
+        // TODO: remove from list of bof in session, possibly handle wave
     }
 }

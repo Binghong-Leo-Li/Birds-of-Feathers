@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import edu.ucsd.cse110wi22.team6.bof.model.IPersonFactory;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -29,11 +32,11 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void testJSONMethod() {
+    public void testPersonSerializeString() {
         List<Course> courses = new ArrayList<>();
-        Person tmp = new Person("Alex", courses, "https://www.example.com/nothing");
-        String toJSON = tmp.toJSON();
-        IPerson tmpFork = Utilities.parsePersonFromJSON(toJSON);
+        IPerson tmp = new Person("Alex", courses, "https://www.example.com/nothing");
+        String personSerialized = tmp.serializeToString();
+        IPerson tmpFork = new IPersonFactory().deserialize(tmp.getStringID(), personSerialized);
         assertEquals(tmp.getName(), tmpFork.getName());
         assertEquals(tmp.getUrl(), tmpFork.getUrl());
     }

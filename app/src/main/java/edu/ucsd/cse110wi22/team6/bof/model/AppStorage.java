@@ -8,6 +8,7 @@ import edu.ucsd.cse110wi22.team6.bof.Utilities;
 
 public class AppStorage implements IUserInfoStorage {
     IKeyValueStore kvMapping;
+    private IDMapping<CourseData> courseMap;
     // Key names
     private static final String INITIALIZED = "initialized";
     // TODO: deprecate the below in favor of user being its own UUID
@@ -17,6 +18,14 @@ public class AppStorage implements IUserInfoStorage {
 
     public AppStorage(IKeyValueStore kvMapping) {
         this.kvMapping = kvMapping;
+    }
+
+    public void registerCourse(Course course, CourseSize size) {
+        courseMap.registerObject(new CourseData(course, size));
+    }
+
+    public CourseSize getCourseSize(Course course) {
+        return courseMap.getObjectByID(course.toString()).getSize();
     }
 
     @Override
