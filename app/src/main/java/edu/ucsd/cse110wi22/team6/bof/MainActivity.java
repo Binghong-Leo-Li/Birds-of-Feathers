@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import com.google.android.gms.nearby.messages.MessageListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 // Activity to display List of BoFs
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected RecyclerView bofRecyclerView;
     protected RecyclerView.LayoutManager personsLayoutManager;
     protected BoFsViewAdapter personsViewAdapter;
+    private Spinner preferences_dropdown;
+
     private IPerson user;
     private IUserInfoStorage storage;
     private MessageListener messageListener;
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private final List<IPerson> nobody = Collections.emptyList();
 
     private static List<IPerson> nearbyPeople = new ArrayList<>();
+    private List<Comparator<IPerson>> comparators;
 
     // Setter
     public static void setNearbyPeople(List<IPerson> nearbyPeople) {
@@ -54,9 +59,17 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "MainActivity.onStart() called");
 
         Log.d(TAG, "App has gone through first time setup already");
+        // TODO: get UUID from storage as well to make sure the UUID of the user remain constant
+        // even if list of classes changed
         user = new Person(storage.getName(),
                 storage.getCourseList(),
                 storage.getPhotoUrl());
+        comparators = Arrays.asList(
+                Utilities.getCompareByNumCourses(user), // Sort by number of classes in common
+                Utilities.getCompareByNumCourses(user), // TODO: prioritize small classes in this case
+                new RecencyComparator(user, 2022, "WI"), // prioritize recent, TODO: change year and quarter
+                Utilities.getCompareByNumCourses(user) // Postponed: this quarter only, TODO: delete this option
+        );
 
         personsViewAdapter.setUser(user);
         updateUI();
@@ -74,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // the Adapter handles updating display
-        personsViewAdapter.setPeopleList(Utilities.getBofList(user, nearbyPeople));
+        personsViewAdapter.setPeopleList(Utilities.getBofList(user,
+                nearbyPeople,
+                comparators.get(preferences_dropdown.getSelectedItemPosition())));
     }
 
     @Override
@@ -83,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "MainActivity.onCreate() called");
 
-        Button stop_button= (Button)findViewById(R.id.stop_button);
+        Button stop_button= findViewById(R.id.stop_button);
 
         stop_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(final View view){
@@ -117,10 +132,23 @@ public class MainActivity extends AppCompatActivity {
         personsViewAdapter = new BoFsViewAdapter(nobody);
         bofRecyclerView.setAdapter(personsViewAdapter);
 
-        Spinner preferences_dropdown=findViewById(R.id.preferences_dropdown);
+        preferences_dropdown=findViewById(R.id.preferences_dropdown);
         ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.preferences, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         preferences_dropdown.setAdapter(adapter);
+        preferences_dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG, "onItemSelected position " + i);
+                updateUI();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.d(TAG, "onNothingSelected");
+                updateUI();
+            }
+        });
 
         findViewById(R.id.mock_ui_button).setOnClickListener(view -> {
             // for mocking purpose
