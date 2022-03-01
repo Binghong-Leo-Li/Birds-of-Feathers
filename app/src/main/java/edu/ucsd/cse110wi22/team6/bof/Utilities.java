@@ -19,6 +19,10 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
+import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
+import edu.ucsd.cse110wi22.team6.bof.model.InMemoryMapping;
+import edu.ucsd.cse110wi22.team6.bof.model.SharedPreferencesMapping;
+
 public class Utilities {
     // Device persistence status
     private static boolean persistence = true;
@@ -27,13 +31,9 @@ public class Utilities {
 
     // Helper function to extract device storage if persistence is set
     public static IUserInfoStorage getStorageInstance(Context context) {
-        if (persistence) {
-            return new SharedPreferencesStorage(context.getSharedPreferences(
-                    Constants.PREFERENCE_STRING, MODE_PRIVATE
-            ));
-        } else {
-            return InMemoryStorage.getInstance();
-        }
+        return new AppStorage(persistence ? new SharedPreferencesMapping(
+                context.getSharedPreferences(Constants.PREFERENCE_STRING, MODE_PRIVATE)
+        ) : InMemoryMapping.getInstance());
     }
 
     // Initializing the persistence setting

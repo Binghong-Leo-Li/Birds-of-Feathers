@@ -1,10 +1,12 @@
-package edu.ucsd.cse110wi22.team6.bof;
+package edu.ucsd.cse110wi22.team6.bof.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import edu.ucsd.cse110wi22.team6.bof.IPerson;
 
 public class Session {
     private final UUID sessionId;

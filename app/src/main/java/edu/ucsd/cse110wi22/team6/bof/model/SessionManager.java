@@ -1,4 +1,4 @@
-package edu.ucsd.cse110wi22.team6.bof;
+package edu.ucsd.cse110wi22.team6.bof.model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,6 +12,8 @@ import com.google.android.gms.nearby.messages.MessagesClient;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import edu.ucsd.cse110wi22.team6.bof.MockedMessagesClient;
 
 // Mediator between sessions, nearby messages, and persistent storage
 public class SessionManager extends MessageListener {
