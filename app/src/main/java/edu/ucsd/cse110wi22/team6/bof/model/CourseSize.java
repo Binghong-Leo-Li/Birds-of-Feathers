@@ -1,4 +1,4 @@
-package edu.ucsd.cse110wi22.team6.bof;
+package edu.ucsd.cse110wi22.team6.bof.model;
 
 public enum CourseSize {
     TINY(1.00),

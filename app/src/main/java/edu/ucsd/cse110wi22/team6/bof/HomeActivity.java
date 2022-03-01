@@ -1,5 +1,6 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.ArrayList;
@@ -51,8 +53,6 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, NameEntryActivity.class);
             startActivity(intent);
         }
-
-        //Nearby.getMessagesClient(this).subscribe(messageListener);
     }
 
 

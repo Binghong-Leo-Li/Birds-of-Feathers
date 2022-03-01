@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 // Person Class to represent student objects
@@ -75,8 +76,21 @@ public class Person implements IPerson {
                 '}';
     }
 
-    public String toJSON(){
+    public String serializeToString(){
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return uuid.equals(person.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
     }
 }
