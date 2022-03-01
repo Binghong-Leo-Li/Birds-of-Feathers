@@ -7,8 +7,8 @@ import edu.ucsd.cse110wi22.team6.bof.IUserInfoStorage;
 import edu.ucsd.cse110wi22.team6.bof.Utilities;
 
 public class AppStorage implements IUserInfoStorage {
-    IKeyValueStore kvMapping;
-    private IDMapping<CourseData> courseMap;
+    private final IKeyValueStore kvMapping;
+    private final IDMapping<CourseData> courseMap;
     // Key names
     private static final String INITIALIZED = "initialized";
     // TODO: deprecate the below in favor of user being its own UUID
@@ -18,6 +18,7 @@ public class AppStorage implements IUserInfoStorage {
 
     public AppStorage(IKeyValueStore kvMapping) {
         this.kvMapping = kvMapping;
+        this.courseMap = new IDMapping<>(kvMapping, "course", new CourseDataFactory());
     }
 
     public void registerCourse(Course course, CourseSize size) {
