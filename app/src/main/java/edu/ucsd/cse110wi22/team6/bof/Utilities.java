@@ -28,9 +28,8 @@ public class Utilities {
     private static boolean persistence = true;
     private static final int SIZE_OF_INT = 4;
 
-
     // Helper function to extract device storage if persistence is set
-    public static IUserInfoStorage getStorageInstance(Context context) {
+    public static AppStorage getStorageInstance(Context context) {
         return new AppStorage(persistence ? new SharedPreferencesMapping(
                 context.getSharedPreferences(Constants.PREFERENCE_STRING, MODE_PRIVATE)
         ) : InMemoryMapping.getInstance());
@@ -94,14 +93,25 @@ public class Utilities {
     }
 
     // Helper function to obtain the list of BoFs from all nearbyPeople
+    // This is an overloaded method that defaults to compare by number of classes together
+    // For compatibility with features from MS 1
     public static List<IPerson> getBofList(IPerson user, List<IPerson> nearbyPeople) {
+        return getBofList(user, nearbyPeople, getCompareByNumCourses(user));
+    }
+
+    public static List<IPerson> getBofList(IPerson user, List<IPerson> nearbyPeople,
+                                           Comparator<IPerson> comparisonStrategy) {
         return nearbyPeople
                 .stream()
                 .filter(person -> Utilities.numCoursesTogether(user, person) > 0)
-                                    // if have courses together then generate list
-                .sorted(Comparator.comparingInt((IPerson person) ->
-                        Utilities.numCoursesTogether(user, person)).reversed())
+                // if have courses together then generate list
+                .sorted(comparisonStrategy.reversed())
                 .collect(Collectors.toList());
+    }
+
+    public static Comparator<IPerson> getCompareByNumCourses(IPerson user) {
+        return Comparator.comparingInt((IPerson person) ->
+                Utilities.numCoursesTogether(user, person));
     }
 
     // Helper function to parse information from CSV file into a new person object
