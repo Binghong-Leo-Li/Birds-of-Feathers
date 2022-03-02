@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Calendar;
 
+import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
+import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
+
 // Activity handling the add course UI
 public class AddNewCourseActivity extends AppCompatActivity {
     private static final int NUM_YEARS_BACK = 6; // we choose to provide options for at most 6 years back
@@ -21,7 +24,8 @@ public class AddNewCourseActivity extends AppCompatActivity {
 
     private TextView subjectEntryView;
     private TextView courseNumberEntryView;
-    // TODO: add a cancel button
+
+    private AppStorage appStorage;
 
     private static int mockCurrentYear;
 
@@ -84,6 +88,8 @@ public class AddNewCourseActivity extends AppCompatActivity {
             subjectEntryView.setText(course.getSubject());
             courseNumberEntryView.setText(course.getCourseNumber());
         }
+
+        appStorage = Utilities.getStorageInstance(this);
     }
 
     // handling enter button being pressed
@@ -92,6 +98,7 @@ public class AddNewCourseActivity extends AppCompatActivity {
         String quarter = (String) quarterDropDown.getSelectedItem();
         String subject = subjectEntryView.getText().toString();
         String number = courseNumberEntryView.getText().toString();
+        int sizeItemIndex = sizeDropDown.getSelectedItemPosition();
 
         if (!subject.matches("[A-Z]+")) { // checking if subject input is invalid
             Utilities.showAlert(this, "Subject must be non blank and in ALL CAPS.");
@@ -107,6 +114,7 @@ public class AddNewCourseActivity extends AppCompatActivity {
 
         // No input validation for year needed since the drop box only has integer selections
         Course course = new Course(Integer.parseInt(year), quarter, subject, number);
+        appStorage.registerCourse(course, CourseSize.values()[sizeItemIndex]);
 
         // course entering is successful
         Intent intent = new Intent();
