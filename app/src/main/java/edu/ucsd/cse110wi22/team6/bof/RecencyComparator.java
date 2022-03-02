@@ -1,5 +1,7 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import android.util.Log;
+
 import java.util.Comparator;
 import java.util.List;
 
@@ -50,12 +52,13 @@ public class RecencyComparator implements Comparator<IPerson> {
     }
 
     public int quarterToInt(String quarter) {
-        String[] quarters = {"WI", "SP", "SS1", "SS2", "FA"};
+        String[] quarters = {"WI", "SP", "SS1", "SS2", "SSS", "FA"};
         if (quarter.equals(quarters[0])) return 1;
         if (quarter.equals(quarters[1])) return 2;
         if (quarter.equals(quarters[2])) return 3;
         if (quarter.equals(quarters[3])) return 3;
-        if (quarter.equals(quarters[4])) return 4;
+        if (quarter.equals(quarters[4])) return 3;
+        if (quarter.equals(quarters[5])) return 4;
         return -1;
     }
 
