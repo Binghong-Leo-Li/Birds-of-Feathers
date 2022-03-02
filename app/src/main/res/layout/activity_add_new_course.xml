@@ -10,10 +10,12 @@
         android:id="@+id/dropdownClassSize"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
-        app:layout_constraintBottom_toTopOf="@+id/add_new_course_enter_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/classSize" />
+        app:layout_constraintTop_toBottomOf="@+id/classSize"
+        app:layout_constraintVertical_bias="0.235" />
 
     <TextView
         android:id="@+id/classSize"
@@ -123,14 +125,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="162dp"
-        android:layout_marginTop="90dp"
         android:layout_marginEnd="161dp"
+        android:layout_marginBottom="4dp"
         android:text="Enter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dropdownClassSize" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/subject_entry_view"
