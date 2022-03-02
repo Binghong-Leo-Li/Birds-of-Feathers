@@ -26,14 +26,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+// Activity handling the entry of person information, e.g. name and photo url
 public class NameEntryActivity extends AppCompatActivity {
     private static final String TAG = "NameEntryActivity";
 
+    // Creating a new thread
     private final ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
     private Future<Void> future;
 
     private GoogleSignInClient mGoogleSignInClient;
 
+    // Handling extracting google account information
     ActivityResultLauncher<Intent> signInFormLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -45,10 +48,12 @@ public class NameEntryActivity extends AppCompatActivity {
 
     private static boolean noGoogleAutoFill;
 
+    // Updating state to no autofill
     public static void noAutoFill() {
         noGoogleAutoFill = true;
     }
 
+    // Validating/Checking google account information
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -63,6 +68,7 @@ public class NameEntryActivity extends AppCompatActivity {
         }
     }
 
+    // Handling auto-filling name with google account
     private void updateUI(GoogleSignInAccount account) {
         if (account != null && !noGoogleAutoFill)
             this.<TextView>findViewById(R.id.first_name_view).setText(account.getGivenName());
@@ -80,6 +86,7 @@ public class NameEntryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Only shown on first time
         super.onCreate(savedInstanceState);
         setTitle("First time setup");
         setContentView(R.layout.activity_name_entry);
@@ -101,7 +108,9 @@ public class NameEntryActivity extends AppCompatActivity {
         });
     }
 
+    // Handling when confirm button is clicked
     private void onConfirm(View view) {
+        // Obtaining stored information from storage
         IUserInfoStorage storage = Utilities.getStorageInstance(this);
 
         EditText firstNameView = findViewById(R.id.first_name_view);
@@ -110,34 +119,43 @@ public class NameEntryActivity extends AppCompatActivity {
         EditText URLView = findViewById(R.id.URL_view);
         storage.setPhotoUrl(URLView.getText().toString());
 
-
         String nameEntered = firstNameView.getText().toString();
         String URLEntered = URLView.getText().toString();
 
+        // Check name entered is non-empty
         if (nameEntered.length() == 0) {
             Utilities.showAlert(this, "Please enter non-empty name!");
             return;
         }
 
+        // Check Url entered is non-empty
         if (URLEntered.length() == 0) {
             Utilities.showAlert(this, "Please enter non-empty URL!");
             return;
         }
 
+        // Check Url entered is of valid format
         if(!URLUtil.isValidUrl(URLEntered)) {
             Utilities.showAlert(this, "Please enter valid URL!");
             return;
         }
 
 
+        // Move from main thread to background thread to enable network connection
+        // Checking Url is a valid photo url
         this.future = backgroundThreadExecutor.submit(() -> {
+
+            // Connecting to network
             URL photo = new URL(URLEntered);
             URLConnection connection = photo.openConnection();
             String contentType = connection.getHeaderField("Content-Type");
             boolean img = contentType.startsWith("image/");
-            if (!img) {
-                runOnUiThread(() -> Utilities.showAlert(this, "Please enter valid photo URL!"));
-            } else {
+
+            if (!img) { // Check if img is type image
+                runOnUiThread(() -> Utilities.showAlert(
+                        this, "Please enter valid photo URL!"
+                ));
+            } else { // If not return and show alert, restart the activity and reinitialize and reset
                 this.future.cancel(true);
                 Intent intent = new Intent(this, CourseEntryActivity.class);
                 startActivity(intent);

@@ -18,16 +18,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bof_list"
-        android:layout_width="400dp"
+        android:layout_width="383dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="64dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="88dp"
+        app:layout_constraintBottom_toTopOf="@+id/mock_ui_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preferences_dropdown"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/preferences_dropdown" />
 
     <Spinner
         android:id="@+id/preferences_dropdown"
@@ -36,10 +33,30 @@
         android:layout_marginStart="1dp"
         android:layout_marginTop="11dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="99dp"
-        app:layout_constraintBottom_toTopOf="@+id/bof_list"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/stop_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Stop"
+        app:layout_constraintBottom_toTopOf="@+id/mock_ui_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/time_mocking_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="31dp"
+        android:layout_marginBottom="24dp"
+        android:text="Time Mocking"
+        app:layout_constraintBottom_toTopOf="@+id/mock_ui_button"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

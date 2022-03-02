@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
         <activity
-
+            android:name=".MockingTime"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="true">
             <intent-filter>
@@ -24,7 +26,6 @@
         <activity
             android:name=".FavoriteListActivity"
             android:exported="false" />
-
 
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
@@ -45,6 +46,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
