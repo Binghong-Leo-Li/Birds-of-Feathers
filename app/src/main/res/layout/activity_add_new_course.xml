@@ -13,10 +13,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/add_new_course_enter_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/classSize" />
+        app:layout_constraintTop_toBottomOf="@+id/classSize"
+        app:layout_constraintVertical_bias="0.07999998" />
 
     <TextView
         android:id="@+id/classSize"
@@ -25,10 +27,12 @@
         android:layout_marginTop="24dp"
         android:text="Class Size"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/add_new_course_enter_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/course_number_entry_view" />
+        app:layout_constraintTop_toBottomOf="@+id/course_number_entry_view"
+        app:layout_constraintVertical_bias="0.04000002" />
 
     <TextView
         android:id="@+id/textView7"
@@ -120,7 +124,9 @@
         android:text="Enter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/course_number_entry_view"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/subject_entry_view"
