@@ -73,6 +73,9 @@ public class TestRecencyComparator {
         Assert.assertEquals(1 ,rc.calculateAge(new Course(
                 2021, "SS1", "HUM", "1"
         )));
+        Assert.assertEquals(1 ,rc.calculateAge(new Course(
+                2021, "SSS", "HUM", "1"
+        )));
         Assert.assertEquals(2 ,rc.calculateAge(new Course(
                 2021, "SP", "CSE", "30"
         )));
