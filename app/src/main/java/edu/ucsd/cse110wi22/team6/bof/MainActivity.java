@@ -27,6 +27,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
+import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
+
 // Activity to display List of BoFs
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Spinner preferences_dropdown;
 
     private IPerson user;
-    private IUserInfoStorage storage;
+    private AppStorage storage;
     private MessageListener messageListener;
 
     // Dummy
@@ -65,10 +68,14 @@ public class MainActivity extends AppCompatActivity {
                 storage.getCourseList(),
                 storage.getPhotoUrl());
         comparators = Arrays.asList(
-                Utilities.getCompareByNumCourses(user), // Sort by number of classes in common
-                Utilities.getCompareByNumCourses(user), // TODO: prioritize small classes in this case
-                new RecencyComparator(user, 2022, "WI"), // prioritize recent, TODO: change year and quarter
-                Utilities.getCompareByNumCourses(user) // Postponed: this quarter only, TODO: delete this option
+                // Sort by number of classes in common
+                Utilities.getCompareByNumCourses(user),
+                // prioritize small classes
+                new SizeComparator(user, (course -> storage.getCourseSize(course))),
+                // prioritize recent
+                new RecencyComparator(user, 2022, "WI"), // TODO: change year and quarter
+                // Postponed: this quarter only
+                Utilities.getCompareByNumCourses(user) // TODO: delete this option
         );
 
         personsViewAdapter.setUser(user);
