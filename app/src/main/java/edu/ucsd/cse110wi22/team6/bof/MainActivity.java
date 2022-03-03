@@ -1,12 +1,12 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
 import android.widget.TimePicker;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,7 +18,6 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +36,8 @@ import java.util.Locale;
 // Activity to display List of BoFs
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private DatePickerDialog datePickerDialog;
+    private Button datebutton;
     private Button timebutton;
     private int hour, minute;
 
@@ -107,27 +108,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "MainActivity.onCreate() called");
 
-        Button stop_button= findViewById(R.id.stop_button);
-
-        stop_button.setOnClickListener(new View.OnClickListener(){
+        Button toggle_button= findViewById(R.id.toggle_button);
+        toggle_button.setText("Stop");
+        toggle_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(final View view){
-                final EditText edittext = new EditText(MainActivity.this);
-                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                alert.setView(edittext);
-                alert.setTitle("Save Session");
-                alert.setMessage("Enter Session Name");
-                alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        String session_name = edittext.getText().toString();
-                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                    }
-                });
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-                alert.show();
+                if (toggle_button.getText().toString() == "Stop") {
+                    final EditText edittext = new EditText(MainActivity.this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                    alert.setView(edittext);
+                    alert.setTitle("Save Session");
+                    alert.setMessage("Enter Session Name");
+                    alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            String session_name = edittext.getText().toString();
+                            //startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                            toggle_button.setText("Start");
+                            //Hide BoF List
+                        }
+                    });
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+                    alert.show();
+                }
+                else{
+                    //do something here relating to start bof List;
+                    toggle_button.setText("Stop");
+                }
             }
         });
 
@@ -166,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         timebutton = findViewById(R.id.pick_time_button);
+        datebutton = findViewById(R.id.pick_date_button);
 
 
 
@@ -213,5 +223,26 @@ public class MainActivity extends AppCompatActivity {
 
         timePickerDialog.setTitle("Pick Time");
         timePickerDialog.show();
+    }
+
+    public void initiateDatePicker(View view) {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day)
+            {
+                month = month + 1;
+                String date = month + "/" + day + "/" + year;
+                datebutton.setText(date);
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        datePickerDialog = new DatePickerDialog(this,dateSetListener, year, month, day);
+        datePickerDialog.show();
     }
 }
