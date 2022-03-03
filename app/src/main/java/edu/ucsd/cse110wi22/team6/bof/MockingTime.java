@@ -21,12 +21,13 @@ public class MockingTime extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mocking_time);
-        setTitle("Nearby Messages Mock");
 
-        Spinner time_dropdown =findViewById(R.id.time_spinner);
-        ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.time, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        time_dropdown.setAdapter(adapter);
+        //setContentView(R.layout.activity_mocking_time);
+        //setTitle("Nearby Messages Mock");
+
+        //Spinner time_dropdown =findViewById(R.id.time_spinner);
+        //ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.time, android.R.layout.simple_spinner_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        //time_dropdown.setAdapter(adapter);
     }
 }

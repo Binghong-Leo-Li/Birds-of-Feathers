@@ -1,5 +1,9 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,9 +27,11 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
@@ -33,6 +39,10 @@ import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
 // Activity to display List of BoFs
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private DatePickerDialog datePickerDialog;
+    private Button datebutton;
+    private Button timebutton;
+    private int hour, minute;
 
     protected RecyclerView bofRecyclerView;
     protected RecyclerView.LayoutManager personsLayoutManager;
@@ -127,27 +137,35 @@ public class MainActivity extends AppCompatActivity {
         year = 2022; // TODO: change year and quarter based on intent parameters and time selection
         quarter = "WI";
 
-        Button stop_button= findViewById(R.id.stop_button);
-
-        stop_button.setOnClickListener(new View.OnClickListener(){
+        Button toggle_button= findViewById(R.id.toggle_button);
+        toggle_button.setText("Stop");
+        toggle_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(final View view){
-                final EditText edittext = new EditText(MainActivity.this);
-                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                alert.setView(edittext);
-                alert.setTitle("Save Session");
-                alert.setMessage("Enter Session Name");
-                alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        String session_name = edittext.getText().toString();
-                    }
-                });
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        //startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                    }
-                });
-                alert.show();
+                if (toggle_button.getText().toString() == "Stop") {
+                    final EditText edittext = new EditText(MainActivity.this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                    alert.setView(edittext);
+                    alert.setTitle("Save Session");
+                    alert.setMessage("Enter Session Name");
+                    alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            String session_name = edittext.getText().toString();
+                            //startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                            toggle_button.setText("Start");
+                            //Hide BoF List
+                        }
+                    });
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+                    alert.show();
+                }
+                else{
+                    //do something here relating to start bof List;
+                    toggle_button.setText("Stop");
+                }
             }
         });
 
@@ -185,10 +203,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        findViewById(R.id.time_mocking_btn).setOnClickListener(view -> {
-            Intent intent = new Intent(this, MockingTime.class);
-            startActivity(intent);
-        });
+        timebutton = findViewById(R.id.pick_time_button);
+        datebutton = findViewById(R.id.pick_date_button);
+
+
 
 
         // Applying Mocked data
@@ -218,4 +236,42 @@ public class MainActivity extends AppCompatActivity {
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
 
+    public void initiateTimePicker(View view) {
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener()
+        {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute)
+            {
+                hour = selectedHour;
+                minute = selectedMinute;
+                timebutton.setText(String.format(Locale.getDefault(), "%02d:%02d",hour, minute));
+            }
+        };
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
+
+        timePickerDialog.setTitle("Pick Time");
+        timePickerDialog.show();
+    }
+
+    public void initiateDatePicker(View view) {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day)
+            {
+                month = month + 1;
+                String date = month + "/" + day + "/" + year;
+                datebutton.setText(date);
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        datePickerDialog = new DatePickerDialog(this,dateSetListener, year, month, day);
+        datePickerDialog.show();
+    }
 }
