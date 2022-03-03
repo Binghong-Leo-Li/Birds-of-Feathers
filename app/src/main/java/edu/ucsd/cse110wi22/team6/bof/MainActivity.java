@@ -33,6 +33,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
+import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
+
 // Activity to display List of BoFs
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -47,8 +50,12 @@ public class MainActivity extends AppCompatActivity {
     private Spinner preferences_dropdown;
 
     private IPerson user;
-    private IUserInfoStorage storage;
+    private AppStorage storage;
     private MessageListener messageListener;
+
+    // Current year and quarter
+    private int year;
+    private String quarter;
 
     // Dummy
     private final List<IPerson> nobody = Collections.emptyList();
@@ -74,12 +81,7 @@ public class MainActivity extends AppCompatActivity {
         user = new Person(storage.getName(),
                 storage.getCourseList(),
                 storage.getPhotoUrl());
-        comparators = Arrays.asList(
-                Utilities.getCompareByNumCourses(user), // Sort by number of classes in common
-                Utilities.getCompareByNumCourses(user), // TODO: prioritize small classes in this case
-                new RecencyComparator(user, 2022, "WI"), // prioritize recent, TODO: change year and quarter
-                Utilities.getCompareByNumCourses(user) // Postponed: this quarter only, TODO: delete this option
-        );
+        updateComparators();
 
         personsViewAdapter.setUser(user);
         updateUI();
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Updating UI to display all nearbyPeople
-    public void updateUI() {
+    void updateUI() {
         for (IPerson person : nearbyPeople) {
             Log.d(TAG, person.getName() +
                     ": " +
@@ -102,11 +104,38 @@ public class MainActivity extends AppCompatActivity {
                 comparators.get(preferences_dropdown.getSelectedItemPosition())));
     }
 
+    void updateComparators() {
+        comparators = Arrays.asList(
+                // Sort by number of classes in common
+                Utilities.getCompareByNumCourses(user),
+                // prioritize small classes
+                new SizeComparator(user, (course -> storage.getCourseSize(course))),
+                // prioritize recent
+                new RecencyComparator(user, year, quarter),
+                // Postponed: this quarter only
+                Utilities.getCompareByNumCourses(user) // TODO: delete this option
+        );
+        updateUI();
+    }
+
+    void setYear(int year) {
+        this.year = year;
+        updateComparators();
+    }
+
+    void setQuarter(String quarter) {
+        this.quarter = quarter;
+        updateComparators();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "MainActivity.onCreate() called");
+
+        year = 2022; // TODO: change year and quarter based on intent parameters and time selection
+        quarter = "WI";
 
         Button toggle_button= findViewById(R.id.toggle_button);
         toggle_button.setText("Stop");
