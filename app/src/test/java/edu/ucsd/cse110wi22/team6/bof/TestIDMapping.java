@@ -29,6 +29,7 @@ public class TestIDMapping {
         assertEquals(p1, map.getObjectByID(uuid));
     }
 
+    /*
     @Test
     public void testNameSpace(){
         InMemoryMapping mem = new InMemoryMapping(new HashMap<String, Object>());
@@ -43,4 +44,5 @@ public class TestIDMapping {
 
         assertNotEquals(map, map2);
     }
+    */
 }
