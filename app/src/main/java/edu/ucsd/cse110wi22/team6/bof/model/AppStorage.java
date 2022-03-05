@@ -59,7 +59,9 @@ public class AppStorage implements IUserInfoStorage {
         ensureUserHasUUID();
         String uuidString = getUserUUIDString();
         assert uuidString != null;
-        return new Person(UUID.fromString(uuidString), getName(), getCourseList(), getPhotoUrl());
+        IPerson user = new Person(UUID.fromString(uuidString), getName(), getCourseList(), getPhotoUrl());
+        registerPerson(user);
+        return user;
     }
 
     @Override
