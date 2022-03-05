@@ -76,11 +76,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "MainActivity.onStart() called");
 
         Log.d(TAG, "App has gone through first time setup already");
-        // TODO: get UUID from storage as well to make sure the UUID of the user remain constant
-        // even if list of classes changed
-        user = new Person(storage.getName(),
-                storage.getCourseList(),
-                storage.getPhotoUrl());
+        user = storage.getUser();
+        Log.d(TAG, "Current User: " + user);
+
         updateComparators();
 
         personsViewAdapter.setUser(user);
