@@ -14,7 +14,7 @@ public class InMemoryMapping implements IKeyValueStore {
     }
 
     // Use a custom map
-    private InMemoryMapping(Map<String, Object> map) {
+    public InMemoryMapping(Map<String, Object> map) {
         this.map = map;
     }
 
