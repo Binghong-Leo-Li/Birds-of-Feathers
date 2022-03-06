@@ -142,10 +142,32 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 // TODO: allowing resuming old sessions
-                Log.d(TAG, "Starting new session");
-                sessionManager.startNewSession();
-                updateToggleButtonName();
-                updateBoFList();
+                //Dummy list of past session names
+                String[] pastSessions = new String[3];
+                pastSessions[0]="Choose Session...";
+                pastSessions[1]="Resume DummySession1";
+                pastSessions[2]="Start New Session";
+
+                AlertDialog.Builder resume_alert = new AlertDialog.Builder(MainActivity.this);
+                View spView = getLayoutInflater().inflate(R.layout.dialog_spinner, null);
+                Spinner spinner = (Spinner)spView.findViewById(R.id.spinner);
+
+                ArrayAdapter<String> resumeAdapter =
+                        new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, pastSessions);
+                resumeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(resumeAdapter);
+
+
+                resume_alert.setTitle("Start/Resume  Session");
+                resume_alert.setPositiveButton("Start", (dialog, id) -> {
+                    Log.d(TAG, "Starting session");
+                    sessionManager.startNewSession();
+                    updateToggleButtonName();
+                    updateBoFList();
+                });
+                resume_alert.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+                resume_alert.setView(spView);
+                resume_alert.show();
             }
         });
 
