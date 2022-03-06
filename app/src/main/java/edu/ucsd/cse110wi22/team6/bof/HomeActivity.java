@@ -79,10 +79,6 @@ public class HomeActivity extends AppCompatActivity {
         setTitle("Home");
         setContentView(R.layout.activity_home);
 
-        // TODO: ad hoc code to test single session functionality
-        if (!SessionManager.getInstance(this).isRunning())
-            SessionManager.getInstance(this).startNewSession();
-
         storage = Utilities.getStorageInstance(this);
 
         currentQuarterDropDown=findViewById(R.id.currentQuarter_dropdown);

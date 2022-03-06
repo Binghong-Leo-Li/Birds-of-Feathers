@@ -23,14 +23,21 @@ public class Session implements Identifiable {
     private final List<SessionChangeListener> listeners = new ArrayList<>();
     private final Gson gson = new Gson();
 
-    private Session(UUID sessionId, Date startTime, Set<IPerson> nearbyStudentList) {
+    // Custom session with custom set, use only for testing
+    public Session(UUID sessionId, Date startTime, Set<IPerson> nearbyStudentList) {
         this.sessionId = sessionId;
         this.startTime = startTime;
         this.nearbyStudentList = nearbyStudentList;
     }
 
+    // Create a new session at the specified time
     public Session(Date startTime) {
         this(UUID.randomUUID(), startTime, new HashSet<>());
+    }
+
+    // Create a new session with certain UUID at the specified time
+    public Session(UUID sessionId, Date startTime) {
+        this(sessionId, startTime, new HashSet<>());
     }
 
     // TODO: add factory method to instantiate this class from persistent storage object
