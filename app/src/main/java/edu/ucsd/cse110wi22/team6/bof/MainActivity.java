@@ -1,9 +1,5 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import android.app.DatePickerDialog;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,10 +35,6 @@ import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
 // Activity to display List of BoFs
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private DatePickerDialog datePickerDialog;
-    private Button datebutton;
-    private Button timebutton;
-    private int hour, minute;
 
     protected RecyclerView bofRecyclerView;
     protected RecyclerView.LayoutManager personsLayoutManager;
@@ -203,11 +195,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        timebutton = findViewById(R.id.pick_time_button);
-        datebutton = findViewById(R.id.pick_date_button);
-
-
-
 
         // Applying Mocked data
         this.messageListener = new MockedMessageListener(new MessageListener() {
@@ -234,44 +221,5 @@ public class MainActivity extends AppCompatActivity {
 
         // Stop nearby
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
-    }
-
-    public void initiateTimePicker(View view) {
-        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener()
-        {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute)
-            {
-                hour = selectedHour;
-                minute = selectedMinute;
-                timebutton.setText(String.format(Locale.getDefault(), "%02d:%02d",hour, minute));
-            }
-        };
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
-
-        timePickerDialog.setTitle("Pick Time");
-        timePickerDialog.show();
-    }
-
-    public void initiateDatePicker(View view) {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
-        {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day)
-            {
-                month = month + 1;
-                String date = month + "/" + day + "/" + year;
-                datebutton.setText(date);
-            }
-        };
-
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        datePickerDialog = new DatePickerDialog(this,dateSetListener, year, month, day);
-        datePickerDialog.show();
     }
 }

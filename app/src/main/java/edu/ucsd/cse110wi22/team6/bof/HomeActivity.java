@@ -1,24 +1,33 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import static android.view.View.GONE;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -32,6 +41,10 @@ public class HomeActivity extends AppCompatActivity {
     private IPerson user;
     private IUserInfoStorage storage;
     private MessageListener messageListener;
+    private Button timebutton;
+    private Button datebutton;
+    private int hour, minute;
+    private DatePickerDialog datePickerDialog;
 
 
 
@@ -78,6 +91,9 @@ public class HomeActivity extends AppCompatActivity {
         Button favoritesButton = findViewById(R.id.buttonFavorites);
         favoritesButton.setOnClickListener(this::onButtonFavorites);
 
+        timebutton = findViewById(R.id.time_mock_btn);
+        datebutton = findViewById(R.id.date_mock_btn);
+
 
     }
     private void onButtonStart(View view) {
@@ -107,6 +123,45 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FavoriteListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    public void initiateTimePicker(View view) {
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener()
+        {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute)
+            {
+                hour = selectedHour;
+                minute = selectedMinute;
+                timebutton.setText(String.format(Locale.getDefault(), "%02d:%02d",hour, minute));
+            }
+        };
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
+
+        timePickerDialog.setTitle("Pick Time");
+        timePickerDialog.show();
+    }
+
+    public void initiateDatePicker(View view) {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
+        {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day)
+            {
+                month = month + 1;
+                String date = month + "/" + day + "/" + year;
+                datebutton.setText(date);
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        datePickerDialog = new DatePickerDialog(this,dateSetListener, year, month, day);
+        datePickerDialog.show();
     }
 
 }
