@@ -33,6 +33,8 @@ public class SessionManager implements IProcessedMessageListener {
     private SessionManager(Context context) {
         this.context = context;
         this.messageProcessor = new MessageProcessor(this);
+        // Create a dummy session with no BoFs so that first launch will not crash
+        this.currentSession = new Session(new UUID(0,0), Calendar.getInstance().getTime());
         this.storage = Utilities.getStorageInstance(context);
         // TODO: register storage as listener of session to enable autosave
         // remember to keep track of session registration as the current session changes

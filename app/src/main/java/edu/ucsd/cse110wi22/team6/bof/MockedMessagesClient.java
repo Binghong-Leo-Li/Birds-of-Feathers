@@ -1,6 +1,5 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -35,14 +34,10 @@ public class MockedMessagesClient implements MessagesClient {
         realClient = Nearby.getMessagesClient(context);
     }
 
-    public static MessagesClient getInstance(Context context) {
+    public static MockedMessagesClient getInstance(Context context) {
         if (instance == null)
             instance = new MockedMessagesClient(context);
         return instance;
-    }
-
-    public static void mockArrival(Message message) {
-        instance.mockMessageArrival(message);
     }
 
     public void mockMessageArrival(Message message) {

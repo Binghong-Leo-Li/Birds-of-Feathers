@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Birds of a Feather</string>
     <string name="add_button">1</string>
+    <string name="session_stop">Stop</string>
+    <string name="session_start">Start</string>
 
     <string-array name="classSizes">
         <item>Tiny (0-40)</item>
