@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -123,37 +125,28 @@ public class MainActivity extends AppCompatActivity {
 
         toggleButton.setOnClickListener(view -> {
             if (sessionManager.isRunning()) {
-                Log.d(TAG, "Stop clicked");
-                sessionManager.stopSession();
-
-                // TODO: enable alert to save
-//                final EditText edittext = new EditText(MainActivity.this);
-//                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-//                alert.setView(edittext);
-//                alert.setTitle("Save Session");
-//                alert.setMessage("Enter Session Name");
-//                alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        String session_name = edittext.getText().toString();
-//                        //startActivity(new Intent(MainActivity.this, HomeActivity.class));
-//                        toggle_button.setText(R.string.session_start);
-//                        //Hide BoF List
-//                    }
-//                });
-//                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        dialog.cancel();
-//                    }
-//                });
-//                alert.show();
+                final EditText edittext = new EditText(MainActivity.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setView(edittext);
+                alert.setTitle("Save Session");
+                alert.setMessage("Enter Session Name");
+                alert.setPositiveButton("Save", (dialog, id) -> {
+                    String sessionName = edittext.getText().toString();
+                    sessionManager.getCurrentSession().setName(sessionName);
+                    Log.d(TAG, "Stopping current session");
+                    sessionManager.stopSession();
+                    updateToggleButtonName();
+                });
+                alert.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+                alert.show();
             }
             else{
-                Log.d(TAG, "Start clicked");
                 // TODO: allowing resuming old sessions
+                Log.d(TAG, "Starting new session");
                 sessionManager.startNewSession();
+                updateToggleButtonName();
                 updateBoFList();
             }
-            updateToggleButtonName();
         });
 
         storage = Utilities.getStorageInstance(this);

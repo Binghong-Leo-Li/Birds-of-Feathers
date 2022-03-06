@@ -27,6 +27,8 @@ public class SessionManager implements IProcessedMessageListener {
 
     private Date mockedTime;
 
+    private static final UUID NIL_UUID = new UUID(0,0);
+
     @SuppressLint("StaticFieldLeak")
     private static SessionManager INSTANCE;
 
@@ -34,7 +36,7 @@ public class SessionManager implements IProcessedMessageListener {
         this.context = context;
         this.messageProcessor = new MessageProcessor(this);
         // Create a dummy session with no BoFs so that first launch will not crash
-        this.currentSession = new Session(new UUID(0,0), Calendar.getInstance().getTime());
+        this.currentSession = new Session(NIL_UUID, Calendar.getInstance().getTime());
         this.storage = Utilities.getStorageInstance(context);
         // TODO: register storage as listener of session to enable autosave
         // remember to keep track of session registration as the current session changes
@@ -53,13 +55,16 @@ public class SessionManager implements IProcessedMessageListener {
         currentSession = newSession;
         running = true;
         messagesClient.subscribe(this.messageProcessor);
+        currentSession.registerListener(storage);
     }
 
     // Start a NEW session
     public void startNewSession() {
-        startSession(new Session(mockedTime == null ?
+        Session newSession = new Session(mockedTime == null ?
                 Calendar.getInstance().getTime() :
-                mockedTime));
+                mockedTime);
+        storage.registerNewSession(newSession);
+        startSession(newSession);
     }
 
     // Stop a session
@@ -67,6 +72,8 @@ public class SessionManager implements IProcessedMessageListener {
         assert running;
         running = false;
         messagesClient.unsubscribe(this.messageProcessor);
+        if (!currentSession.getSessionId().equals(NIL_UUID))
+            currentSession.unregisterListener(storage);
     }
 
     // Getter for the current session
@@ -87,16 +94,23 @@ public class SessionManager implements IProcessedMessageListener {
         return INSTANCE;
     }
 
+    private void foundNearbyStudent(IPerson person) {
+        storage.registerPerson(person);
+        currentSession.addNearbyStudent(person);
+    }
+
     @Override
     public void onAdvertise(IPerson person) {
         Log.d(TAG, "Added student " + person);
-        currentSession.addNearbyStudent(person);
+        foundNearbyStudent(person);
     }
 
     @Override
     public void onWave(IPerson from, UUID to) {
         if (storage.getUser().getUUID().equals(to)) {
             Log.d(TAG, "Wave received from " + from);
+            // In case an "advertise" message from this person is missed, add it nevertheless
+            foundNearbyStudent(from);
             // TODO: handle wave by adding to wave list in AppStorage
         }
     }
