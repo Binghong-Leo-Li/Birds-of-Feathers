@@ -10,35 +10,21 @@
         android:id="@+id/mock_ui_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="6dp"
         android:layout_marginBottom="16dp"
         android:text="Mock Nearby Messages"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/pick_date_button"
-        app:layout_constraintHorizontal_bias="0.087"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bof_list"
-        android:layout_width="383dp"
+        android:layout_width="357dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="88dp"
-        app:layout_constraintBottom_toTopOf="@+id/mock_ui_button"
+        app:layout_constraintBottom_toTopOf="@+id/toggle_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/preferences_dropdown" />
-
-    <Button
-        android:id="@+id/pick_time_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:onClick="initiateTimePicker"
-        android:text="Mock Time"
-        app:layout_constraintEnd_toEndOf="@+id/bof_list"
-        app:layout_constraintTop_toBottomOf="@+id/bof_list" />
 
     <Spinner
         android:id="@+id/preferences_dropdown"
@@ -56,23 +42,11 @@
         android:id="@+id/toggle_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         android:text="Stop"
         app:layout_constraintBottom_toTopOf="@+id/mock_ui_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/pick_date_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="23dp"
-        android:onClick="initiateDatePicker"
-        android:text="Mock Date"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mock_ui_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
