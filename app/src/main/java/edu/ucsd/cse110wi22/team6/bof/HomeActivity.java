@@ -171,7 +171,9 @@ public class HomeActivity extends AppCompatActivity {
 
     public void onBoFClicked(View view) {
         Intent intent = new Intent(this, MainActivity.class);
-        String selectedQuarter = currentQuarterDropDown.getSelectedItem().toString();
+        int selectedQuarterIdx = currentQuarterDropDown.getSelectedItemPosition();
+        String[] quarterCodes = getResources().getStringArray(R.array. quarter_list);
+        String selectedQuarter = quarterCodes[selectedQuarterIdx];
         intent.putExtra("quarter", selectedQuarter);
         intent.putExtra("year", year);
 

@@ -13,11 +13,12 @@
         <item>Gigantic (400+)</item>
     </string-array>
     <string-array name="currentQuarter">
-        <item>Fall</item>
         <item>Winter</item>
         <item>Spring</item>
         <item>Summer Session 1</item>
         <item>Summer Session 2</item>
+        <item>Special Summer Session </item>
+        <item>Fall</item>
     </string-array>
     >
     <string-array name="preferences">
