@@ -1,6 +1,9 @@
 package edu.ucsd.cse110wi22.team6.bof.model;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import edu.ucsd.cse110wi22.team6.bof.Course;
@@ -21,6 +24,7 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     private static final String COURSES = "courses";
     private static final String PHOTO_URL = "photoUrl";
     private static final String USER_UUID = "userUUID";
+    private static final String SESSION_LIST = "sessionList"; // As a list of UUIDs
 
     public AppStorage(IKeyValueStore kvMapping) {
         this.kvMapping = kvMapping;
@@ -45,9 +49,27 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
         return peopleMap.getObjectByID(uuid.toString());
     }
 
+    // Check for name collisions if the name is not null
+    // If the name is null, return false (no collision)
+    // Otherwise, return true if there the name of this session collides with
+    // The name of an existing session whose name is not null
+    public boolean hasNameCollision(Session session) {
+        return false; // TODO: actually do the check by scanning names for collisions
+    }
+
+    // Notify AppStorage of the existence of a NEW session
+    public void registerNewSession(Session session) {
+        assert !hasNameCollision(session);
+        Set<String> s = new HashSet<>(kvMapping.getStringSet(SESSION_LIST, Collections.emptySet()));
+        s.add(session.getStringID());
+        kvMapping.putStringSet(SESSION_LIST, s);
+        sessionMap.registerObject(session);
+    }
+
     @Override
     public void onSessionModified(Session session) {
         // Update (Re-register) existing session in the map to auto-save
+        assert !hasNameCollision(session);
         sessionMap.registerObject(session);
     }
 

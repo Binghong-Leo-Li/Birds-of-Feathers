@@ -3,6 +3,7 @@ package edu.ucsd.cse110wi22.team6.bof.model;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Session implements Identifiable {
     private String name;
     private final Date startTime;
     private final Set<IPerson> nearbyStudentList;
-    private final List<SessionChangeListener> listeners = new ArrayList<>();
+    private final Collection<SessionChangeListener> listeners = new ArrayList<>();
     private final Gson gson = new Gson();
 
     // Custom session with custom set, use only for testing
@@ -86,7 +87,9 @@ public class Session implements Identifiable {
 
     // Unregister observers
     public void unregisterListener(SessionChangeListener listener) {
-        listeners.remove(listener);
+        boolean removed = listeners.remove(listener);
+        // Make sure the listener existed before, Java's not SRP so let's deal with it
+        assert removed;
     }
 
     // The name shown in the dropdown selection of sessions, either name or timestamp if
