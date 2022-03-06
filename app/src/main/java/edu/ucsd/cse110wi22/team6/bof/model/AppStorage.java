@@ -9,13 +9,13 @@ import edu.ucsd.cse110wi22.team6.bof.IUserInfoStorage;
 import edu.ucsd.cse110wi22.team6.bof.Person;
 import edu.ucsd.cse110wi22.team6.bof.Utilities;
 
-public class AppStorage implements IUserInfoStorage {
+public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     private final IKeyValueStore kvMapping;
     private final IDMapping<CourseData> courseMap;
     private final IDMapping<IPerson> peopleMap;
+    private final IDMapping<Session> sessionMap;
     // Key names
     private static final String INITIALIZED = "initialized";
-    // TODO: deprecate the below in favor of user being its own UUID
     private static final String NAME = "name";
     private static final String COURSES = "courses";
     private static final String PHOTO_URL = "photoUrl";
@@ -25,6 +25,7 @@ public class AppStorage implements IUserInfoStorage {
         this.kvMapping = kvMapping;
         this.courseMap = new IDMapping<>(kvMapping, "course", new CourseDataFactory());
         this.peopleMap = new IDMapping<>(kvMapping, "person", new IPersonFactory());
+        this.sessionMap = new IDMapping<>(kvMapping, "session", new Session.Factory(this::getPersonFromID));
     }
 
     public void registerCourse(Course course, CourseSize size) {
@@ -39,8 +40,14 @@ public class AppStorage implements IUserInfoStorage {
         peopleMap.registerObject(person);
     }
 
-    public IPerson getPersonFromID(String uuidString) {
-        return peopleMap.getObjectByID(uuidString);
+    public IPerson getPersonFromID(UUID uuid) {
+        return peopleMap.getObjectByID(uuid.toString());
+    }
+
+    @Override
+    public void onSessionModified(Session session) {
+        // Update (Re-register) existing session in the map to auto-save
+        sessionMap.registerObject(session);
     }
 
     private String getUserUUIDString() {

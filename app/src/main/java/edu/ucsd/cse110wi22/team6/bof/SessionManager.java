@@ -1,27 +1,28 @@
-package edu.ucsd.cse110wi22.team6.bof.model;
+package edu.ucsd.cse110wi22.team6.bof;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.MessagesClient;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
-import edu.ucsd.cse110wi22.team6.bof.MockedMessagesClient;
+import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
+import edu.ucsd.cse110wi22.team6.bof.model.Session;
 
 // Mediator between sessions, nearby messages, and persistent storage
-public class SessionManager extends MessageListener {
+public class SessionManager implements IProcessedMessageListener {
     private static final String TAG = "SessionManager";
     private Session currentSession;
     private final MessagesClient messagesClient;
     // Have a storage handle object: AppStorage and instantiate it from Context
     private final Context context;
+    private final AppStorage storage;
+    private final MessageListener messageProcessor;
     private boolean running;
 
     private Date mockedTime;
@@ -31,6 +32,8 @@ public class SessionManager extends MessageListener {
 
     private SessionManager(Context context) {
         this.context = context;
+        this.messageProcessor = new MessageProcessor(this);
+        this.storage = Utilities.getStorageInstance(context);
         messagesClient = MockedMessagesClient.getInstance(context);
     }
 
@@ -38,19 +41,24 @@ public class SessionManager extends MessageListener {
         this.mockedTime = mockedTime;
     }
 
-    public void startNewSession() {
+    // Used to resume from an existing session
+    public void startSession(Session newSession) {
         assert !running;
-        currentSession = new Session(mockedTime == null ?
-                Calendar.getInstance().getTime() :
-                mockedTime);
+        currentSession = newSession;
         running = true;
-        messagesClient.subscribe(this);
+        messagesClient.subscribe(this.messageProcessor);
+    }
+
+    public void startNewSession() {
+        startSession(new Session(mockedTime == null ?
+                Calendar.getInstance().getTime() :
+                mockedTime));
     }
 
     public void stopSession() {
         assert running;
         running = false;
-        messagesClient.unsubscribe(this);
+        messagesClient.unsubscribe(this.messageProcessor);
     }
 
     public Session getCurrentSession() {
@@ -70,18 +78,16 @@ public class SessionManager extends MessageListener {
     }
 
     @Override
-    public void onFound(@NonNull Message message) {
-        super.onFound(message);
-        String messageContent = new String(message.getContent());
-        Log.d(TAG, "onFound: " + messageContent);
-        // TODO: add to list of bof in session, possibly handle wave
+    public void onAdvertise(IPerson person) {
+        Log.d(TAG, "Added student " + person);
+        currentSession.addNearbyStudent(person);
     }
 
     @Override
-    public void onLost(@NonNull Message message) {
-        super.onLost(message);
-        String messageContent = new String(message.getContent());
-        Log.d(TAG, "onLost: " + messageContent);
-        // TODO: remove from list of bof in session, possibly handle wave
+    public void onWave(IPerson from, UUID to) {
+        if (storage.getUser().getUUID().equals(to)) {
+            Log.d(TAG, "Wave received from " + from);
+            // TODO: handle wave by adding to wave list in AppStorage
+        }
     }
 }
