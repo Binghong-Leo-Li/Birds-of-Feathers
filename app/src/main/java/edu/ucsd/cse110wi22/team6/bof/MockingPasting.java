@@ -75,6 +75,6 @@ public class MockingPasting extends AppCompatActivity {
             Utilities.showAlert(this, "Something went wrong. Check the format.");
             return;
         }
-        MockedMessagesClient.mockArrival(new Message(data));
+        MockedMessagesClient.getInstance(this).mockMessageArrival(new Message(data));
     }
 }
