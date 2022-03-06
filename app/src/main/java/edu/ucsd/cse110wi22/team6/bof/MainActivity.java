@@ -120,8 +120,9 @@ public class MainActivity extends AppCompatActivity {
 
         toggleButton = findViewById(R.id.toggle_button);
 
-        year = 2022; // TODO: change year and quarter based on intent parameters and time selection
-        quarter = "WI";
+        Bundle extras = getIntent().getExtras();
+        year = extras.getInt("year", 0);
+        quarter = extras.getString("quarter", null);
 
         toggleButton.setOnClickListener(view -> {
             if (sessionManager.isRunning()) {

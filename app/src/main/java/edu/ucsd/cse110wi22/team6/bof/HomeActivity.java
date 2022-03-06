@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
     private MessageListener messageListener;
     private Button timebutton;
     private Button datebutton;
-    private int hour, minute;
+    private int hour, minute, day, month, year;
     private DatePickerDialog datePickerDialog;
 
 
@@ -150,9 +150,11 @@ public class HomeActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
         {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day)
+            public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay)
             {
-                month = month + 1;
+                year = selectedYear;
+                month = selectedMonth + 1;
+                day = selectedDay;
                 String date = month + "/" + day + "/" + year;
                 datebutton.setText(date);
             }
@@ -167,4 +169,12 @@ public class HomeActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    public void onBoFClicked(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        String selectedQuarter = currentQuarterDropDown.getSelectedItem().toString();
+        intent.putExtra("quarter", selectedQuarter);
+        intent.putExtra("year", year);
+
+        startActivity(intent);
+    }
 }
