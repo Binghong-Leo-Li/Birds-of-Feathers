@@ -29,7 +29,7 @@ public class MockedMessagesClient implements MessagesClient {
     private final MessagesClient realClient;
     private final List<MessageListener> listeners = new ArrayList<>();
 
-    private static MessagesClient instance;
+    private static MockedMessagesClient instance;
 
     private MockedMessagesClient(Context context) {
         realClient = Nearby.getMessagesClient(context);
@@ -39,6 +39,16 @@ public class MockedMessagesClient implements MessagesClient {
         if (instance == null)
             instance = new MockedMessagesClient(context);
         return instance;
+    }
+
+    public static void mockArrival(Message message) {
+        instance.mockMessageArrival(message);
+    }
+
+    public void mockMessageArrival(Message message) {
+        for (MessageListener listener : listeners) {
+            listener.onFound(message);
+        }
     }
 
     @NonNull

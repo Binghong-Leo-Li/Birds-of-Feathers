@@ -34,14 +34,18 @@ public class SessionManager implements IProcessedMessageListener {
         this.context = context;
         this.messageProcessor = new MessageProcessor(this);
         this.storage = Utilities.getStorageInstance(context);
+        // TODO: register storage as listener of session to enable autosave
+        // remember to keep track of session registration as the current session changes
+        // and also fire the listener on first creation
         messagesClient = MockedMessagesClient.getInstance(context);
     }
 
+    // Allow mocking the current time since it is otherwise untestable
     public void setMockedTime(Date mockedTime) {
         this.mockedTime = mockedTime;
     }
 
-    // Used to resume from an existing session
+    // Resume an existing session
     public void startSession(Session newSession) {
         assert !running;
         currentSession = newSession;
@@ -49,31 +53,35 @@ public class SessionManager implements IProcessedMessageListener {
         messagesClient.subscribe(this.messageProcessor);
     }
 
+    // Start a NEW session
     public void startNewSession() {
         startSession(new Session(mockedTime == null ?
                 Calendar.getInstance().getTime() :
                 mockedTime));
     }
 
+    // Stop a session
     public void stopSession() {
         assert running;
         running = false;
         messagesClient.unsubscribe(this.messageProcessor);
     }
 
+    // Getter for the current session
     public Session getCurrentSession() {
         return currentSession;
     }
 
+    // Getter for whether there is a started session that is still running
     public boolean isRunning() {
         return running;
     }
 
-    public static void initialize(Context context) {
-        INSTANCE = new SessionManager(context.getApplicationContext());
-    }
-
-    public SessionManager getInstance() {
+    // Get the singleton instance
+    public static SessionManager getInstance(Context context) {
+        if (INSTANCE == null)  {
+            INSTANCE = new SessionManager(context.getApplicationContext());
+        }
         return INSTANCE;
     }
 

@@ -29,6 +29,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import edu.ucsd.cse110wi22.team6.bof.model.Session;
+
+// The first activity started when the app is launched
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
@@ -75,6 +78,10 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("Home");
         setContentView(R.layout.activity_home);
+
+        // TODO: ad hoc code to test single session functionality
+        if (!SessionManager.getInstance(this).isRunning())
+            SessionManager.getInstance(this).startNewSession();
 
         storage = Utilities.getStorageInstance(this);
 

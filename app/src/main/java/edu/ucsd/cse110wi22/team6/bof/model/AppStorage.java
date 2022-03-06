@@ -9,6 +9,7 @@ import edu.ucsd.cse110wi22.team6.bof.IUserInfoStorage;
 import edu.ucsd.cse110wi22.team6.bof.Person;
 import edu.ucsd.cse110wi22.team6.bof.Utilities;
 
+// A class for storing the persistent state of this app
 public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     private final IKeyValueStore kvMapping;
     private final IDMapping<CourseData> courseMap;

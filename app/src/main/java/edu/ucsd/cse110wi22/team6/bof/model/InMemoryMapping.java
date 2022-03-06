@@ -9,11 +9,15 @@ public class InMemoryMapping implements IKeyValueStore {
     private final Map<String, Object> map;
     private static final InMemoryMapping INSTANCE = new InMemoryMapping(new HashMap<>());
 
+    // In memory mapping singleton to unify the data seen from different clients
     public static InMemoryMapping getInstance() {
         return INSTANCE;
     }
 
-    // Use a custom map
+    // Use a custom map, note that using this constructor is unsafe
+    // This creates a NEW instance rather than sharing a single instance which cause
+    // different clients to see different results
+    // Only use this method for unit testing, never use this in the app
     public InMemoryMapping(Map<String, Object> map) {
         this.map = map;
     }

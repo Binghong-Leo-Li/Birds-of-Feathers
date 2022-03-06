@@ -11,23 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.Message;
-import com.google.android.gms.nearby.messages.MessageListener;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
@@ -43,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     private IPerson user;
     private AppStorage storage;
-    private MessageListener messageListener;
 
     // Current year and quarter
     private int year;
@@ -52,13 +43,7 @@ public class MainActivity extends AppCompatActivity {
     // Dummy
     private final List<IPerson> nobody = Collections.emptyList();
 
-    private static List<IPerson> nearbyPeople = new ArrayList<>();
     private List<Comparator<IPerson>> comparators;
-
-    // Setter
-    public static void setNearbyPeople(List<IPerson> nearbyPeople) {
-        MainActivity.nearbyPeople = nearbyPeople;
-    }
 
     // handling start up of the app
     @Override
@@ -75,13 +60,14 @@ public class MainActivity extends AppCompatActivity {
 
         personsViewAdapter.setUser(user);
         updateUI();
-
-        Nearby.getMessagesClient(this).subscribe(messageListener);
     }
 
     // Updating UI to display all nearbyPeople
     void updateUI() {
-        for (IPerson person : nearbyPeople) {
+        List<IPerson> nearbyStudents= SessionManager.getInstance(this)
+                .getCurrentSession()
+                .getNearbyStudentList();
+        for (IPerson person : nearbyStudents) {
             Log.d(TAG, person.getName() +
                     ": " +
                     Utilities.numCoursesTogether(user, person) +
@@ -90,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         // the Adapter handles updating display
         personsViewAdapter.setPeopleList(Utilities.getBofList(user,
-                nearbyPeople,
+                nearbyStudents,
                 comparators.get(preferences_dropdown.getSelectedItemPosition())));
     }
 
@@ -131,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button.setText("Stop");
         toggle_button.setOnClickListener(new View.OnClickListener(){
             public void onClick(final View view){
-                if (toggle_button.getText().toString() == "Stop") {
+                if (toggle_button.getText().toString().equals("Stop")) {
                     final EditText edittext = new EditText(MainActivity.this);
                     AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
                     alert.setView(edittext);
@@ -192,32 +178,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MockingPasting.class);
             startActivity(intent);
         });
-
-
-        // Applying Mocked data
-        this.messageListener = new MockedMessageListener(new MessageListener() {
-            @Override
-            public void onFound(@NonNull Message message) {
-                super.onFound(message);
-                byte[] content = message.getContent();
-                Log.d(TAG, "Received message: " + Arrays.toString(content));
-                try {
-                    nearbyPeople.add(Utilities.deserializePerson(content));
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                    Log.w(TAG, "Invalid message!");
-//                    return; // Uncomment these lines if not mocking
-                }
-//                updateUI();
-            }
-        });
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
-        // Stop nearby
-        Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
 }
