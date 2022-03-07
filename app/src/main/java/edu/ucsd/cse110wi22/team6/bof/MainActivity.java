@@ -26,6 +26,8 @@ import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
 // Activity to display List of BoFs
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    public static final int DEFAULT_YEAR = 2021;
+    public static final String DEFAULT_QUARTER = "WI";
 
     protected RecyclerView bofRecyclerView;
     protected RecyclerView.LayoutManager personsLayoutManager;
@@ -122,13 +124,15 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
-            year = 2021;
-            quarter = "WI";
+            year = DEFAULT_YEAR;
+            quarter = DEFAULT_QUARTER;
         }
         else {
-            year = extras.getInt("year", 2021);
-            quarter = extras.getString("quarter", "WI");
+            year = extras.getInt("year", DEFAULT_YEAR);
+            quarter = extras.getString("quarter", DEFAULT_QUARTER);
         }
+        Log.d(TAG, "Year: " + year);
+        Log.d(TAG, "Quarter: " + quarter);
 
         toggleButton.setOnClickListener(view -> {
             if (sessionManager.isRunning()) {

@@ -79,6 +79,9 @@ public class HomeActivity extends AppCompatActivity {
         setTitle("Home");
         setContentView(R.layout.activity_home);
 
+        // Default year to current year
+        year = Calendar.getInstance().get(Calendar.YEAR);
+
         storage = Utilities.getStorageInstance(this);
 
         currentQuarterDropDown=findViewById(R.id.currentQuarter_dropdown);
