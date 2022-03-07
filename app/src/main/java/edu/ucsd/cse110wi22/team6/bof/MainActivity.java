@@ -121,8 +121,14 @@ public class MainActivity extends AppCompatActivity {
         toggleButton = findViewById(R.id.toggle_button);
 
         Bundle extras = getIntent().getExtras();
-        year = extras.getInt("year", 0);
-        quarter = extras.getString("quarter", null);
+        if (extras == null) {
+            year = 2021;
+            quarter = "WI";
+        }
+        else {
+            year = extras.getInt("year", 2021);
+            quarter = extras.getString("quarter", "WI");
+        }
 
         toggleButton.setOnClickListener(view -> {
             if (sessionManager.isRunning()) {
