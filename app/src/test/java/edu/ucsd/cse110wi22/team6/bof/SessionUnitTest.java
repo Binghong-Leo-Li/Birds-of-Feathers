@@ -57,8 +57,8 @@ public class SessionUnitTest {
 
     @Test
     public void testSessionGetDisplayName() {
-        Session session = new Session(new Date(2021, 10, 11));
-        assertEquals("Fri Nov 11 00:00:00 PST 3921", session.getDisplayName());
+        Session session = new Session(new Date("Sat, 12 Aug 1995 13:30:00 GMT+0430"));
+        assertEquals("Sat Aug 12 02:00:00 PDT 1995", session.getDisplayName());
     }
 
     @Test
