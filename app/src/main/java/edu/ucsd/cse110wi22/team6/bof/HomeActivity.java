@@ -106,6 +106,13 @@ public class HomeActivity extends AppCompatActivity {
         Log.d(TAG, "start button called");
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        int selectedQuarterIdx = currentQuarterDropDown.getSelectedItemPosition();
+        String[] quarterCodes = getResources().getStringArray(R.array. quarter_list);
+        String selectedQuarter = quarterCodes[selectedQuarterIdx];
+        intent.putExtra("quarter", selectedQuarter);
+        intent.putExtra("year", year);
+
         startActivity(intent);
     }
 
@@ -167,16 +174,5 @@ public class HomeActivity extends AppCompatActivity {
 
         datePickerDialog = new DatePickerDialog(this,dateSetListener, year, month, day);
         datePickerDialog.show();
-    }
-
-    public void onBoFClicked(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        int selectedQuarterIdx = currentQuarterDropDown.getSelectedItemPosition();
-        String[] quarterCodes = getResources().getStringArray(R.array. quarter_list);
-        String selectedQuarter = quarterCodes[selectedQuarterIdx];
-        intent.putExtra("quarter", selectedQuarter);
-        intent.putExtra("year", year);
-
-        startActivity(intent);
     }
 }
