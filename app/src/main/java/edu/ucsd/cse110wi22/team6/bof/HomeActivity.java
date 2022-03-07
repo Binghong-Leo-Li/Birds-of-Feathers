@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
     private MessageListener messageListener;
     private Button timebutton;
     private Button datebutton;
-    private int hour, minute;
+    private int hour, minute, day, month, year;
     private DatePickerDialog datePickerDialog;
 
 
@@ -79,6 +79,9 @@ public class HomeActivity extends AppCompatActivity {
         setTitle("Home");
         setContentView(R.layout.activity_home);
 
+        // Default year to current year
+        year = Calendar.getInstance().get(Calendar.YEAR);
+
         storage = Utilities.getStorageInstance(this);
 
         currentQuarterDropDown=findViewById(R.id.currentQuarter_dropdown);
@@ -106,6 +109,13 @@ public class HomeActivity extends AppCompatActivity {
         Log.d(TAG, "start button called");
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        int selectedQuarterIdx = currentQuarterDropDown.getSelectedItemPosition();
+        String[] quarterCodes = getResources().getStringArray(R.array. quarter_list);
+        String selectedQuarter = quarterCodes[selectedQuarterIdx];
+        intent.putExtra("quarter", selectedQuarter);
+        intent.putExtra("year", year);
+
         startActivity(intent);
     }
 
@@ -150,9 +160,11 @@ public class HomeActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
         {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day)
+            public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay)
             {
-                month = month + 1;
+                year = selectedYear;
+                month = selectedMonth + 1;
+                day = selectedDay;
                 String date = month + "/" + day + "/" + year;
                 datebutton.setText(date);
             }
@@ -166,5 +178,4 @@ public class HomeActivity extends AppCompatActivity {
         datePickerDialog = new DatePickerDialog(this,dateSetListener, year, month, day);
         datePickerDialog.show();
     }
-
 }
