@@ -1,15 +1,10 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import static android.view.View.GONE;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,18 +13,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
-import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.Message;
-import com.google.android.gms.nearby.messages.MessageListener;
-
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.Date;
 import java.util.Locale;
-
-import edu.ucsd.cse110wi22.team6.bof.model.Session;
 
 // The first activity started when the app is launched
 public class HomeActivity extends AppCompatActivity {
@@ -38,18 +29,16 @@ public class HomeActivity extends AppCompatActivity {
 
     private Spinner currentQuarterDropDown;
 
-    protected RecyclerView bofRecyclerView;
-    protected RecyclerView.LayoutManager personsLayoutManager;
-    protected BoFsViewAdapter personsViewAdapter;
-    private IPerson user;
     private IUserInfoStorage storage;
-    private MessageListener messageListener;
     private Button timebutton;
     private Button datebutton;
-    private int hour, minute, day, month, year;
+    private int year;
+    // defaults in case only time or only date is mocked (shouldn't do that)
+    private String dateString = "1/1/2022", timeString = "00:00";
     private DatePickerDialog datePickerDialog;
 
-
+    private static final DateFormat DATE_PARSER =
+            new SimpleDateFormat("M/d/yyyy HH:mm", Locale.US);
 
     @Override
     protected void onStart() {
@@ -57,12 +46,6 @@ public class HomeActivity extends AppCompatActivity {
         Log.d(TAG, "HomeActivity.onStart() called");
         if (storage.isInitialized()) {
             Log.d(TAG, "App has gone through first time setup already");
-            //user = new Person(storage.getName(),
-                    //storage.getCourseList(),
-                    //storage.getPhotoUrl());
-
-            //personsViewAdapter.setUser(user);
-            //updateUI();
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");
@@ -70,8 +53,6 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +80,9 @@ public class HomeActivity extends AppCompatActivity {
 
         timebutton = findViewById(R.id.time_mock_btn);
         datebutton = findViewById(R.id.date_mock_btn);
-
-
     }
+
     private void onButtonStart(View view) {
-
-
         // go to main
         Log.d(TAG, "start button called");
         Intent intent = new Intent(this, MainActivity.class);
@@ -120,8 +98,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void onButtonCourses(View view) {
-
-
         // go to courses
         Log.d(TAG, "courses button called");
         Intent intent = new Intent(this, CourseEntryActivity.class);
@@ -130,12 +106,22 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void onButtonFavorites(View view) {
-
-
         // go to favorites
         Intent intent = new Intent(this, FavoriteListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    private void updateMock() {
+        try {
+            Date mockedTime = DATE_PARSER.parse(dateString + " " + timeString);
+            SessionManager.getInstance(this).setMockedTime(mockedTime);
+            Toast.makeText(this,
+                    "Successfully set mocked time and date to " + mockedTime,
+                    Toast.LENGTH_LONG).show();
+        } catch (ParseException e) {
+            Log.e(TAG, "Date parse error", e);
+        }
     }
 
     public void initiateTimePicker(View view) {
@@ -144,11 +130,18 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute)
             {
+                int hour, minute;
                 hour = selectedHour;
                 minute = selectedMinute;
-                timebutton.setText(String.format(Locale.getDefault(), "%02d:%02d",hour, minute));
+                timeString = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
+                updateMock();
+                timebutton.setText(timeString);
             }
         };
+
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR);
+        int minute = cal.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
 
@@ -162,20 +155,22 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay)
             {
+                int day, month;
                 year = selectedYear;
                 month = selectedMonth + 1;
                 day = selectedDay;
-                String date = month + "/" + day + "/" + year;
-                datebutton.setText(date);
+                dateString = month + "/" + day + "/" + year;
+                updateMock();
+                datebutton.setText(dateString);
             }
         };
 
         Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
+        int thisYear = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        datePickerDialog = new DatePickerDialog(this,dateSetListener, year, month, day);
+        datePickerDialog = new DatePickerDialog(this,dateSetListener, thisYear, month, day);
         datePickerDialog.show();
     }
 }
