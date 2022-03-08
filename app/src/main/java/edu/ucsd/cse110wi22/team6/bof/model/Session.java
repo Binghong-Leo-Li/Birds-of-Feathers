@@ -145,9 +145,11 @@ public class Session implements Identifiable {
         @Override
         public Session deserialize(String id, String serializedData) {
             SessionRecord record = gson.fromJson(serializedData, SessionRecord.class);
-            return new Session(UUID.fromString(id),
+            Session deserializedSession = new Session(UUID.fromString(id),
                     record.startTime,
                     record.uuidList.stream().map(idToPersonMap).collect(Collectors.toSet()));
+            deserializedSession.setName(record.name);
+            return deserializedSession;
         }
     }
 }

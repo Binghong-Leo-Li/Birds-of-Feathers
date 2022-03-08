@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import edu.ucsd.cse110wi22.team6.bof.Course;
 import edu.ucsd.cse110wi22.team6.bof.IPerson;
@@ -53,23 +54,29 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     // If the name is null, return false (no collision)
     // Otherwise, return true if there the name of this session collides with
     // The name of an existing session whose name is not null
-    public boolean hasNameCollision(Session session) {
-        return false; // TODO: actually do the check by scanning names for collisions
+
+    public boolean isNameTaken(String name) {
+        return false;
     }
 
     // Notify AppStorage of the existence of a NEW session
     public void registerNewSession(Session session) {
-        assert !hasNameCollision(session);
         Set<String> s = new HashSet<>(kvMapping.getStringSet(SESSION_LIST, Collections.emptySet()));
         s.add(session.getStringID());
         kvMapping.putStringSet(SESSION_LIST, s);
         sessionMap.registerObject(session);
     }
 
+    public List<Session> getSessionList() {
+        return kvMapping.getStringSet(SESSION_LIST, Collections.emptySet())
+                .stream()
+                .map(sessionMap::getObjectByID)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public void onSessionModified(Session session) {
         // Update (Re-register) existing session in the map to auto-save
-        assert !hasNameCollision(session);
         sessionMap.registerObject(session);
     }
 
