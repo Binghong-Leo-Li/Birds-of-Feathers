@@ -46,6 +46,7 @@ public class SessionManager implements IProcessedMessageListener {
 
     // Allow mocking the current time since it is otherwise untestable
     public void setMockedTime(Date mockedTime) {
+        Log.d(TAG, "Mocking time successfully set to " + mockedTime);
         this.mockedTime = mockedTime;
     }
 

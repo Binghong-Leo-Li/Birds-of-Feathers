@@ -3,6 +3,7 @@ package edu.ucsd.cse110wi22.team6.bof;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -126,9 +129,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "MainActivity.onCreate() called");
 
-        sessionManager = SessionManager.getInstance(this);
+        // Add a <- arrow button to allow going back easily
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
-        toggleButton = findViewById(R.id.toggle_button);
+        sessionManager = SessionManager.getInstance(this);
+        storage = Utilities.getStorageInstance(this);
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -142,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Year: " + year);
         Log.d(TAG, "Quarter: " + quarter);
 
+        toggleButton = findViewById(R.id.toggle_button);
         toggleButton.setOnClickListener(view -> {
             if (sessionManager.isRunning()) {
                 // Stopping a running session
@@ -198,8 +206,6 @@ public class MainActivity extends AppCompatActivity {
                 resume_alert.show();
             }
         });
-
-        storage = Utilities.getStorageInstance(this);
 
         bofRecyclerView = findViewById(R.id.bof_list);
 
@@ -259,6 +265,16 @@ public class MainActivity extends AppCompatActivity {
         });
         alert.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
         alert.show();
+    }
+
+    // This allows the back button to work
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
