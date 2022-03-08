@@ -152,26 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 // If session is a fresh one (no name assigned)
-                final EditText edittext = new EditText(MainActivity.this);
-                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                alert.setView(edittext);
-                alert.setTitle("Save Session");
-                alert.setMessage("Enter Session Name");
-                alert.setPositiveButton("Save", (dialog, id) -> {
-                    String sessionName = edittext.getText().toString();
-                    if (sessionName.isEmpty()) {
-                        Utilities.showAlert(this, "Session name cannot be empty");
-                        return;
-                    }
-                    if (storage.isSessionNameTaken(sessionName)) {
-                        Utilities.showAlert(this, "A session with name \"" + sessionName + "\" already exists");
-                        return;
-                    }
-                    sessionManager.getCurrentSession().setName(sessionName);
-                    stopCurrentSession();
-                });
-                alert.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
-                alert.show();
+                setSessionName("Save Session", sessionManager.getCurrentSession(), () -> {}, this::stopCurrentSession);
             }
             else{
                 // Starting/resuming a session
@@ -199,7 +180,15 @@ public class MainActivity extends AppCompatActivity {
                         sessionManager.startNewSession();
                     } else {
                         Log.d(TAG, "Resuming existing session");
-                        sessionManager.startSession(sessions.get(itemPosition - 1));
+                        Session resumeSession = sessions.get(itemPosition - 1);
+                        if (resumeSession.getName() == null) {
+                            setSessionName("Name this session", resumeSession, () -> sessionManager.startSession(resumeSession), () -> {
+                                updateToggleButtonName();
+                                updateBoFList();
+                            });
+                            return;
+                        }
+                        sessionManager.startSession(resumeSession);
                     }
                     updateToggleButtonName();
                     updateBoFList();
@@ -243,6 +232,33 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MockingPasting.class);
             startActivity(intent);
         });
+    }
+
+    // Helper method to handle two instances where a set name is required
+    // One is on first time a new session is stopped
+    // Another is when a session stopped without being assigned a name and is restarted
+    private void setSessionName(String title, Session session, Runnable beforeSaveAction, Runnable afterSaveAction) {
+        final EditText edittext = new EditText(MainActivity.this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        alert.setView(edittext);
+        alert.setTitle(title);
+        alert.setMessage("Enter Session Name");
+        alert.setPositiveButton("Save", (dialog, id) -> {
+            String sessionName = edittext.getText().toString();
+            if (sessionName.isEmpty()) {
+                Utilities.showAlert(this, "Session name cannot be empty");
+                return;
+            }
+            if (storage.isSessionNameTaken(sessionName)) {
+                Utilities.showAlert(this, "A session with name \"" + sessionName + "\" already exists");
+                return;
+            }
+            beforeSaveAction.run();
+            session.setName(sessionName);
+            afterSaveAction.run();
+        });
+        alert.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+        alert.show();
     }
 
     @Override
