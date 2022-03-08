@@ -2,11 +2,14 @@ package edu.ucsd.cse110wi22.team6.bof.model;
 
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -24,6 +27,9 @@ public class Session implements Identifiable {
     private final Collection<SessionChangeListener> listeners = new ArrayList<>();
     private final Gson gson = new Gson();
 
+    // Using the expected 1/16/22 5:10PM format
+    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("M/d/yy h:mma", Locale.US);
+
     // Custom session with custom set, use only for testing
     public Session(UUID sessionId, Date startTime, Set<IPerson> nearbyStudentList) {
         this.sessionId = sessionId;
@@ -40,9 +46,6 @@ public class Session implements Identifiable {
     public Session(UUID sessionId, Date startTime) {
         this(sessionId, startTime, new HashSet<>());
     }
-
-    // TODO: add factory method to instantiate this class from persistent storage object
-    // or start one from scratch
 
     // Add a nearby student found to this session
     public void addNearbyStudent(IPerson student) {
@@ -96,7 +99,7 @@ public class Session implements Identifiable {
     // there is no name
     public String getDisplayName() {
         if (name == null) {
-            return startTime.toString(); // TODO: format as something like 1/16/22 5:10PM
+            return DATE_FORMAT.format(startTime);
         }
         return name;
     }
@@ -145,9 +148,11 @@ public class Session implements Identifiable {
         @Override
         public Session deserialize(String id, String serializedData) {
             SessionRecord record = gson.fromJson(serializedData, SessionRecord.class);
-            return new Session(UUID.fromString(id),
+            Session deserializedSession = new Session(UUID.fromString(id),
                     record.startTime,
                     record.uuidList.stream().map(idToPersonMap).collect(Collectors.toSet()));
+            deserializedSession.setName(record.name);
+            return deserializedSession;
         }
     }
 }

@@ -19,8 +19,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
+import edu.ucsd.cse110wi22.team6.bof.model.Session;
 import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
 
 // Activity to display List of BoFs
@@ -112,6 +114,12 @@ public class MainActivity extends AppCompatActivity {
         toggleButton.setText(running ? R.string.session_stop : R.string.session_start);
     }
 
+    void stopCurrentSession() {
+        Log.d(TAG, "Stopping current session");
+        sessionManager.stopSession();
+        updateToggleButtonName();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,28 +144,23 @@ public class MainActivity extends AppCompatActivity {
 
         toggleButton.setOnClickListener(view -> {
             if (sessionManager.isRunning()) {
-                final EditText edittext = new EditText(MainActivity.this);
-                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                alert.setView(edittext);
-                alert.setTitle("Save Session");
-                alert.setMessage("Enter Session Name");
-                alert.setPositiveButton("Save", (dialog, id) -> {
-                    String sessionName = edittext.getText().toString();
-                    sessionManager.getCurrentSession().setName(sessionName);
-                    Log.d(TAG, "Stopping current session");
-                    sessionManager.stopSession();
-                    updateToggleButtonName();
-                });
-                alert.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
-                alert.show();
+                // Stopping a running session
+
+                // If the session already has a name, don't prompt again
+                if (sessionManager.getCurrentSession().getName() != null) {
+                    stopCurrentSession();
+                    return;
+                }
+                // If session is a fresh one (no name assigned)
+                setSessionName("Save Session", sessionManager.getCurrentSession(), () -> {}, this::stopCurrentSession);
             }
             else{
-                // TODO: allowing resuming old sessions
-                //Dummy list of past session names
-                String[] pastSessions = new String[3];
-                pastSessions[0]="Choose Session...";
-                pastSessions[1]="Resume DummySession1";
-                pastSessions[2]="Start New Session";
+                // Starting/resuming a session
+                List<Session> sessions = storage.getSessionList();
+                String[] pastSessions = Stream.concat(
+                        Stream.of("New Session"),
+                        sessions.stream().map(session -> "Resume \"" + session.getDisplayName() + "\"")
+                ).toArray(String[]::new);
 
                 AlertDialog.Builder resume_alert = new AlertDialog.Builder(MainActivity.this);
                 View spView = getLayoutInflater().inflate(R.layout.dialog_spinner, null);
@@ -169,10 +172,24 @@ public class MainActivity extends AppCompatActivity {
                 spinner.setAdapter(resumeAdapter);
 
 
-                resume_alert.setTitle("Start/Resume  Session");
+                resume_alert.setTitle("Start/Resume Session");
                 resume_alert.setPositiveButton("Start", (dialog, id) -> {
-                    Log.d(TAG, "Starting session");
-                    sessionManager.startNewSession();
+                    int itemPosition = spinner.getSelectedItemPosition();
+                    if (itemPosition == 0) {
+                        Log.d(TAG, "Starting new session");
+                        sessionManager.startNewSession();
+                    } else {
+                        Log.d(TAG, "Resuming existing session");
+                        Session resumeSession = sessions.get(itemPosition - 1);
+                        if (resumeSession.getName() == null) {
+                            setSessionName("Name this session", resumeSession, () -> sessionManager.startSession(resumeSession), () -> {
+                                updateToggleButtonName();
+                                updateBoFList();
+                            });
+                            return;
+                        }
+                        sessionManager.startSession(resumeSession);
+                    }
                     updateToggleButtonName();
                     updateBoFList();
                 });
@@ -215,6 +232,33 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MockingPasting.class);
             startActivity(intent);
         });
+    }
+
+    // Helper method to handle two instances where a set name is required
+    // One is on first time a new session is stopped
+    // Another is when a session stopped without being assigned a name and is restarted
+    private void setSessionName(String title, Session session, Runnable beforeSaveAction, Runnable afterSaveAction) {
+        final EditText edittext = new EditText(MainActivity.this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        alert.setView(edittext);
+        alert.setTitle(title);
+        alert.setMessage("Enter Session Name");
+        alert.setPositiveButton("Save", (dialog, id) -> {
+            String sessionName = edittext.getText().toString();
+            if (sessionName.isEmpty()) {
+                Utilities.showAlert(this, "Session name cannot be empty");
+                return;
+            }
+            if (storage.isSessionNameTaken(sessionName)) {
+                Utilities.showAlert(this, "A session with name \"" + sessionName + "\" already exists");
+                return;
+            }
+            beforeSaveAction.run();
+            session.setName(sessionName);
+            afterSaveAction.run();
+        });
+        alert.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+        alert.show();
     }
 
     @Override
