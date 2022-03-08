@@ -3,6 +3,7 @@ package edu.ucsd.cse110wi22.team6.bof.model;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -55,8 +56,9 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     // Otherwise, return true if there the name of this session collides with
     // The name of an existing session whose name is not null
 
-    public boolean isNameTaken(String name) {
-        return false;
+    public boolean isSessionNameTaken(String name) {
+        assert name != null;
+        return getSessionList().stream().anyMatch(session -> name.equals(session.getName()));
     }
 
     // Notify AppStorage of the existence of a NEW session

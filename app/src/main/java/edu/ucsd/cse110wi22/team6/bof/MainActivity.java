@@ -159,6 +159,14 @@ public class MainActivity extends AppCompatActivity {
                 alert.setMessage("Enter Session Name");
                 alert.setPositiveButton("Save", (dialog, id) -> {
                     String sessionName = edittext.getText().toString();
+                    if (sessionName.isEmpty()) {
+                        Utilities.showAlert(this, "Session name cannot be empty");
+                        return;
+                    }
+                    if (storage.isSessionNameTaken(sessionName)) {
+                        Utilities.showAlert(this, "A session with name \"" + sessionName + "\" already exists");
+                        return;
+                    }
                     sessionManager.getCurrentSession().setName(sessionName);
                     stopCurrentSession();
                 });
