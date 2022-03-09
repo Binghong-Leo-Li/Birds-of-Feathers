@@ -3,6 +3,7 @@ package edu.ucsd.cse110wi22.team6.bof;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -28,10 +29,8 @@ import edu.ucsd.cse110wi22.team6.bof.model.SessionChangeListener;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class SessionUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
+    // The date format used by the tests
+    private static final DateFormat INPUT_FORMAT = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.US);
 
     @Test
     public void testSessionConstructorSpecifiedTime(){
@@ -54,17 +53,29 @@ public class SessionUnitTest {
     @Test
     public void testSessionSetNameAndGetName() {
         Session session = new Session(new Date(2021, 10, 11));
-        assertEquals(null, session.getName());
+        assertNull(session.getName());
         session.setName("test");
         assertEquals("test", session.getName());
     }
 
-//    @Test
-//    public void testSessionGetDisplayName() throws ParseException {
-//
-//        Session session = new Session(DateFormat.getDateTimeInstance().parse( "Jan 12, 1952"));
-//        assertEquals("Sat Aug 12 13:30:00 UTC 1995", session.getDisplayName());
-//    }
+    @Test
+    public void testSessionGetDisplayNamePM() throws ParseException {
+        Session session = new Session(INPUT_FORMAT.parse( "08/12/1995 12:01 PM"));
+        assertEquals("8/12/95 12:01PM", session.getDisplayName());
+    }
+
+    @Test
+    public void testSessionGetDisplayNameAM() throws ParseException {
+        Session session = new Session(INPUT_FORMAT.parse( "12/07/2020 01:05 AM"));
+        assertEquals("12/7/20 1:05AM", session.getDisplayName());
+    }
+
+    @Test
+    public void testSessionGetDisplayNameWithName() throws ParseException {
+        Session session = new Session(INPUT_FORMAT.parse( "08/07/2020 01:05 AM"));
+        session.setName("Hello, world!");
+        assertEquals("Hello, world!", session.getDisplayName());
+    }
 
     @Test
     public void testSessionGetStringID() {
@@ -93,15 +104,11 @@ public class SessionUnitTest {
         assertEquals("registered", reg[0]);
     }
 
+    @Test
     public void testSessionUnregister() {
         Session session = new Session(UUID.fromString("14467823-22d5-4a6d-88f3-78a50516fa37"), new Date(2021, 10, 11));
         final String[] reg = {"unregistered"};
-        SessionChangeListener listener = new SessionChangeListener() {
-            @Override
-            public void onSessionModified(Session session) {
-                reg[0] = "registered";
-            }
-        };
+        SessionChangeListener listener = session1 -> reg[0] = "registered";
         session.registerListener(listener);
         session.unregisterListener(listener);
         session.setName("test");
