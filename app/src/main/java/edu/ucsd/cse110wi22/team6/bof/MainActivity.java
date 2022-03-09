@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         personsLayoutManager = new LinearLayoutManager(this);
         bofRecyclerView.setLayoutManager(personsLayoutManager);
 
-        personsViewAdapter = new BoFsViewAdapter(nobody);
+        personsViewAdapter = new BoFsViewAdapter(nobody, person -> storage.isFavorited(person));
         bofRecyclerView.setAdapter(personsViewAdapter);
 
         preferences_dropdown=findViewById(R.id.preferences_dropdown);
