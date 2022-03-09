@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @RunWith(AndroidJUnit4.class)
 public class TestBoFDetails {
@@ -29,6 +30,7 @@ public class TestBoFDetails {
     @Test
     public void testListOfBoFsDisplayed() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), BoFsDetails.class);
+        intent.putExtra("uuid", UUID.randomUUID().toString());
         intent.putExtra("name", "Rick");
         intent.putExtra("courseListParsing", "2021 FA ECE 65,2020 FA CSE 11");
         intent.putExtra("url", "https://avatars.githubusercontent.com/u/32375681?v=4");

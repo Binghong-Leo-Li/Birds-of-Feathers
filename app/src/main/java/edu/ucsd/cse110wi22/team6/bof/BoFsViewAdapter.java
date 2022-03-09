@@ -17,17 +17,20 @@ import com.bumptech.glide.Glide;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 // Adapter from boFs to view, handle displaying BoF list
 public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHolder> {
     private List<? extends IPerson> people;
+    private final Predicate<IPerson> starred;
     private IPerson user;
 
     // Constructor
-    public BoFsViewAdapter(List<? extends IPerson> people) {
+    public BoFsViewAdapter(List<? extends IPerson> people, Predicate<IPerson> starred) {
         super();
         this.people = people;
+        this.starred = starred;
     }
 
     // initialization
@@ -38,7 +41,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
                 .from(parent.getContext())
                 .inflate(R.layout.bof_row, parent, false);
 
-        return new ViewHolder(user, view);
+        return new ViewHolder(user, view, starred);
     }
 
     // binding
@@ -75,16 +78,21 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
         private final TextView personNameView;
         private final TextView numCommonCoursesView;
         private final ImageView personThumbnailView;
+        private final ImageView favorited;
         private final IPerson user;
         private IPerson person;
 
+        private final Predicate<IPerson> starred;
+
         // constructor
-        ViewHolder(IPerson user, View itemView) {
+        ViewHolder(IPerson user, View itemView, Predicate<IPerson> starred) {
             super(itemView);
             this.user = user;
             this.personNameView = itemView.findViewById(R.id.bof_row_name);
             this.numCommonCoursesView = itemView.findViewById(R.id.num_common_courses_view);
             this.personThumbnailView = itemView.findViewById(R.id.thumbnail);
+            this.favorited = itemView.findViewById(R.id.favorited);
+            this.starred = starred;
             itemView.setOnClickListener(this);
         }
 
@@ -102,6 +110,8 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
             if (user != null)
                 this.numCommonCoursesView.setText( // displaying correct text on recycler view
                         String.valueOf(Utilities.numCoursesTogether(user, person)));
+
+            this.favorited.setVisibility(starred.test(person) ? View.VISIBLE : View.INVISIBLE);
         }
 
         // handling clicking on an individual in the list, proceeding to BoFsDetails Activity
@@ -114,6 +124,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
 
             // saving data, moving on to BoFsDetails
             Intent intent = new Intent(context, BoFsDetails.class);
+            intent.putExtra("uuid", this.person.getStringID());
             intent.putExtra("name", this.person.getName());
             intent.putExtra("courseListParsing", Utilities.encodeCourseList(
                     Utilities.getCoursesTogether(user, this.person)

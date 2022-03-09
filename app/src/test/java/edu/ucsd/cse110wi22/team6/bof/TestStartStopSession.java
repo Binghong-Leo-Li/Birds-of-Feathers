@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 
+// BDD scenario tests for MS1-5 and MS1-6
 @RunWith(AndroidJUnit4.class)
 public class TestStartStopSession {
     SessionManager manager;

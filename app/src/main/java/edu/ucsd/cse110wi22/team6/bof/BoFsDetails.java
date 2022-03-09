@@ -2,6 +2,7 @@ package edu.ucsd.cse110wi22.team6.bof;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -12,31 +13,39 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+import java.util.UUID;
+
+import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 
 // Class handling viewing BoF details when clicked in
 public class BoFsDetails extends AppCompatActivity {
-    private String name;
-    private List<Course> courseList;
-    private String url;
 
     private RecyclerView coursesRecyclerView;
     private RecyclerView.LayoutManager coursesLayoutManager;
     private CourseViewAdapter courseViewAdapter;
+    private ImageButton favoriteButton;
+
+    private AppStorage storage;
+    private IPerson bof;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bof_details);
 
+        storage = Utilities.getStorageInstance(this);
 
         Bundle extras = getIntent().getExtras();
                                     // extracting information from previously passed-in parameters
                                     // we parse the information accordingly below
-        this.name = extras.getString("name", "User do not exist");
-        setTitle(this.name);
+        UUID uuid = UUID.fromString(extras.getString("uuid", ""));
+        String name = extras.getString("name", "User do not exist");
+        setTitle(name);
         String courseListParsing = extras.getString("courseListParsing");
-        this.courseList = Utilities.parseCourseList(courseListParsing);
-        this.url = extras.getString("url");
+        List<Course> courseList = Utilities.parseCourseList(courseListParsing);
+        String url = extras.getString("url");
+
+        bof = new Person(uuid, name, courseList, url);
 
         ImageView image = findViewById(R.id.imageView);
         Glide.with(this) // Using glide library to load image from url
@@ -49,9 +58,17 @@ public class BoFsDetails extends AppCompatActivity {
         coursesRecyclerView = findViewById(R.id.bof_courses_info);
         coursesLayoutManager = new LinearLayoutManager(this);
         coursesRecyclerView.setLayoutManager(coursesLayoutManager); // setting the correct lay out
-        courseViewAdapter = new CourseViewAdapter(this.courseList);
+        courseViewAdapter = new CourseViewAdapter(courseList);
         coursesRecyclerView.setAdapter(courseViewAdapter); // set the adapter to display correct view
 
+        favoriteButton = findViewById(R.id.favoriteButton);
+        updateUI();
+    }
+
+    void updateUI() {
+        favoriteButton.setImageResource(storage.isFavorited(bof) ?
+                android.R.drawable.btn_star_big_on :
+                android.R.drawable.btn_star_big_off);
     }
 
     // handling the back button being clicked
@@ -60,11 +77,18 @@ public class BoFsDetails extends AppCompatActivity {
     }
 
     public void onFavoriteClicked(View view) {
-        Toast.makeText(this, "favorited!",
-                Toast.LENGTH_LONG).show();
-
-        //TODO　add to favorite list
+        if (storage.isFavorited(bof)) {
+            Toast.makeText(this, "Removed from Favorites",
+                    Toast.LENGTH_SHORT).show();
+            storage.removeFromFavorites(bof);
+        } else {
+            Toast.makeText(this, "Saved to Favorites",
+                    Toast.LENGTH_SHORT).show();
+            storage.addToFavorites(bof);
+        }
+        updateUI();
     }
+
     public void onWaveClicked(View view) {
         Toast.makeText(this, "waved!",
                 Toast.LENGTH_LONG).show();
