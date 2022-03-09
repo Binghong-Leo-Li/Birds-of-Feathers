@@ -89,6 +89,13 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
                 .collect(Collectors.toList());
     }
 
+    public List<IPerson> getFavoriteList() {
+        return getStringSet(FAVORITE_LIST)
+                .stream()
+                .map(peopleMap::getObjectByID)
+                .collect(Collectors.toList());
+    }
+
     private void mutateSet(Consumer<Set<String>> mutator, String setKey) {
         Set<String> s = new HashSet<>(getStringSet(setKey));
         mutator.accept(s);
