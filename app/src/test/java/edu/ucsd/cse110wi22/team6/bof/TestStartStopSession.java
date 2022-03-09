@@ -24,6 +24,20 @@ public class TestStartStopSession {
     MockedMessagesClient mockedMessagesClient;
     Context context;
     AppStorage storage;
+    public static final Person OLIVIA = new Person(
+            UUID.fromString("19b4747e-995c-4bb2-b5e5-1dc7a5fc8f64"),
+            "Olivia", Utilities.parseCourseList("2019 SP CSE 101,2021 WI SYN 2"),
+            "");
+    public static final Person BOB = new Person(
+            UUID.fromString("d61f3be1-418b-4ae8-aee4-d9186f5fc848"),
+            "Bob",
+            Utilities.parseCourseList("2021 FA CSE 100,2019 SP CSE 101"),
+            "");
+    public static final Person ABE = new Person(
+            UUID.fromString("952e3c52-9eb8-4080-88db-bb48c213c897"),
+            "Abe",
+            Utilities.parseCourseList("2021 FA CSE 100,2019 SP CSE 101"),
+            "");
 
     @Before
     public void setup() {
@@ -50,30 +64,48 @@ public class TestStartStopSession {
         mockedMessagesClient.mockMessageArrival(new Message(MessageProcessor.Encoder.advertisePerson(person)));
     }
 
+    // Scenario 1 for MS1-5
+    // Given the current session is initially started
+    // And nobody is initially in the session
+    // And the user click stop
+    // And then Olivia, Bob, and Abe arrives
+    // Then there should still be nobody in the session
     @Test
-    public void test() {
+    public void testStop() {
+        // Given the current session is initially started
         resetState();
-        Person olivia = new Person(
-                UUID.fromString("19b4747e-995c-4bb2-b5e5-1dc7a5fc8f64"),
-                "Olivia", Utilities.parseCourseList("2019 SP CSE 101,2021 WI SYN 2"),
-                "");
-        Person bob = new Person(
-                UUID.fromString("d61f3be1-418b-4ae8-aee4-d9186f5fc848"),
-                "Bob",
-                Utilities.parseCourseList("2021 FA CSE 100,2019 SP CSE 101"),
-                "");
-        Person abe = new Person(
-                UUID.fromString("952e3c52-9eb8-4080-88db-bb48c213c897"),
-                "Abe",
-                Utilities.parseCourseList("2021 FA CSE 100,2019 SP CSE 101"),
-                "");
-        arrive(olivia);
+        // And the user click stop
         manager.stopSession();
-        arrive(bob);
+        // And then Olivia, Bob, and Abe arrives
+        arrive(OLIVIA);
+        arrive(BOB);
+        arrive(ABE);
+        // Then there should still be nobody in the session
+        assertTrue(manager.getCurrentSession().getNearbyStudentList().isEmpty());
+    }
+
+    // Scenario 1 for MS1-6
+    // Given the current session is initially started
+    // And there are no nearby students stored in this session
+    // When Olivia comes near by
+    // Then Olivia should be stored in the current session
+    // When the user click stop
+    // And then Bob arrives
+    // Then Bob should not be stored in the current session
+    // When the user click start again
+    // And Abe arrives
+    // Then Abe should be stored in the current session
+    // And Olivia should be the only other student in the current session
+    @Test
+    public void testStart() {
+        resetState();
+        arrive(OLIVIA);
+        manager.stopSession();
+        arrive(BOB);
         manager.startSession(manager.getCurrentSession()); // Resume current session
-        arrive(abe);
-        assertTrue(manager.getCurrentSession().getNearbyStudentList().contains(olivia));
-        assertFalse(manager.getCurrentSession().getNearbyStudentList().contains(bob));
-        assertTrue(manager.getCurrentSession().getNearbyStudentList().contains(abe));
+        arrive(ABE);
+        assertTrue(manager.getCurrentSession().getNearbyStudentList().contains(OLIVIA));
+        assertFalse(manager.getCurrentSession().getNearbyStudentList().contains(BOB));
+        assertTrue(manager.getCurrentSession().getNearbyStudentList().contains(ABE));
     }
 }

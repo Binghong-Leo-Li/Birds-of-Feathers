@@ -27,6 +27,7 @@ import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
 // BDD Scenario tests for Story 1 and 2 on rubric and story 4.1 and 4.2 on ZenHub
 @RunWith(AndroidJUnit4.class)
 public class TestListBoFsMS2 {
+    // Helper method
     private void setNearbyPeople(List<IPerson> list) {
         SessionManager manager = SessionManager.getInstance(InstrumentationRegistry
                 .getInstrumentation().getTargetContext());
@@ -75,6 +76,24 @@ public class TestListBoFsMS2 {
     }
 
     // Default option should be same as MS 1
+    // Scenario 1: Filtering using default option (number of courses in common)
+    //
+    //Given that Ava has not changed anything since first time setup
+    //And Ava’s list of classes is
+    //CSE 100 in Winter 2021
+    //CSE 101 in Spring 2019
+    //And Olivia’s list of classes is
+    //CSE 100 in Winter 2021
+    //CSE 101 in Spring 2019
+    //And Bob’s list of classes is
+    //MATH 20A in Spring 2019
+    //MATH 20C in Winter 2021
+    //CSE 101 in Spring 2019
+    //And only Bob and Olivia is nearby
+    //When Ava navigates to the home screen
+    //Then Olivia should appear on the top, with number 2
+    //And Bob should appear below Olivia, with number 1
+    //And No other BoFs are shown
     @Test
     public void testNumCoursesInCommonSimple() {
         IUserInfoStorage storage = Utilities.getStorageInstance(null);
@@ -94,7 +113,7 @@ public class TestListBoFsMS2 {
         });
     }
 
-    // Test the same thing as above but a more complex case
+    // Test the same thing as above but a more complex case, from MS 1
     @Test
     public void testListOfBoFsDisplayed() {
         IUserInfoStorage storage = Utilities.getStorageInstance(null);
@@ -129,8 +148,28 @@ public class TestListBoFsMS2 {
     //        <item>this quarter only</item>
 
     // Prioritize small classes
+    // Scenario 2: Filtering using “prioritize small classes”
+    //
+    //Given Ava’s list of classes is
+    //CSE 100 in Fall 2021, size huge.
+    //CSE 101 in Spring 2019, size large.
+    //SYN 2 in Winter 2021, size tiny.
+    //And Olivia’s list of classes is
+    //CSE 101 in Spring 2019, size large.
+    //SYN 2 in Winter 2021, size tiny.
+    //And Bob’s list of classes is
+    //CSE 100 in Fall 2021, size huge.
+    //CSE 101 in Spring 2019, size large.
+    //And only Bob and Olivia is nearby
+    //When Ava navigates to the home screen
+    //And select “Prioritize small classes” on the drop down
+    //And “This quarter only” option is not selected
+    //Then Olivia should appear on the top, with number 2
+    //And Bob should appear below Olivia, with number 2
+    //And No other BoFs are shown
     @Test
     public void testSortBySmallClasses() {
+        // Given already implemented in setup()
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
         scenario.onActivity(activity -> {
@@ -146,8 +185,29 @@ public class TestListBoFsMS2 {
     }
 
     // Prioritize recent
+    // Scenario 3: Filtering using “prioritize recent”
+    //
+    //Given the current quarter is FA 2021
+    //And Ava’s list of classes is
+    //CSE 100 in Fall 2021, size huge.
+    //CSE 101 in Spring 2019, size large.
+    //SYN 2 in Winter 2021, size tiny.
+    //And Olivia’s list of classes is
+    //CSE 101 in Spring 2019, size large.
+    //SYN 2 in Winter 2021, size tiny.
+    //And Bob’s list of classes is
+    //CSE 100 in Fall 2021, size huge.
+    //CSE 101 in Spring 2019, size large.
+    //And only Bob and Olivia is nearby
+    //When Ava navigates to the home screen
+    //And select “Prioritize recent” on the drop down
+    //And “This quarter only” option is not selected
+    //Then Bob should appear on the top, with number 2
+    //And Olivia should appear below Bob, with number 2
+    //And No other BoFs are shown
     @Test
     public void testSortByRecent() {
+        // Given already implemented in setup()
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
         scenario.onActivity(activity -> {
