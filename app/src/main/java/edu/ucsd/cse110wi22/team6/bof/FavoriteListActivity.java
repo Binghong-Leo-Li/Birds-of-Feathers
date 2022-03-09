@@ -2,15 +2,13 @@ package edu.ucsd.cse110wi22.team6.bof;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 
@@ -22,14 +20,10 @@ public class FavoriteListActivity extends AppCompatActivity {
     private IPerson user;
     private AppStorage storage;
 
-    private final List<IPerson> nobody = Collections.emptyList();
-
-    private static List<IPerson> nearbyPeople = new ArrayList<>();
-
-
     @Override
     protected void onStart() {
         super.onStart();
+        setTitle("Favorites");
 
         Log.d(TAG, "MainActivity.onStart() called");
 
@@ -37,6 +31,7 @@ public class FavoriteListActivity extends AppCompatActivity {
         user = storage.getUser();
 
         personsViewAdapter.setUser(user);
+        personsViewAdapter.setPeopleList(storage.getFavoriteList());
     }
 
 
@@ -47,6 +42,11 @@ public class FavoriteListActivity extends AppCompatActivity {
 
         Log.d(TAG, "FavoriteListActivity.onCreate() called");
 
+        // Add a <- arrow button to allow going back easily
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         storage = Utilities.getStorageInstance(this);
 
         bofRecyclerView = findViewById(R.id.favorite_list);
@@ -56,12 +56,18 @@ public class FavoriteListActivity extends AppCompatActivity {
 
         // It is redundant to put stars since every one must be favorited to begin with
         // so return false on every person to have no stars in this view
-        personsViewAdapter = new BoFsViewAdapter(nobody, person -> false);
+        personsViewAdapter = new BoFsViewAdapter(storage.getFavoriteList(), person -> false);
         bofRecyclerView.setAdapter(personsViewAdapter);
     }
 
-    public void updateUI() {
-        personsViewAdapter.setPeopleList(Utilities.getBofList(user, nearbyPeople));
+    // This allows the "<-" button to work
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

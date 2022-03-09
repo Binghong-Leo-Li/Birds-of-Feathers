@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
-    // This allows the back button to work
+    // This allows the "<-" button to work
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
