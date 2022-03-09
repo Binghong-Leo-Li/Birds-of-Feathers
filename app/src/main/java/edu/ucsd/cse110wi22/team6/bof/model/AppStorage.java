@@ -3,9 +3,9 @@ package edu.ucsd.cse110wi22.team6.bof.model;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110wi22.team6.bof.Course;
@@ -27,12 +27,27 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     private static final String PHOTO_URL = "photoUrl";
     private static final String USER_UUID = "userUUID";
     private static final String SESSION_LIST = "sessionList"; // As a list of UUIDs
+    private static final String FAVORITE_LIST = "favoriteList"; // As a list of person UUIDs
 
     public AppStorage(IKeyValueStore kvMapping) {
         this.kvMapping = kvMapping;
         this.courseMap = new IDMapping<>(kvMapping, "course", new CourseDataFactory());
         this.peopleMap = new IDMapping<>(kvMapping, "person", new IPersonFactory());
         this.sessionMap = new IDMapping<>(kvMapping, "session", new Session.Factory(this::getPersonFromID));
+    }
+
+    public void addToFavorites(IPerson person) {
+        assert !isFavorited(person);
+        mutateSet(favorites -> favorites.add(person.getStringID()), FAVORITE_LIST);
+    }
+
+    public void removeFromFavorites(IPerson person) {
+        assert isFavorited(person);
+        mutateSet(favorites -> favorites.remove(person.getStringID()), FAVORITE_LIST);
+    }
+
+    public boolean isFavorited(IPerson person) {
+        return getStringSet(FAVORITE_LIST).contains(person.getStringID());
     }
 
     public void registerCourse(Course course, CourseSize size) {
@@ -63,17 +78,25 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
 
     // Notify AppStorage of the existence of a NEW session
     public void registerNewSession(Session session) {
-        Set<String> s = new HashSet<>(kvMapping.getStringSet(SESSION_LIST, Collections.emptySet()));
-        s.add(session.getStringID());
-        kvMapping.putStringSet(SESSION_LIST, s);
+        mutateSet(sessions -> sessions.add(session.getStringID()), SESSION_LIST);
         sessionMap.registerObject(session);
     }
 
     public List<Session> getSessionList() {
-        return kvMapping.getStringSet(SESSION_LIST, Collections.emptySet())
+        return getStringSet(SESSION_LIST)
                 .stream()
                 .map(sessionMap::getObjectByID)
                 .collect(Collectors.toList());
+    }
+
+    private void mutateSet(Consumer<Set<String>> mutator, String setKey) {
+        Set<String> s = new HashSet<>(getStringSet(setKey));
+        mutator.accept(s);
+        kvMapping.putStringSet(setKey, s);
+    }
+
+    private Set<String> getStringSet(String setKey) {
+        return kvMapping.getStringSet(setKey, Collections.emptySet());
     }
 
     @Override
