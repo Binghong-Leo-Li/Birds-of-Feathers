@@ -13,6 +13,7 @@ import com.google.gson.JsonParser;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -50,7 +51,7 @@ public class MessageProcessor extends MessageListener {
                 }
                 case WAVE: {
                     IPerson from = gson.fromJson(jsonObject.get(TAG_FROM), Person.class);
-                    UUID to = gson.fromJson(jsonObject.get(TAG_TO), UUID.class);
+                    UUID[] to = gson.fromJson(jsonObject.get(TAG_TO), UUID[].class);
                     processedMessageListener.onWave(from, to);
                     break;
                 }
@@ -79,11 +80,11 @@ public class MessageProcessor extends MessageListener {
             return gson.toJson(jsonObject).getBytes(StandardCharsets.UTF_8);
         }
         // Generate message for sending a wave
-        public static byte[] wave(IPerson from, UUID target) {
+        public static byte[] wave(IPerson from, UUID[] targets) {
             Map<String, Object> jsonObject = new HashMap<>();
             jsonObject.put(TAG_TYPE, MessageType.WAVE);
             jsonObject.put(TAG_FROM, from);
-            jsonObject.put(TAG_TO, target);
+            jsonObject.put(TAG_TO, targets);
             return gson.toJson(jsonObject).getBytes(StandardCharsets.UTF_8);
         }
     }

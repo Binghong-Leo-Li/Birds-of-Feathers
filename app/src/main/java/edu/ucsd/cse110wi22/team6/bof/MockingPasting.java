@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.nearby.messages.Message;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,7 +62,7 @@ public class MockingPasting extends AppCompatActivity {
         if (waveUUID == null) {
             return MessageProcessor.Encoder.advertisePerson(originator);
         } else {
-            return MessageProcessor.Encoder.wave(originator, waveUUID);
+            return MessageProcessor.Encoder.wave(originator, new UUID[]{waveUUID});
         }
     }
 

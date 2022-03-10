@@ -7,5 +7,5 @@ public interface IProcessedMessageListener {
     // Advertise the presence of someone
     void onAdvertise(IPerson person);
     // A wave message from `from` to `to`
-    void onWave(IPerson from, UUID to);
+    void onWave(IPerson from, UUID[] to);
 }
