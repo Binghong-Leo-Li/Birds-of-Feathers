@@ -8,6 +8,7 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import java.nio.charset.StandardCharsets;
@@ -19,6 +20,7 @@ import java.util.UUID;
 // Converts from raw to processed (decoded) messages
 public class MessageProcessor extends MessageListener {
     private static final String TAG = "MessageProcessor";
+
     // JSON tag names
     public static final String TAG_TYPE = "type";
     public static final String TAG_PERSON = "person";
@@ -37,22 +39,26 @@ public class MessageProcessor extends MessageListener {
         super.onFound(message);
         String messageContent = new String(message.getContent());
         Log.d(TAG, "onFound() message " + messageContent);
-        JsonObject jsonObject = JsonParser.parseString(messageContent).getAsJsonObject();
-        MessageType type = gson.fromJson(jsonObject.get(TAG_TYPE), MessageType.class);
-        switch (type) {
-            case ADVERTISE: {
-                IPerson person = gson.fromJson(jsonObject.get(TAG_PERSON), Person.class);
-                processedMessageListener.onAdvertise(person);
-                break;
+        try {
+            JsonObject jsonObject = JsonParser.parseString(messageContent).getAsJsonObject();
+            MessageType type = gson.fromJson(jsonObject.get(TAG_TYPE), MessageType.class);
+            switch (type) {
+                case ADVERTISE: {
+                    IPerson person = gson.fromJson(jsonObject.get(TAG_PERSON), Person.class);
+                    processedMessageListener.onAdvertise(person);
+                    break;
+                }
+                case WAVE: {
+                    IPerson from = gson.fromJson(jsonObject.get(TAG_FROM), Person.class);
+                    UUID to = gson.fromJson(jsonObject.get(TAG_TO), UUID.class);
+                    processedMessageListener.onWave(from, to);
+                    break;
+                }
+                default:
+                    Log.e(TAG, "Invalid message type " + type); // invalid message, should not happen!
             }
-            case WAVE: {
-                IPerson from = gson.fromJson(jsonObject.get(TAG_FROM), Person.class);
-                UUID to = gson.fromJson(jsonObject.get(TAG_TO), UUID.class);
-                processedMessageListener.onWave(from, to);
-                break;
-            }
-            default:
-                assert false; // invalid message, should not happen!
+        } catch (JsonParseException exception) {
+            Log.e(TAG, "JSON parse error", exception);
         }
     }
 

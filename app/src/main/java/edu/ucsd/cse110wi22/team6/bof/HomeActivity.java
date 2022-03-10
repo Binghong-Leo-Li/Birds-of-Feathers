@@ -22,6 +22,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
+
 // The first activity started when the app is launched
 public class HomeActivity extends AppCompatActivity {
 
@@ -29,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Spinner currentQuarterDropDown;
 
-    private IUserInfoStorage storage;
+    private AppStorage storage;
     private Button timebutton;
     private Button datebutton;
     private int year;
@@ -46,6 +48,7 @@ public class HomeActivity extends AppCompatActivity {
         Log.d(TAG, "HomeActivity.onStart() called");
         if (storage.isInitialized()) {
             Log.d(TAG, "App has gone through first time setup already");
+            NearbyMessagesManager.getInstance(this).changeMessage(MessageProcessor.Encoder.advertisePerson(storage.getUser()));
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");
