@@ -36,7 +36,7 @@ public class MockedMessagesClient implements MessagesClient {
 
     public static MockedMessagesClient getInstance(Context context) {
         if (instance == null)
-            instance = new MockedMessagesClient(context);
+            instance = new MockedMessagesClient(context.getApplicationContext());
         return instance;
     }
 
