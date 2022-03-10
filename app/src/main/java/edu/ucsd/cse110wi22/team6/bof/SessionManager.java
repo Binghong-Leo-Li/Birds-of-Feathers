@@ -9,22 +9,26 @@ import com.google.android.gms.nearby.messages.MessagesClient;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.UUID;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 import edu.ucsd.cse110wi22.team6.bof.model.Session;
+import edu.ucsd.cse110wi22.team6.bof.model.SessionChangeListener;
 
 // Mediator between sessions, nearby messages, and persistent storage
-public class SessionManager implements IProcessedMessageListener {
+public class SessionManager implements IProcessedMessageListener, SessionChangeListener {
     private static final String TAG = "SessionManager";
     private Session currentSession;
     private final MessagesClient messagesClient;
-    // Have a storage handle object: AppStorage and instantiate it from Context
-    private final Context context;
+//    private final Context context;
     private final AppStorage storage;
     private final MessageListener messageProcessor;
     private boolean running;
+
+    private final Collection<SessionChangeListener> currentSessionChangeListeners;
 
     private Date mockedTime;
 
@@ -34,12 +38,31 @@ public class SessionManager implements IProcessedMessageListener {
     private static SessionManager INSTANCE;
 
     private SessionManager(Context context) {
-        this.context = context;
+//        this.context = context;
         this.messageProcessor = new MessageProcessor(this);
         // Create a dummy session with no BoFs so that first launch will not crash
         this.currentSession = new Session(NIL_UUID, Calendar.getInstance().getTime());
+        this.currentSessionChangeListeners = new HashSet<>();
         this.storage = Utilities.getStorageInstance(context);
         messagesClient = MockedMessagesClient.getInstance(context);
+    }
+
+    // Register observers
+    public void registerSessionChangeListener(SessionChangeListener listener) {
+        currentSessionChangeListeners.add(listener);
+    }
+
+    // Unregister observers
+    public void unregisterSessionChangeListener(SessionChangeListener listener) {
+        boolean removed = currentSessionChangeListeners.remove(listener);
+        // Make sure the listener existed before, Java's not SRP so let's deal with it
+        assert removed;
+    }
+
+    // Notify all the observers
+    private void notifySessionChangeListeners() {
+        for (SessionChangeListener listener : currentSessionChangeListeners)
+            listener.onSessionModified(currentSession);
     }
 
     // Allow mocking the current time since it is otherwise untestable
@@ -55,6 +78,7 @@ public class SessionManager implements IProcessedMessageListener {
         running = true;
         messagesClient.subscribe(this.messageProcessor);
         currentSession.registerListener(storage);
+        currentSession.registerListener(this);
     }
 
     // Start a NEW session
@@ -71,8 +95,10 @@ public class SessionManager implements IProcessedMessageListener {
         assert running;
         running = false;
         messagesClient.unsubscribe(this.messageProcessor);
-        if (!currentSession.getSessionId().equals(NIL_UUID))
+        if (!currentSession.getSessionId().equals(NIL_UUID)) {
             currentSession.unregisterListener(storage);
+            currentSession.unregisterListener(this);
+        }
     }
 
     // Getter for the current session
@@ -104,6 +130,12 @@ public class SessionManager implements IProcessedMessageListener {
     }
 
     @Override
+    public void onSessionModified(Session session) {
+        assert session == currentSession;
+        notifySessionChangeListeners();
+    }
+
+    @Override
     public void onAdvertise(IPerson person) {
         Log.d(TAG, "Found student " + person);
         foundNearbyStudent(person);
@@ -116,7 +148,7 @@ public class SessionManager implements IProcessedMessageListener {
         UUID userUUID = storage.getUser().getUUID();
         if (Arrays.asList(to).contains(userUUID)) {
             Log.d(TAG, "Wave received from " + from);
-            // TODO: handle wave by adding to wave list in AppStorage
+            storage.waveFrom(from);
         } else {
             Log.d(TAG, "Not waving to me: " + from);
         }

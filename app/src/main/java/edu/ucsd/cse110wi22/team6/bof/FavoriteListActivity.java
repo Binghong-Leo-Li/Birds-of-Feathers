@@ -56,7 +56,7 @@ public class FavoriteListActivity extends AppCompatActivity {
 
         // It is redundant to put stars since every one must be favorited to begin with
         // so return false on every person to have no stars in this view
-        personsViewAdapter = new BoFsViewAdapter(storage.getFavoriteList(), person -> false);
+        personsViewAdapter = new BoFsViewAdapter(storage.getFavoriteList(), person -> false, person -> false);
         bofRecyclerView.setAdapter(personsViewAdapter);
     }
 

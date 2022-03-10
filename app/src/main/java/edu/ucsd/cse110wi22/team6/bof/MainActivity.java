@@ -26,10 +26,12 @@ import java.util.stream.Stream;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 import edu.ucsd.cse110wi22.team6.bof.model.Session;
+import edu.ucsd.cse110wi22.team6.bof.model.SessionChangeListener;
 import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
+import edu.ucsd.cse110wi22.team6.bof.model.WaveListener;
 
 // Activity to display List of BoFs
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SessionChangeListener, WaveListener {
     private static final String TAG = "MainActivity";
     public static final int DEFAULT_YEAR = 2021;
     public static final String DEFAULT_QUARTER = "WI";
@@ -64,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         user = storage.getUser();
         Log.d(TAG, "Current User: " + user);
 
+        storage.registerWaveListener(this);
+        sessionManager.registerSessionChangeListener(this);
+
         personsViewAdapter.setUser(user);
         updateComparators();
         updateBoFList();
@@ -72,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Updating UI to display all nearbyPeople
     void updateBoFList() {
-        List<IPerson> nearbyStudents= SessionManager.getInstance(this)
+        List<IPerson> nearbyStudents= sessionManager
                 .getCurrentSession()
                 .getNearbyStudentList();
         for (IPerson person : nearbyStudents) {
@@ -85,7 +90,14 @@ public class MainActivity extends AppCompatActivity {
         // the Adapter handles updating display
         personsViewAdapter.setPeopleList(Utilities.getBofList(user,
                 nearbyStudents,
-                comparators.get(preferences_dropdown.getSelectedItemPosition())));
+                Comparator
+                        // Existence of waves takes the most priority in sorting
+                        .comparingInt((IPerson person) -> storage.isWavingToUser(person) ? 1 : 0)
+                        // Then compare by other criterion (Ex. number of courses in common)
+                        .thenComparing(
+                            comparators.get(preferences_dropdown.getSelectedItemPosition())
+                        )
+        ));
     }
 
     void updateComparators() {
@@ -215,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         personsLayoutManager = new LinearLayoutManager(this);
         bofRecyclerView.setLayoutManager(personsLayoutManager);
 
-        personsViewAdapter = new BoFsViewAdapter(nobody, person -> storage.isFavorited(person));
+        personsViewAdapter = new BoFsViewAdapter(nobody, person -> storage.isFavorited(person), person -> storage.isWavingToUser(person));
         bofRecyclerView.setAdapter(personsViewAdapter);
 
         preferences_dropdown=findViewById(R.id.preferences_dropdown);
@@ -282,6 +294,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        storage.unregisterWaveListener(this);
+        sessionManager.unregisterSessionChangeListener(this);
+
         super.onStop();
+    }
+
+    @Override
+    public void onSessionModified(Session session) {
+        updateBoFList();
+    }
+
+    @Override
+    public void onWaveInformationChanged() {
+        updateBoFList();
     }
 }

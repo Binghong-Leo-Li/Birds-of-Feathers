@@ -24,13 +24,15 @@ import java.util.stream.Collectors;
 public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHolder> {
     private List<? extends IPerson> people;
     private final Predicate<IPerson> starred;
+    private final Predicate<IPerson> waved;
     private IPerson user;
 
     // Constructor
-    public BoFsViewAdapter(List<? extends IPerson> people, Predicate<IPerson> starred) {
+    public BoFsViewAdapter(List<? extends IPerson> people, Predicate<IPerson> starred, Predicate<IPerson> waved) {
         super();
         this.people = people;
         this.starred = starred;
+        this.waved = waved;
     }
 
     // initialization
@@ -41,7 +43,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
                 .from(parent.getContext())
                 .inflate(R.layout.bof_row, parent, false);
 
-        return new ViewHolder(user, view, starred);
+        return new ViewHolder(user, view, starred, waved);
     }
 
     // binding
@@ -83,20 +85,24 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
         private final TextView numCommonCoursesView;
         private final ImageView personThumbnailView;
         private final ImageView favorited;
+        private final ImageView wavedView;
         private final IPerson user;
         private IPerson person;
 
         private final Predicate<IPerson> starred;
+        private final Predicate<IPerson> waved;
 
         // constructor
-        ViewHolder(IPerson user, View itemView, Predicate<IPerson> starred) {
+        ViewHolder(IPerson user, View itemView, Predicate<IPerson> starred, Predicate<IPerson> waved) {
             super(itemView);
             this.user = user;
             this.personNameView = itemView.findViewById(R.id.bof_row_name);
             this.numCommonCoursesView = itemView.findViewById(R.id.num_common_courses_view);
             this.personThumbnailView = itemView.findViewById(R.id.thumbnail);
             this.favorited = itemView.findViewById(R.id.favorited);
+            this.wavedView = itemView.findViewById(R.id.waved);
             this.starred = starred;
+            this.waved = waved;
             itemView.setOnClickListener(this);
         }
 
@@ -116,6 +122,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
                         String.valueOf(Utilities.numCoursesTogether(user, person)));
 
             this.favorited.setVisibility(starred.test(person) ? View.VISIBLE : View.INVISIBLE);
+            this.wavedView.setVisibility(waved.test(person) ? View.VISIBLE : View.INVISIBLE);
         }
 
         // handling clicking on an individual in the list, proceeding to BoFsDetails Activity
