@@ -93,13 +93,18 @@ public class SessionManager implements IProcessedMessageListener {
     }
 
     private void foundNearbyStudent(IPerson person) {
-        storage.registerPerson(person);
-        currentSession.addNearbyStudent(person);
+        if (person.equals(storage.getUser())) {
+            Log.d(TAG, "Found user oneself");
+        } else {
+            Log.d(TAG, "Adding student to session");
+            storage.registerPerson(person);
+            currentSession.addNearbyStudent(person);
+        }
     }
 
     @Override
     public void onAdvertise(IPerson person) {
-        Log.d(TAG, "Added student " + person);
+        Log.d(TAG, "Found student " + person);
         foundNearbyStudent(person);
     }
 
