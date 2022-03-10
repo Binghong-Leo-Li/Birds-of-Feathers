@@ -90,9 +90,9 @@ public class BoFsDetails extends AppCompatActivity {
     }
 
     public void onWaveClicked(View view) {
-        Toast.makeText(this, "waved!",
+        Toast.makeText(this, "Wave sent",
                 Toast.LENGTH_LONG).show();
 
-        //TODO send wave through nearby
+        NearbyMessagesManager.getInstance(this).waveTo(bof);
     }
 }

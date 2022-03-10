@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.MessagesClient;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -109,12 +110,15 @@ public class SessionManager implements IProcessedMessageListener {
     }
 
     @Override
-    public void onWave(IPerson from, UUID to) {
-        if (storage.getUser().getUUID().equals(to)) {
+    public void onWave(IPerson from, UUID[] to) {
+        // In case an "advertise" message from this person is missed, add it nevertheless
+        foundNearbyStudent(from);
+        UUID userUUID = storage.getUser().getUUID();
+        if (Arrays.asList(to).contains(userUUID)) {
             Log.d(TAG, "Wave received from " + from);
-            // In case an "advertise" message from this person is missed, add it nevertheless
-            foundNearbyStudent(from);
             // TODO: handle wave by adding to wave list in AppStorage
+        } else {
+            Log.d(TAG, "Not waving to me: " + from);
         }
     }
 }

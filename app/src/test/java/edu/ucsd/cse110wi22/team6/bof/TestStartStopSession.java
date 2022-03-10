@@ -41,11 +41,11 @@ public class TestStartStopSession {
 
     @Before
     public void setup() {
+        Utilities.setPersistence(false);
         context = InstrumentationRegistry
                 .getInstrumentation().getTargetContext();
         manager = SessionManager.getInstance(context);
         mockedMessagesClient = MockedMessagesClient.getInstance(context);
-        Utilities.setPersistence(false);
         storage = Utilities.getStorageInstance(context);
         storage.setInitialized(true);
         storage.setName("Ava");

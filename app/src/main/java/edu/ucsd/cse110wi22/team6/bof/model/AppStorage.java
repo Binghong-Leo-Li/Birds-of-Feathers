@@ -28,6 +28,7 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     private static final String USER_UUID = "userUUID";
     private static final String SESSION_LIST = "sessionList"; // As a list of UUIDs
     private static final String FAVORITE_LIST = "favoriteList"; // As a list of person UUIDs
+    private static final String WAVE_TO_LIST = "waveToList"; // List of students the user is waving to
 
     public AppStorage(IKeyValueStore kvMapping) {
         this.kvMapping = kvMapping;
@@ -91,6 +92,17 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
 
     public List<IPerson> getFavoriteList() {
         return getStringSet(FAVORITE_LIST)
+                .stream()
+                .map(peopleMap::getObjectByID)
+                .collect(Collectors.toList());
+    }
+
+    public void waveTo(IPerson person) {
+        mutateSet(waveList -> waveList.add(person.getStringID()), WAVE_TO_LIST);
+    }
+
+    public List<IPerson> getWaveToList() {
+        return getStringSet(WAVE_TO_LIST)
                 .stream()
                 .map(peopleMap::getObjectByID)
                 .collect(Collectors.toList());
