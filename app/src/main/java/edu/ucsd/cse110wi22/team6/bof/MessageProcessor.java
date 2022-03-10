@@ -36,7 +36,7 @@ public class MessageProcessor extends MessageListener {
     public void onFound(@NonNull Message message) {
         super.onFound(message);
         String messageContent = new String(message.getContent());
-        Log.d(TAG, "onFound: " + messageContent);
+        Log.d(TAG, "onFound() message " + messageContent);
         JsonObject jsonObject = JsonParser.parseString(messageContent).getAsJsonObject();
         MessageType type = gson.fromJson(jsonObject.get(TAG_TYPE), MessageType.class);
         switch (type) {
@@ -60,7 +60,7 @@ public class MessageProcessor extends MessageListener {
     public void onLost(@NonNull Message message) {
         super.onLost(message);
         String messageContent = new String(message.getContent());
-        Log.d(TAG, "onLost: " + messageContent);
+        Log.d(TAG, "onLost() message " + messageContent);
     }
 
     public static class Encoder {
@@ -83,6 +83,6 @@ public class MessageProcessor extends MessageListener {
     }
 
     public enum MessageType {
-        ADVERTISE,WAVE;
+        ADVERTISE,WAVE
     }
 }

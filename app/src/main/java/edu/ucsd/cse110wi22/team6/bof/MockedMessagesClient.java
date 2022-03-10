@@ -49,29 +49,28 @@ public class MockedMessagesClient implements MessagesClient {
     @NonNull
     @Override
     public Task<Void> publish(@NonNull Message message) {
-        Log.d(TAG, "Publishing message " + new String(message.getContent()));
-        return null; // TODO: use the real client behind the scenes to handle all of those return values
+        Log.d(TAG, "publish() message " + new String(message.getContent()));
+        return realClient.publish(message);
     }
 
     @NonNull
     @Override
     public Task<Void> publish(@NonNull Message message, @NonNull PublishOptions publishOptions) {
         publish(message);
-        return null;
+        return realClient.publish(message, publishOptions);
     }
 
     @NonNull
     @Override
     public Task<Void> unpublish(@NonNull Message message) {
-        Log.d(TAG, "Unpublishing message " + new String(message.getContent()));
-        return null;
+        Log.d(TAG, "unpublish() message " + new String(message.getContent()));
+        return realClient.unpublish(message);
     }
 
     @NonNull
     @Override
     public Task<Void> subscribe(@NonNull MessageListener messageListener) {
-        // TODO: request Bluetooth permission here
-        Log.d(TAG, "Subscribing message listener " + messageListener);
+        Log.d(TAG, "subscribe(" + messageListener + ")");
         listeners.add(messageListener);
         return realClient.subscribe(messageListener);
     }
@@ -80,7 +79,7 @@ public class MockedMessagesClient implements MessagesClient {
     @Override
     public Task<Void> subscribe(@NonNull MessageListener messageListener, @NonNull SubscribeOptions subscribeOptions) {
         subscribe(messageListener);
-        return null;
+        return realClient.subscribe(messageListener, subscribeOptions);
     }
 
     @NonNull
@@ -98,7 +97,7 @@ public class MockedMessagesClient implements MessagesClient {
     @NonNull
     @Override
     public Task<Void> unsubscribe(@NonNull MessageListener messageListener) {
-        Log.d(TAG, "Unsubscribing message listener " + messageListener);
+        Log.d(TAG, "unsubscribe(" + messageListener + ")");
         listeners.remove(messageListener);
         return realClient.unsubscribe(messageListener);
     }
@@ -112,13 +111,13 @@ public class MockedMessagesClient implements MessagesClient {
     @NonNull
     @Override
     public Task<Void> registerStatusCallback(@NonNull StatusCallback statusCallback) {
-        return null;
+        return realClient.registerStatusCallback(statusCallback);
     }
 
     @NonNull
     @Override
     public Task<Void> unregisterStatusCallback(@NonNull StatusCallback statusCallback) {
-        return null;
+        return realClient.unregisterStatusCallback(statusCallback);
     }
 
     @Override
@@ -129,6 +128,6 @@ public class MockedMessagesClient implements MessagesClient {
     @NonNull
     @Override
     public ApiKey<MessagesOptions> getApiKey() {
-        throw new UnsupportedOperationException("getApiKey not supported in mock.");
+        return realClient.getApiKey();
     }
 }

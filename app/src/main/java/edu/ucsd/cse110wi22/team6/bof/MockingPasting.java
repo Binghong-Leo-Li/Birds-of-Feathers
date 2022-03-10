@@ -55,8 +55,7 @@ public class MockingPasting extends AppCompatActivity {
             originator = new Person(originUUID, name, courses, photoURL);
         } catch (RuntimeException exception) {
             // If anything doesn't parse, since instructors are humans as well
-            Log.w(TAG, "Invalid CSV format!");
-            exception.printStackTrace();
+            Log.w(TAG, "Invalid CSV format!", exception);
             return null;
         }
         if (waveUUID == null) {

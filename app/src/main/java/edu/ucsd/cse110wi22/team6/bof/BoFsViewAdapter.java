@@ -57,6 +57,10 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
         notifyDataSetChanged(); // notifying recycler view
     }
 
+    public List<? extends IPerson> getPeopleList() {
+        return people;
+    }
+
     // setter
     @SuppressLint("NotifyDataSetChanged")
     public void setUser(IPerson user) {
