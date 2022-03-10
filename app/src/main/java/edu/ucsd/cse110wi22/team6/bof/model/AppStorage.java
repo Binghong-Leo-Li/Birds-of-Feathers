@@ -1,5 +1,8 @@
 package edu.ucsd.cse110wi22.team6.bof.model;
 
+import androidx.annotation.NonNull;
+
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +23,9 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     private final IDMapping<CourseData> courseMap;
     private final IDMapping<IPerson> peopleMap;
     private final IDMapping<Session> sessionMap;
+
+    private final Collection<WaveListener> waveListeners;
+
     // Key names
     private static final String INITIALIZED = "initialized";
     private static final String NAME = "name";
@@ -29,12 +35,14 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     private static final String SESSION_LIST = "sessionList"; // As a list of UUIDs
     private static final String FAVORITE_LIST = "favoriteList"; // As a list of person UUIDs
     private static final String WAVE_TO_LIST = "waveToList"; // List of students the user is waving to
+    private static final String WAVE_FROM_LIST = "waveFromList"; // List of students the user received wave from
 
     public AppStorage(IKeyValueStore kvMapping) {
         this.kvMapping = kvMapping;
         this.courseMap = new IDMapping<>(kvMapping, "course", new CourseDataFactory());
         this.peopleMap = new IDMapping<>(kvMapping, "person", new IPersonFactory());
         this.sessionMap = new IDMapping<>(kvMapping, "session", new Session.Factory(this::getPersonFromID));
+        this.waveListeners = new HashSet<>();
     }
 
     public void addToFavorites(IPerson person) {
@@ -49,6 +57,10 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
 
     public boolean isFavorited(IPerson person) {
         return getStringSet(FAVORITE_LIST).contains(person.getStringID());
+    }
+
+    public boolean isWavingToUser(IPerson person) {
+        return getStringSet(WAVE_FROM_LIST).contains(person.getStringID());
     }
 
     public void registerCourse(Course course, CourseSize size) {
@@ -84,17 +96,11 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     }
 
     public List<Session> getSessionList() {
-        return getStringSet(SESSION_LIST)
-                .stream()
-                .map(sessionMap::getObjectByID)
-                .collect(Collectors.toList());
+        return getListAsObjects(SESSION_LIST, sessionMap);
     }
 
     public List<IPerson> getFavoriteList() {
-        return getStringSet(FAVORITE_LIST)
-                .stream()
-                .map(peopleMap::getObjectByID)
-                .collect(Collectors.toList());
+        return getListAsObjects(FAVORITE_LIST, peopleMap);
     }
 
     public void waveTo(IPerson person) {
@@ -102,9 +108,41 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     }
 
     public List<IPerson> getWaveToList() {
-        return getStringSet(WAVE_TO_LIST)
+        return getListAsObjects(WAVE_TO_LIST, peopleMap);
+    }
+
+    public void waveFrom(IPerson person) {
+        mutateSet(waveList -> waveList.add(person.getStringID()), WAVE_FROM_LIST);
+        notifyListeners();
+    }
+
+//    public List<IPerson> getWaveFromList() {
+//        return getListAsObjects(WAVE_FROM_LIST, peopleMap);
+//    }
+
+    // Register observers
+    public void registerWaveListener(WaveListener listener) {
+        waveListeners.add(listener);
+    }
+
+    // Unregister observers
+    public void unregisterWaveListener(WaveListener listener) {
+        boolean removed = waveListeners.remove(listener);
+        // Make sure the listener existed before, Java's not SRP so let's deal with it
+        assert removed;
+    }
+
+    // Notify all the observers
+    private void notifyListeners() {
+        for (WaveListener listener : waveListeners)
+            listener.onWaveInformationChanged();
+    }
+
+    @NonNull
+    private <T extends Identifiable> List<T> getListAsObjects(String listKeyName, IDMapping<T> mapping) {
+        return getStringSet(listKeyName)
                 .stream()
-                .map(peopleMap::getObjectByID)
+                .map(mapping::getObjectByID)
                 .collect(Collectors.toList());
     }
 
