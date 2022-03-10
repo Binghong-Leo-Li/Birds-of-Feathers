@@ -48,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
         Log.d(TAG, "HomeActivity.onStart() called");
         if (storage.isInitialized()) {
             Log.d(TAG, "App has gone through first time setup already");
-            NearbyMessagesManager.getInstance(this).changeMessage(MessageProcessor.Encoder.advertisePerson(storage.getUser()));
+            NearbyMessagesManager.getInstance(this).update();
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");
