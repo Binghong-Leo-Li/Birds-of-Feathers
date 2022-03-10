@@ -23,9 +23,9 @@
     >
     <string-array name="preferences">
         <item>Sort by number of classes in common</item>
-        <item>prioritize small classes</item>
-        <item>prioritize recent</item>
-        <item>this quarter only</item>
+        <item>Prioritize small classes</item>
+        <item>Prioritize recent</item>
+<!--        <item>this quarter only</item>-->
 
     </string-array>
     <string-array name="time">

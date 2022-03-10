@@ -38,9 +38,6 @@ public class SessionManager implements IProcessedMessageListener {
         // Create a dummy session with no BoFs so that first launch will not crash
         this.currentSession = new Session(NIL_UUID, Calendar.getInstance().getTime());
         this.storage = Utilities.getStorageInstance(context);
-        // TODO: register storage as listener of session to enable autosave
-        // remember to keep track of session registration as the current session changes
-        // and also fire the listener on first creation
         messagesClient = MockedMessagesClient.getInstance(context);
     }
 

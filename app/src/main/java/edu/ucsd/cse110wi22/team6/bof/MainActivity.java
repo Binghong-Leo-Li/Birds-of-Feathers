@@ -95,9 +95,8 @@ public class MainActivity extends AppCompatActivity {
                 // prioritize small classes
                 new SizeComparator(user, (course -> storage.getCourseSize(course))),
                 // prioritize recent
-                new RecencyComparator(user, year, quarter),
-                // Postponed: this quarter only
-                Utilities.getCompareByNumCourses(user) // TODO: delete this option
+                new RecencyComparator(user, year, quarter)
+                // This quarter only is postponed indefinitely
         );
         updateBoFList();
     }
@@ -121,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Stopping current session");
         sessionManager.stopSession();
         updateToggleButtonName();
+    }
+
+    public List<? extends IPerson> getPeopleList() {
+        return personsViewAdapter.getPeopleList();
     }
 
     @Override

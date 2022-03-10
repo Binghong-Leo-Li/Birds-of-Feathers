@@ -2,6 +2,7 @@ package edu.ucsd.cse110wi22.team6.bof;
 
 import static org.junit.Assert.assertEquals;
 
+import android.content.Context;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,10 +28,14 @@ import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
 // BDD Scenario tests for Story 1 and 2 on rubric and story 4.1 and 4.2 on ZenHub
 @RunWith(AndroidJUnit4.class)
 public class TestListBoFsMS2 {
+    private static final int PRIORITIZE_SMALL_CLASSES_INDEX = 1;
+    private static final int PRIORITIZE_RECENT_INDEX = 2;
+
+    private Context context;
+
     // Helper method
     private void setNearbyPeople(List<IPerson> list) {
-        SessionManager manager = SessionManager.getInstance(InstrumentationRegistry
-                .getInstrumentation().getTargetContext());
+        SessionManager manager = SessionManager.getInstance(context);
         if (manager.isRunning()) {
             manager.stopSession();
         }
@@ -54,8 +59,11 @@ public class TestListBoFsMS2 {
     // Setting up persisted storage
     @Before
     public void setup() {
+        context = InstrumentationRegistry
+                .getInstrumentation().getTargetContext();
+
         Utilities.setPersistence(false);
-        AppStorage storage = Utilities.getStorageInstance(null);
+        AppStorage storage = Utilities.getStorageInstance(context);
         storage.setInitialized(true);
         storage.setName("Ava");
         storage.setPhotoUrl("https://www.example.com");
@@ -96,7 +104,7 @@ public class TestListBoFsMS2 {
     //And No other BoFs are shown
     @Test
     public void testNumCoursesInCommonSimple() {
-        IUserInfoStorage storage = Utilities.getStorageInstance(null);
+        IUserInfoStorage storage = Utilities.getStorageInstance(context);
         storage.setCourseList(Utilities.parseCourseList("2021 WI CSE 100,2019 SP CSE 101,2021 WI SYN 2"));
         setNearbyPeople(Arrays.asList(
                 new Person("Olivia", Utilities.parseCourseList("2021 WI CSE 100,2019 SP CSE 101"), ""),
@@ -116,7 +124,7 @@ public class TestListBoFsMS2 {
     // Test the same thing as above but a more complex case, from MS 1
     @Test
     public void testListOfBoFsDisplayed() {
-        IUserInfoStorage storage = Utilities.getStorageInstance(null);
+        IUserInfoStorage storage = Utilities.getStorageInstance(context);
         storage.setCourseList(Utilities.parseCourseList("2022 WI CSE 110,2021 FA CSE 100,2021 FA ECE 65,2020 FA CSE 11"));
         setNearbyPeople(Arrays.asList(
                 /*1*/ new Person("Rick", Utilities.parseCourseList("2022 WI CSE 110"), ""),
@@ -140,12 +148,6 @@ public class TestListBoFsMS2 {
             assertEquals("Replicant", info);
         });
     }
-
-    // <string-array name="preferences">
-    //        <item>Sort by number of classes in common</item>
-    //        <item>prioritize small classes</item>
-    //        <item>prioritize recent</item>
-    //        <item>this quarter only</item>
 
     // Prioritize small classes
     // Scenario 2: Filtering using “prioritize small classes”
@@ -175,7 +177,7 @@ public class TestListBoFsMS2 {
         scenario.onActivity(activity -> {
             RecyclerView view = activity.findViewById(R.id.bof_list);
             Spinner sortDropDown = activity.findViewById(R.id.preferences_dropdown);
-            sortDropDown.setSelection(1); // "prioritize small classes"
+            sortDropDown.setSelection(PRIORITIZE_SMALL_CLASSES_INDEX);
             view.measure(0,0); // dirty hack to force update of recycler view
             // See https://github.com/robolectric/robolectric/issues/3747
             assertEquals(2, Objects.requireNonNull(view.getAdapter()).getItemCount());
@@ -215,7 +217,7 @@ public class TestListBoFsMS2 {
             activity.setQuarter("FA");
             RecyclerView view = activity.findViewById(R.id.bof_list);
             Spinner sortDropDown = activity.findViewById(R.id.preferences_dropdown);
-            sortDropDown.setSelection(2); // "prioritize recent"
+            sortDropDown.setSelection(PRIORITIZE_RECENT_INDEX);
             view.measure(0,0); // dirty hack to force update of recycler view
             // See https://github.com/robolectric/robolectric/issues/3747
             assertEquals(2, Objects.requireNonNull(view.getAdapter()).getItemCount());

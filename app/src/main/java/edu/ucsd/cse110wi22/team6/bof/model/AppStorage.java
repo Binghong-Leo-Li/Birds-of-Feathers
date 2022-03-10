@@ -119,8 +119,12 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     // Lazy creation of user UUID
     private void ensureUserHasUUID() {
         if (getUserUUIDString() == null) {
-            kvMapping.putString(USER_UUID, UUID.randomUUID().toString());
+            setUserUUID(UUID.randomUUID());
         }
+    }
+
+    public void setUserUUID(UUID uuid) {
+        kvMapping.putString(USER_UUID, uuid.toString());
     }
 
     public IPerson getUser() {
