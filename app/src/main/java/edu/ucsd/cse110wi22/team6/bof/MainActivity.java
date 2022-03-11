@@ -215,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements SessionChangeList
                     }
                     updateToggleButtonName();
                     updateBoFList();
+
                 });
                 resume_alert.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
                 resume_alert.setView(spView);
@@ -260,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements SessionChangeList
     // Another is when a session stopped without being assigned a name and is restarted
     private void setSessionName(String title, Session session, Runnable beforeSaveAction, Runnable afterSaveAction) {
         final EditText edittext = new EditText(MainActivity.this);
+        edittext.setContentDescription("edit");
         AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         alert.setView(edittext);
         alert.setTitle(title);

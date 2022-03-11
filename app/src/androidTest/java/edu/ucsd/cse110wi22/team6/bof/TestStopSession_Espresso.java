@@ -37,16 +37,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-//User Story 4 BDD Scenario Test
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class TestStartStopSession_Espresso {
+public class TestStopSession_Espresso {
 
     @Rule
     public ActivityTestRule<HomeActivity> mActivityTestRule = new ActivityTestRule<>(HomeActivity.class);
 
     @Test
-    public void testStartStopSession_Espresso() {
+    public void testStopSession_Espresso() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.first_name_view),
                         childAtPosition(
@@ -55,7 +54,7 @@ public class TestStartStopSession_Espresso {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("xunhao"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("Xunhao"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.URL_view),
@@ -77,7 +76,7 @@ public class TestStartStopSession_Espresso {
                                         0),
                                 3),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("https://avatars.githubusercontent.com/u/59716405?v=4"), closeSoftKeyboard());
+        appCompatEditText3.perform(replaceText("https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0"), closeSoftKeyboard());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.first_name_confirm_button), withText("Confirm"),
@@ -91,6 +90,7 @@ public class TestStartStopSession_Espresso {
 
         ActivityScenario.launch(CourseEntryActivity.class);
 
+
         ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.course_entry_done_button), withText("Done"),
                         childAtPosition(
@@ -103,16 +103,6 @@ public class TestStartStopSession_Espresso {
 
         ActivityScenario.launch(HomeActivity.class);
 
-
-
-
-
-
-
-
-
-
-        //
         ViewInteraction materialButton3 = onView(
                 allOf(withId(R.id.buttonStart3), withText("BoF List"),
                         childAtPosition(
@@ -122,8 +112,6 @@ public class TestStartStopSession_Espresso {
                                 1),
                         isDisplayed()));
         materialButton3.perform(click());
-
-        ActivityScenario.launch(MainActivity.class);
 
         ViewInteraction materialButton4 = onView(
                 allOf(withId(R.id.toggle_button), withText("Start"),
@@ -135,25 +123,17 @@ public class TestStartStopSession_Espresso {
                         isDisplayed()));
         materialButton4.perform(click());
 
-        onView(withId(android.R.id.button1)).perform(click());
 
 
-
-//        ViewInteraction materialButton5 = onView(
-//                allOf(withId(android.R.id.button1), withText("Start"),
-//                        childAtPosition(
-//                                childAtPosition(
-//                                        withId(R.id.buttonPanel),
-//                                        0),
-//                                3)));
-//        materialButton5.perform(scrollTo(), click());
+        onView(ViewMatchers.withContentDescription("START"))
+                .inRoot(RootMatchers.isPlatformPopup())
+                .perform(ViewActions.click());
 
 
 
 
 
-
-        ViewInteraction materialButton9 = onView(
+        ViewInteraction materialButton6 = onView(
                 allOf(withId(R.id.toggle_button), withText("Stop"),
                         childAtPosition(
                                 childAtPosition(
@@ -161,11 +141,14 @@ public class TestStartStopSession_Espresso {
                                         0),
                                 3),
                         isDisplayed()));
-        materialButton9.perform(click());
+        materialButton6.perform(click());
+
+        onView(ViewMatchers.withContentDescription("SAVE"))
+                .inRoot(RootMatchers.isPlatformPopup())
+                .perform(ViewActions.click());
 
 
-        onView(withContentDescription("edit")).perform(replaceText("1"), closeSoftKeyboard());
-        onView(withId(android.R.id.button1)).perform(click());
+
 
 
     }
