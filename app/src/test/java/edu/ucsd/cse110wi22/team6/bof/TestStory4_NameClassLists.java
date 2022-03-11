@@ -173,9 +173,9 @@ public class TestStory4_NameClassLists {
 
         manager.stopSession();
 
-        // need revisit: github junit inconsistent with android studio test
-//        List<Session> sessions = storage.getSessionList();
-//        assertEquals(3,sessions.size());
+        // need revisit: all est running together not working
+        // List<Session> sessions = storage.getSessionList();
+        // assertEquals(3,sessions.size());
 //
 //        // Test class list names in storage
 //        assertTrue(contains(sessions, "CSE 110"));
@@ -197,6 +197,7 @@ public class TestStory4_NameClassLists {
             // extracting spinner
             Spinner sp = (Spinner)ad.findViewById(R.id.spinner);
 
+            // need revisit: also need to reset
             // spinner should have 4 fields
             // assertEquals(4, sp.getAdapter().getCount());
 
