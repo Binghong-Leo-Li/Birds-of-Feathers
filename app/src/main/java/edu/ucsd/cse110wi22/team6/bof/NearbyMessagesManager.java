@@ -43,7 +43,7 @@ public class NearbyMessagesManager {
     }
 
     // MUST be actual change in subscription to avoid double-subscribe/unsubscribe
-    public void notifyChangeSubscription(Activity activity) {
+    public void notifyChangeSubscription(NearbyActivity activity) {
         Log.d(TAG, "notifyChangeSubscription(" + activity + ")");
         if (nearbyState.shouldSubscribe()) {
             subscribe(activity);
@@ -91,7 +91,7 @@ public class NearbyMessagesManager {
                 .addOnFailureListener(e -> nearbyError("unpublish", e));
     }
 
-    private void subscribe(Activity activity) {
+    private void subscribe(NearbyActivity activity) {
 //        assert !subscribed;
 //        subscribed = true;
         MockedMessagesClient
@@ -100,7 +100,7 @@ public class NearbyMessagesManager {
                 .addOnFailureListener(e -> nearbyError("subscribe", e));
     }
 
-    private void unsubscribe(Activity activity) {
+    private void unsubscribe(NearbyActivity activity) {
 //        assert subscribed;
 //        subscribed = false;
         MockedMessagesClient
@@ -113,7 +113,7 @@ public class NearbyMessagesManager {
         Log.e(TAG, "Failed to " + action + "()", e);
     }
 
-    public void onStart(Activity activity) {
+    public void onStart(NearbyActivity activity) {
         Log.d(TAG, "onStart " + activity);
         if (nearbyState.shouldPublish())
             publish(activity);
@@ -121,7 +121,7 @@ public class NearbyMessagesManager {
             subscribe(activity);
     }
 
-    public void onStop(Activity activity) {
+    public void onStop(NearbyActivity activity) {
         Log.d(TAG, "onStop " + activity);
 //        if (published)
         if (nearbyState.shouldPublish())

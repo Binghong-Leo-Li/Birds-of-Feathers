@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.nearby.messages.MessageListener;
+
 // TODO: make every concerned activity implement this
 public abstract class NearbyActivity extends AppCompatActivity {
     protected NearbyMessagesManager manager;

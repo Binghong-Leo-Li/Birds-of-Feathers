@@ -81,7 +81,7 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
     }
 
     // This version is needed for nearby to work
-    public void startSession(Session newSession, Activity activity) {
+    public void startSession(Session newSession, NearbyActivity activity) {
         assert !running;
         currentSession = newSession;
         setRunning(true, activity);
@@ -89,7 +89,7 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
         currentSession.registerListener(this);
     }
 
-    public void startNewSession(Activity activity) {
+    public void startNewSession(NearbyActivity activity) {
         Session newSession = new Session(mockedTime == null ?
                 Calendar.getInstance().getTime() :
                 mockedTime);
@@ -107,7 +107,7 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
         stopSession(null);
     }
 
-    public void stopSession(Activity activity) {
+    public void stopSession(NearbyActivity activity) {
         assert running;
         setRunning(false, activity);
         if (!currentSession.getSessionId().equals(NIL_UUID)) {
@@ -174,7 +174,7 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
         }
     }
 
-    public void setRunning(boolean running, Activity activity) {
+    public void setRunning(boolean running, NearbyActivity activity) {
         assert this.running == !running; // necessary for nearby to work
         this.running = running;
         if (activity != null) {
