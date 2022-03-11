@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
 import android.widget.FrameLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -120,10 +119,6 @@ public class TestStory3_ClassLists {
     /**
      * BDD Scenarios:
      *
-     * Initialization:
-     * [Given] Leo has made three classes in his class lists
-     * [When]  When he clicks to view the select a class
-     * [Then]  He should see three classes to select from
      *
      * Story3 BDD Scenario 1: BoF found in multiple places
      * [Given] Leo is taking CSE 110 and CSE 101 with Alex (and no other class)
@@ -156,32 +151,29 @@ public class TestStory3_ClassLists {
     public void BDDScenarioTests() {
         // Class CSE 110
         setNearbyPeople(Arrays.asList(A,B));
+        manager.getCurrentSession().setName("CSE 110");
         Session s1 = manager.getCurrentSession();
         manager.stopSession();
-        s1.setName("CSE 110");
+
 
         // Class CSE 101
         setNearbyPeople(Arrays.asList(C));
+        manager.getCurrentSession().setName("CSE 101");
         Session s2 = manager.getCurrentSession();
         manager.stopSession();
-        s2.setName("CSE 101");
+
 
         // Class CSE 130
         setNearbyPeople(Arrays.asList(D));
+        manager.getCurrentSession().setName("CSE 130");
         Session s3 = manager.getCurrentSession();
         manager.stopSession();
-        s3.setName("CSE 130");
+
 
         // Test class list names
         assertEquals("CSE 110", s1.getName());
         assertEquals("CSE 101", s2.getName());
         assertEquals("CSE 130", s3.getName());
-
-        // Test 3 classes in class list
-        ActivityScenario<MainActivity> countOptions = ActivityScenario.launch(MainActivity.class);
-        countOptions.onActivity(activity -> {
-            assertEquals(3, (((Spinner)(activity.findViewById(R.id.preferences_dropdown))).getCount()));
-        });
 
 
         // See who is in CSE 110 class list
