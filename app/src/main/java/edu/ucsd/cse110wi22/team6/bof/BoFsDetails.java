@@ -1,5 +1,9 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -27,12 +31,12 @@ public class BoFsDetails extends NearbyActivity {
 
     private AppStorage storage;
     private IPerson bof;
+    private boolean isWaved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bof_details);
-
         storage = Utilities.getStorageInstance(this);
 
         Bundle extras = getIntent().getExtras();
@@ -46,6 +50,11 @@ public class BoFsDetails extends NearbyActivity {
         String url = extras.getString("url");
 
         bof = new Person(uuid, name, courseList, url);
+        ImageButton btn = (ImageButton)findViewById(R.id.wave_button);
+        if (storage.getWaveToList().contains(bof)){
+            btn.setBackgroundResource(R.drawable.wave_hand_full);
+            btn.requestLayout();
+        }
 
         ImageView image = findViewById(R.id.imageView);
         Glide.with(this) // Using glide library to load image from url
@@ -63,6 +72,11 @@ public class BoFsDetails extends NearbyActivity {
 
         favoriteButton = findViewById(R.id.favoriteButton);
         updateUI();
+    }
+
+    public static int dpToPx(int dp, Context context) {
+        float density = context.getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
     }
 
     void updateUI() {
@@ -89,10 +103,14 @@ public class BoFsDetails extends NearbyActivity {
         updateUI();
     }
 
+    //change hollow waving hand to solid
     public void onWaveClicked(View view) {
         Toast.makeText(this, "Wave sent",
                 Toast.LENGTH_LONG).show();
 
+        ImageButton btn = (ImageButton)findViewById(R.id.wave_button);
+        btn.setBackgroundResource(R.drawable.wave_hand_full);
+        btn.requestLayout();
         SessionManager.getInstance(this).waveTo(bof, this);
     }
 }
