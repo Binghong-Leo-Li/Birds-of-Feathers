@@ -1,11 +1,11 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gms.nearby.messages.MessageListener;
-import com.google.android.gms.nearby.messages.MessagesClient;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -19,13 +19,12 @@ import edu.ucsd.cse110wi22.team6.bof.model.Session;
 import edu.ucsd.cse110wi22.team6.bof.model.SessionChangeListener;
 
 // Mediator between sessions, nearby messages, and persistent storage
-public class SessionManager implements IProcessedMessageListener, SessionChangeListener {
+public class SessionManager implements IProcessedMessageListener, SessionChangeListener, INearbyState {
     private static final String TAG = "SessionManager";
     private Session currentSession;
-    private final MessagesClient messagesClient;
 //    private final Context context;
     private final AppStorage storage;
-    private final MessageListener messageProcessor;
+    private final NearbyMessagesManager nearbyMessagesManager;
     private boolean running;
 
     private final Collection<SessionChangeListener> currentSessionChangeListeners;
@@ -39,12 +38,16 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
 
     private SessionManager(Context context) {
 //        this.context = context;
-        this.messageProcessor = new MessageProcessor(this);
+        MessageListener messageProcessor = new MessageProcessor(this);
         // Create a dummy session with no BoFs so that first launch will not crash
         this.currentSession = new Session(NIL_UUID, Calendar.getInstance().getTime());
         this.currentSessionChangeListeners = new HashSet<>();
         this.storage = Utilities.getStorageInstance(context);
-        messagesClient = MockedMessagesClient.getInstance(context);
+        this.nearbyMessagesManager = new NearbyMessagesManager(this, messageProcessor);
+    }
+
+    public NearbyMessagesManager getNearbyMessagesManager() {
+        return nearbyMessagesManager;
     }
 
     // Register observers
@@ -71,30 +74,42 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
         this.mockedTime = mockedTime;
     }
 
-    // Resume an existing session
+    // Resume an existing session (USE ONLY IN TESTING PLEASE)
+    // Use the version with activity parameter if in non-testing mode to enable nearby update
     public void startSession(Session newSession) {
+        startSession(newSession, null);
+    }
+
+    // This version is needed for nearby to work
+    public void startSession(Session newSession, Activity activity) {
         assert !running;
         currentSession = newSession;
-        running = true;
-        messagesClient.subscribe(this.messageProcessor);
+        setRunning(true, activity);
         currentSession.registerListener(storage);
         currentSession.registerListener(this);
     }
 
-    // Start a NEW session
-    public void startNewSession() {
+    public void startNewSession(Activity activity) {
         Session newSession = new Session(mockedTime == null ?
                 Calendar.getInstance().getTime() :
                 mockedTime);
         storage.registerNewSession(newSession);
-        startSession(newSession);
+        startSession(newSession, activity);
     }
 
-    // Stop a session
+    // Start a NEW session (USE ONLY IN TESTING PLEASE)
+    public void startNewSession() {
+        startNewSession(null);
+    }
+
+    // Stop a session (TESTING ONLY)
     public void stopSession() {
+        stopSession(null);
+    }
+
+    public void stopSession(Activity activity) {
         assert running;
-        running = false;
-        messagesClient.unsubscribe(this.messageProcessor);
+        setRunning(false, activity);
         if (!currentSession.getSessionId().equals(NIL_UUID)) {
             currentSession.unregisterListener(storage);
             currentSession.unregisterListener(this);
@@ -129,6 +144,11 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
         }
     }
 
+    public void waveTo(IPerson person, Activity activity) {
+        storage.waveTo(person);
+        nearbyMessagesManager.notifyNearbyMessageChanged(activity);
+    }
+
     @Override
     public void onSessionModified(Session session) {
         assert session == currentSession;
@@ -152,5 +172,30 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
         } else {
             Log.d(TAG, "Not waving to me: " + from);
         }
+    }
+
+    public void setRunning(boolean running, Activity activity) {
+        assert this.running == !running; // necessary for nearby to work
+        this.running = running;
+        if (activity != null) {
+            nearbyMessagesManager.notifyChangePublicity(activity);
+            nearbyMessagesManager.notifyChangeSubscription(activity);
+        }
+    }
+
+    @Override
+    public boolean shouldPublish() {
+        return isRunning();
+    }
+
+    @Override
+    public boolean shouldSubscribe() {
+        return isRunning();
+    }
+
+    @Override
+    public byte[] currentMessage() {
+        UUID[] uuids = storage.getWaveToList().stream().map(IPerson::getUUID).toArray(UUID[]::new);
+        return MessageProcessor.Encoder.wave(storage.getUser(), uuids);
     }
 }

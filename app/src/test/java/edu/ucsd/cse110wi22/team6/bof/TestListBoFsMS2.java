@@ -15,7 +15,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.shadows.ShadowLog;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +38,7 @@ public class TestListBoFsMS2 {
         if (manager.isRunning()) {
             manager.stopSession();
         }
-        manager.startNewSession();
+        manager.startNewSession(null);
         for (IPerson student : list) {
             manager.getCurrentSession().addNearbyStudent(student);
         }

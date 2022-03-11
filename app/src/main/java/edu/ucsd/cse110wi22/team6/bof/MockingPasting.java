@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.nearby.messages.Message;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -78,6 +77,6 @@ public class MockingPasting extends AppCompatActivity {
             Utilities.showAlert(this, "Something went wrong. Check the format.");
             return;
         }
-        MockedMessagesClient.getInstance(this).mockMessageArrival(new Message(data));
+        MockedMessagesClient.mockMessageArrival(new Message(data));
     }
 }

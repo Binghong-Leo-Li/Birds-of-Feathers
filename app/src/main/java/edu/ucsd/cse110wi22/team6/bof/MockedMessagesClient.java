@@ -1,5 +1,6 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 // A mocked version of Android's Nearby messages API client
@@ -26,30 +28,47 @@ public class MockedMessagesClient implements MessagesClient {
     private final String TAG = "MockedMessagesClient";
 
     private final MessagesClient realClient;
-    private final List<MessageListener> listeners = new ArrayList<>();
+    private final Activity activity;
+    // TODO: make this resettable across tests (instance field of App?)
+    private static final Collection<MessageListener> listeners = new ArrayList<>();
 
-    private static MockedMessagesClient instance;
+//    private static MockedMessagesClient instance;
 
-    private MockedMessagesClient(Context context) {
-        realClient = Nearby.getMessagesClient(context);
+//    @Deprecated
+//    private MockedMessagesClient(Context context) {
+//        realClient = Nearby.getMessagesClient(context);
+//    }
+
+    private MockedMessagesClient(Activity activity) {
+        realClient = Nearby.getMessagesClient(activity);
+        this.activity = activity;
     }
 
-    public static MockedMessagesClient getInstance(Context context) {
-        if (instance == null)
-            instance = new MockedMessagesClient(context.getApplicationContext());
-        return instance;
+//    @Deprecated
+//    public static MockedMessagesClient getInstanceOld(Context context) {
+//        if (instance == null)
+//            instance = new MockedMessagesClient(context.getApplicationContext());
+//        return instance;
+//    }
+
+    public static MessagesClient getMessagesClient(Activity activity) {
+        return new MockedMessagesClient(activity);
     }
 
-    public void mockMessageArrival(Message message) {
+    public static void mockMessageArrival(Message message) {
         for (MessageListener listener : listeners) {
             listener.onFound(message);
         }
     }
 
+    private void logListeners() {
+        Log.d(TAG, "List of listeners right now: " + listeners);
+    }
+
     @NonNull
     @Override
     public Task<Void> publish(@NonNull Message message) {
-        Log.d(TAG, "publish() message " + new String(message.getContent()));
+        Log.d(TAG, activity + " publish() message " + new String(message.getContent()));
         return realClient.publish(message);
     }
 
@@ -63,15 +82,16 @@ public class MockedMessagesClient implements MessagesClient {
     @NonNull
     @Override
     public Task<Void> unpublish(@NonNull Message message) {
-        Log.d(TAG, "unpublish() message " + new String(message.getContent()));
+        Log.d(TAG, activity + " unpublish() message " + new String(message.getContent()));
         return realClient.unpublish(message);
     }
 
     @NonNull
     @Override
     public Task<Void> subscribe(@NonNull MessageListener messageListener) {
-        Log.d(TAG, "subscribe(" + messageListener + ")");
+        Log.d(TAG, activity + " subscribe(" + messageListener + ")");
         listeners.add(messageListener);
+        logListeners();
         return realClient.subscribe(messageListener);
     }
 
@@ -97,8 +117,9 @@ public class MockedMessagesClient implements MessagesClient {
     @NonNull
     @Override
     public Task<Void> unsubscribe(@NonNull MessageListener messageListener) {
-        Log.d(TAG, "unsubscribe(" + messageListener + ")");
+        Log.d(TAG, activity + " unsubscribe(" + messageListener + ")");
         listeners.remove(messageListener);
+        logListeners();
         return realClient.unsubscribe(messageListener);
     }
 
