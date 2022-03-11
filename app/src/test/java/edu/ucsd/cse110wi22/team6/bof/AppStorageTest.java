@@ -3,11 +3,15 @@ package edu.ucsd.cse110wi22.team6.bof;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
+import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
 import edu.ucsd.cse110wi22.team6.bof.model.InMemoryMapping;
+import edu.ucsd.cse110wi22.team6.bof.model.Session;
 
 public class AppStorageTest {
     // Just use this if Photo URL is irrelevant
@@ -66,11 +70,34 @@ public class AppStorageTest {
 
     // TODO: add more tests to achieve better coverage
     // Specifically
-    // registerCourse
-    // getCourseSize
-    // registerPerson
-    // getPersonFromID
-    // registerNewSession
-    // getSessionList
-    // isSessionNameTaken
+    @Test
+    public void testGetCourseSize(){
+        AppStorage storage = getFreshInstance();
+        Course course = new Course(2019, "SP", "CSE", "101");
+        storage.registerCourse(course, CourseSize.HUGE);
+        assertEquals(CourseSize.HUGE, storage.getCourseSize(course));
+    }
+    @Test
+    public void testGetPersonFromID(){
+        AppStorage storage = getFreshInstance();
+        storage.registerPerson(BOB);
+        assertEquals(storage.getPersonFromID(BOB.getUUID()), BOB);
+    }
+    @Test
+    public void testRegisterNewSession(){
+        AppStorage storage = getFreshInstance();
+        Date d = new Date(2019, 12, 20);
+        Session s = new Session(d);
+        storage.registerNewSession(s);
+        assertEquals(1,storage.getSessionList().size());
+    }
+    @Test
+    public void testIsSessionNameTaken(){
+        AppStorage storage = getFreshInstance();
+        Date d = new Date(2019, 12, 20);
+        Session s = new Session(d);
+        s.setName("Session1");
+        storage.registerNewSession(s);
+        assertEquals(true, storage.isSessionNameTaken("Session1"));
+    }
 }
