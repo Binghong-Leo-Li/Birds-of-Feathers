@@ -10,12 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.nearby.messages.Message;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 // Class for mocking nearby people to enable testing
-public class MockingPasting extends AppCompatActivity {
+public class MockingPasting extends NearbyActivity {
     private static final String TAG = "MockingPasting";
 
     @Override
@@ -77,6 +78,7 @@ public class MockingPasting extends AppCompatActivity {
             Utilities.showAlert(this, "Something went wrong. Check the format.");
             return;
         }
+        Log.d(TAG, "Mocking message arrival: " + new String(data, StandardCharsets.UTF_8));
         MockedMessagesClient.mockMessageArrival(new Message(data));
     }
 }
