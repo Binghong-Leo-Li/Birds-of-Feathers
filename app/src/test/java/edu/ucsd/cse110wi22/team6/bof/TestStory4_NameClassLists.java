@@ -1,19 +1,25 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.shadows.ShadowAlertDialog;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +30,8 @@ import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
 import edu.ucsd.cse110wi22.team6.bof.model.Session;
 
+
+// story 4 name class lists bdd test
 @RunWith(AndroidJUnit4.class)
 public class TestStory4_NameClassLists {
     // State of the app
@@ -119,9 +127,19 @@ public class TestStory4_NameClassLists {
 
     }
 
+    // contains for sessions
     private boolean contains(List<Session> sessions, String expectedCourse){
         for (int i = 0; i < sessions.size(); i++) {
             if (sessions.get(i).getName().equals(expectedCourse)) return true;
+        }
+        return false;
+    }
+
+    // contains for spinner
+    private boolean contains(Spinner sp, String expectedCourseName) {
+        for (int i = 0; i < sp.getAdapter().getCount(); i++) {
+            if (sp.getAdapter().getItem(i).toString().contains(expectedCourseName))
+                return true;
         }
         return false;
     }
@@ -130,8 +148,8 @@ public class TestStory4_NameClassLists {
      *
      * Story4 BDD Scenario:
      * [Given] Leo created three class lists
-     * [And]   Leo saves the classes with names "CSE 110", "CSE 101", "CSE 130"
-     * [When]  Leo clicks to select a class
+     * [And]   Leo saved the classes with names "CSE 110", "CSE 101", "CSE 130"
+     * [When]  Leo clicks to select a class from list
      * [Then]  Leo should be seeing three options "CSE 110", "CSE 101", "CSE 130"
      *
      **/
@@ -158,14 +176,38 @@ public class TestStory4_NameClassLists {
         List<Session> sessions = storage.getSessionList();
         assertEquals(3,sessions.size());
 
-        // Test class list names
-        Assert.assertTrue(contains(sessions, "CSE 110"));
-        Assert.assertTrue(contains(sessions, "CSE 101"));
-        Assert.assertTrue(contains(sessions, "CSE 130"));
+        // Test class list names in storage
+        assertTrue(contains(sessions, "CSE 110"));
+        assertTrue(contains(sessions, "CSE 101"));
+        assertTrue(contains(sessions, "CSE 130"));
 
+        ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
+        scenario.onActivity(activity -> {
+            // clicking the start button to select
+            Button start = activity.findViewById(R.id.toggle_button);
+            start.performClick();
 
+            // should only have one alert dialog at the time after click
+            assertEquals(1, ShadowAlertDialog.getShownDialogs().size());
+
+            // Getting the alter dialog
+            AlertDialog ad = (AlertDialog)(ShadowAlertDialog.getShownDialogs().get(0));
+
+            // extracting spinner
+            Spinner sp = (Spinner)ad.findViewById(R.id.spinner);
+
+            // spinner should have 4 fields
+            assertEquals(4, sp.getAdapter().getCount());
+
+            // spinner should contain the following courses on screen
+            assertTrue(contains(sp, "CSE 110"));
+            assertTrue(contains(sp, "CSE 101"));
+            assertTrue(contains(sp, "CSE 130"));
+
+            // spinner should not contain other courses
+            assertFalse(contains(sp, "CSE 100"));
+            assertFalse(contains(sp, "Rando"));
+
+        });
     }
-
-
-
 }
