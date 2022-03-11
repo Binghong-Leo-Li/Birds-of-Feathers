@@ -54,6 +54,10 @@ public class MessageProcessor extends MessageListener {
                     processedMessageListener.onWave(from, to);
                     break;
                 }
+                case NULL: {
+                    Log.d(TAG, "Received nil message");
+                    break;
+                }
                 default:
                     Log.e(TAG, "Invalid message type " + type); // invalid message, should not happen!
             }
@@ -86,9 +90,14 @@ public class MessageProcessor extends MessageListener {
             jsonObject.put(TAG_TO, targets);
             return gson.toJson(jsonObject).getBytes(StandardCharsets.UTF_8);
         }
+        public static byte[] nil() {
+            Map<String, Object> jsonObject = new HashMap<>();
+            jsonObject.put(TAG_TYPE, MessageType.NULL);
+            return gson.toJson(jsonObject).getBytes(StandardCharsets.UTF_8);
+        }
     }
 
     public enum MessageType {
-        ADVERTISE,WAVE
+        ADVERTISE,WAVE,NULL
     }
 }

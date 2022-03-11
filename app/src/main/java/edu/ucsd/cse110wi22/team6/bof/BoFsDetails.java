@@ -18,7 +18,7 @@ import java.util.UUID;
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 
 // Class handling viewing BoF details when clicked in
-public class BoFsDetails extends AppCompatActivity {
+public class BoFsDetails extends NearbyActivity {
 
     private RecyclerView coursesRecyclerView;
     private RecyclerView.LayoutManager coursesLayoutManager;
@@ -93,6 +93,6 @@ public class BoFsDetails extends AppCompatActivity {
         Toast.makeText(this, "Wave sent",
                 Toast.LENGTH_LONG).show();
 
-        NearbyMessagesManager.getInstance(this).waveTo(bof);
+        SessionManager.getInstance(this).waveTo(bof, this);
     }
 }

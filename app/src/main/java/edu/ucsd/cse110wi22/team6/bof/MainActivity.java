@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +30,7 @@ import edu.ucsd.cse110wi22.team6.bof.model.SizeComparator;
 import edu.ucsd.cse110wi22.team6.bof.model.WaveListener;
 
 // Activity to display List of BoFs
-public class MainActivity extends AppCompatActivity implements SessionChangeListener, WaveListener {
+public class MainActivity extends NearbyActivity implements SessionChangeListener, WaveListener {
     private static final String TAG = "MainActivity";
     public static final int DEFAULT_YEAR = 2021;
     public static final String DEFAULT_QUARTER = "WI";
@@ -62,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements SessionChangeList
 
         Log.d(TAG, "MainActivity.onStart() called");
 
-        Log.d(TAG, "App has gone through first time setup already");
         user = storage.getUser();
         Log.d(TAG, "Current User: " + user);
 
@@ -130,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements SessionChangeList
 
     void stopCurrentSession() {
         Log.d(TAG, "Stopping current session");
-        sessionManager.stopSession();
+        sessionManager.stopSession(this);
         updateToggleButtonName();
     }
 
@@ -200,18 +198,18 @@ public class MainActivity extends AppCompatActivity implements SessionChangeList
                     int itemPosition = spinner.getSelectedItemPosition();
                     if (itemPosition == 0) {
                         Log.d(TAG, "Starting new session");
-                        sessionManager.startNewSession();
+                        sessionManager.startNewSession(this);
                     } else {
                         Log.d(TAG, "Resuming existing session");
                         Session resumeSession = sessions.get(itemPosition - 1);
                         if (resumeSession.getName() == null) {
-                            setSessionName("Name this session", resumeSession, () -> sessionManager.startSession(resumeSession), () -> {
+                            setSessionName("Name this session", resumeSession, () -> sessionManager.startSession(resumeSession, this), () -> {
                                 updateToggleButtonName();
                                 updateBoFList();
                             });
                             return;
                         }
-                        sessionManager.startSession(resumeSession);
+                        sessionManager.startSession(resumeSession, this);
                     }
                     updateToggleButtonName();
                     updateBoFList();
