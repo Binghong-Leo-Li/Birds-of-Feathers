@@ -6,13 +6,12 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 
-public class FavoriteListActivity extends AppCompatActivity {
+public class FavoriteListActivity extends NearbyActivity {
     private static final String TAG = "FavoriteListActivity";
     protected RecyclerView bofRecyclerView;
     protected RecyclerView.LayoutManager personsLayoutManager;
