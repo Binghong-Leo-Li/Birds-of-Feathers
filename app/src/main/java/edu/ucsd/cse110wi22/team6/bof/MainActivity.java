@@ -192,7 +192,7 @@ public class MainActivity extends NearbyActivity implements SessionChangeListene
                 resumeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(resumeAdapter);
 
-
+                //Alert Dialog for start/resuming a session after clicking start button
                 resume_alert.setTitle("Start/Resume Session");
                 resume_alert.setPositiveButton("Start", (dialog, id) -> {
                     int itemPosition = spinner.getSelectedItemPosition();
@@ -228,6 +228,7 @@ public class MainActivity extends NearbyActivity implements SessionChangeListene
         personsViewAdapter = new BoFsViewAdapter(nobody, person -> storage.isFavorited(person), person -> storage.isWavingToUser(person));
         bofRecyclerView.setAdapter(personsViewAdapter);
 
+        //Dropdown for list of preferences that the user can sort by for bofs
         preferences_dropdown=findViewById(R.id.preferences_dropdown);
         ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.preferences, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
