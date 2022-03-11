@@ -120,11 +120,13 @@ public class TestStory3_ClassLists {
      * BDD Scenarios:
      *
      *
-     * Story3 BDD Scenario 1: BoF found in multiple places
+     * Story3 BDD Scenario 1: BoF found with multiple overlapping classes
      * [Given] Leo is taking CSE 110 and CSE 101 with Alex (and no other class)
-     * [And]   Alex is found with nearby during the classes
+     * [And]   All the information is entered correctly
+     * [And]   Alex is found with nearby during class CSE 110
+     * [And]   Leo saved the class list for CSE 110
      * [When]  Leo selects to view the class list for CSE 110
-     * [Then]  Alex should appear on the bof list with 2 overlapping course
+     * [Then]  Alex should appear on the bof list with 2 overlapping courses
      * [When]  Leo selects to view the class list for CSE 101
      * [Then]  Alex should appear on the bof list with 2 overlapping courses
      * [When]  Leo selects to view the class list of any other class
@@ -140,7 +142,8 @@ public class TestStory3_ClassLists {
      * Story3 BDD Scenario 3: Only one BoF found in a class
      * [Given] Leo is taking CSE 130 with David
      * [And]   David is the only person in the class
-     * [And]   David is found
+     * [And]   David is found by with NearBy during CSE 130
+     * [And]   Leo saved the class list for CSE 130
      * [When]  Leo selects to view the class list for CSE 130
      * [Then]  David should appear in the list for CSE 130
      * [And]   David should be the only person appearing
