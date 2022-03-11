@@ -85,13 +85,13 @@ public class MockedMessagesClient implements MessagesClient {
     @NonNull
     @Override
     public Task<Void> subscribe(@NonNull PendingIntent pendingIntent, @NonNull SubscribeOptions subscribeOptions) {
-        throw new UnsupportedOperationException("PendingIntent variants not supported.");
+        return realClient.subscribe(pendingIntent, subscribeOptions);
     }
 
     @NonNull
     @Override
     public Task<Void> subscribe(@NonNull PendingIntent pendingIntent) {
-        throw new UnsupportedOperationException("PendingIntent variants not supported.");
+        return realClient.subscribe(pendingIntent);
     }
 
     @NonNull
@@ -105,7 +105,7 @@ public class MockedMessagesClient implements MessagesClient {
     @NonNull
     @Override
     public Task<Void> unsubscribe(@NonNull PendingIntent pendingIntent) {
-        throw new UnsupportedOperationException("PendingIntent variants not supported.");
+        return realClient.unsubscribe(pendingIntent);
     }
 
     @NonNull
@@ -122,7 +122,7 @@ public class MockedMessagesClient implements MessagesClient {
 
     @Override
     public void handleIntent(@NonNull Intent intent, @NonNull MessageListener messageListener) {
-        throw new UnsupportedOperationException("handleIntent not supported.");
+        realClient.handleIntent(intent, messageListener);
     }
 
     @NonNull

@@ -29,6 +29,9 @@ public class MockingPasting extends AppCompatActivity {
                 .setOnClickListener((view) -> finish());
         this.<Button>findViewById(R.id.mocking_enter_button)
                 .setOnClickListener(this::onEnterClicked);
+        EditText uuidView = this.findViewById(R.id.uuidText);
+        uuidView.setKeyListener(null);
+        uuidView.setText(Utilities.getStorageInstance(this).getUser().getStringID());
     }
 
     private byte[] getMockedMessageContent(String csv) {
