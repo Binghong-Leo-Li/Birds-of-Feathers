@@ -1,7 +1,5 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -25,7 +23,7 @@ import java.util.Locale;
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 
 // The first activity started when the app is launched
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends NearbyActivity {
 
     private static final String TAG = "HomeActivity";
 
@@ -48,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
         Log.d(TAG, "HomeActivity.onStart() called");
         if (storage.isInitialized()) {
             Log.d(TAG, "App has gone through first time setup already");
-            NearbyMessagesManager.getInstance(this).update();
+            manager.notifyNearbyMessageChanged(this);
         } else {
             // First time setup
             Log.d(TAG, "First time setup detected");

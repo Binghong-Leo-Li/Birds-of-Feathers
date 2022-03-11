@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.nearby.messages.Message;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +28,9 @@ public class MockingPasting extends AppCompatActivity {
                 .setOnClickListener((view) -> finish());
         this.<Button>findViewById(R.id.mocking_enter_button)
                 .setOnClickListener(this::onEnterClicked);
+        EditText uuidView = this.findViewById(R.id.uuidText);
+        uuidView.setKeyListener(null);
+        uuidView.setText(Utilities.getStorageInstance(this).getUser().getStringID());
     }
 
     private byte[] getMockedMessageContent(String csv) {
@@ -75,6 +77,6 @@ public class MockingPasting extends AppCompatActivity {
             Utilities.showAlert(this, "Something went wrong. Check the format.");
             return;
         }
-        MockedMessagesClient.getInstance(this).mockMessageArrival(new Message(data));
+        MockedMessagesClient.mockMessageArrival(new Message(data));
     }
 }

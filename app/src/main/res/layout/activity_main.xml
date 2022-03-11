@@ -18,11 +18,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bof_list"
-        android:layout_width="357dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/toggle_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/preferences_dropdown" />
 
