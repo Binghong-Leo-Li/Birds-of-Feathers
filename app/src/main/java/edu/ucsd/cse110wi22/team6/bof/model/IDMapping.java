@@ -24,7 +24,7 @@ public class IDMapping<T extends Identifiable> {
     public T getObjectByID(String id) {
         String serialized = storage.getString(namespace + SEPARATOR + id, null);
         // Object does not exist if serialized == null, violates contract of registering it before using it
-        // assert serialized != null;
+        assert serialized != null;
         return factory.deserialize(id, serialized);
     }
 }
