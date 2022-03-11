@@ -41,6 +41,7 @@ public class TestStory4_NameClassLists {
         }
         manager.startNewSession();
         for (IPerson student : list) {
+            storage.registerPerson(student);
             manager.getCurrentSession().addNearbyStudent(student);
         }
     }
@@ -161,6 +162,8 @@ public class TestStory4_NameClassLists {
         Assert.assertTrue(contains(sessions, "CSE 110"));
         Assert.assertTrue(contains(sessions, "CSE 101"));
         Assert.assertTrue(contains(sessions, "CSE 130"));
+
+
     }
 
 
