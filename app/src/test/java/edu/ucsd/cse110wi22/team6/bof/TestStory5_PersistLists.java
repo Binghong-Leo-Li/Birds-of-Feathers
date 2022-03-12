@@ -33,7 +33,7 @@ import edu.ucsd.cse110wi22.team6.bof.model.Session;
 
 // story 4 name class lists bdd test
 @RunWith(AndroidJUnit4.class)
-public class TestStory4_NameClassLists {
+public class TestStory5_PersistLists {
     // State of the app
     private Context context;
     // Dummy people
@@ -97,7 +97,7 @@ public class TestStory4_NameClassLists {
     // Setting up persisted storage
     @Before
     public void setup() {
-        Utilities.setPersistence(false);
+        App.resetInstance(false);
         context = InstrumentationRegistry.getInstrumentation().getContext();
         storage = Utilities.getStorageInstance(context);
         storage.setInitialized(true);
@@ -151,7 +151,7 @@ public class TestStory4_NameClassLists {
      * [And]   Leo saved the classes with names "CSE 110", "CSE 101", "CSE 130"
      * [When]  Leo clicks to select a class from list
      * [Then]  Leo should be seeing three options "CSE 110", "CSE 101", "CSE 130"
-     *
+     * [And]   The three added classes should persist
      **/
     @Test
     public void BDDTest() {
@@ -173,14 +173,13 @@ public class TestStory4_NameClassLists {
 
         manager.stopSession();
 
-        // need revisit: all est running together not working
-        // List<Session> sessions = storage.getSessionList();
-        // assertEquals(3,sessions.size());
-//
-//        // Test class list names in storage
-//        assertTrue(contains(sessions, "CSE 110"));
-//        assertTrue(contains(sessions, "CSE 101"));
-//        assertTrue(contains(sessions, "CSE 130"));
+         List<Session> sessions = storage.getSessionList();
+         assertEquals(3,sessions.size());
+
+        // Test class list names in storage
+        assertTrue(contains(sessions, "CSE 110"));
+        assertTrue(contains(sessions, "CSE 101"));
+        assertTrue(contains(sessions, "CSE 130"));
 
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
         scenario.onActivity(activity -> {
@@ -197,9 +196,8 @@ public class TestStory4_NameClassLists {
             // extracting spinner
             Spinner sp = (Spinner)ad.findViewById(R.id.spinner);
 
-            // need revisit: also need to reset
             // spinner should have 4 fields
-            // assertEquals(4, sp.getAdapter().getCount());
+            assertEquals(4, sp.getAdapter().getCount());
 
             // spinner should contain the following courses on screen
             assertTrue(contains(sp, "CSE 110"));
