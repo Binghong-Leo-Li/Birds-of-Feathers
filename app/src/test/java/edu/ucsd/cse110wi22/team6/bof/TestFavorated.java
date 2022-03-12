@@ -69,7 +69,7 @@ public class TestFavorated {
         context = InstrumentationRegistry
                 .getInstrumentation().getTargetContext();
 
-        Utilities.setPersistence(false);
+        App.resetInstance(false);
         AppStorage storage = Utilities.getStorageInstance(context);
         storage.setInitialized(true);
         storage.setName("Ava");
