@@ -32,7 +32,7 @@ import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
 
 // Test the sorting of the list of BoFs based on recency and size
-// BDD Scenario tests for Story 1 and 2 on rubric and story 4.1 and 4.2 on ZenHub
+// Story 6 BDD tests
 @RunWith(AndroidJUnit4.class)
 public class TestFavorated {
     private static final int PRIORITIZE_SMALL_CLASSES_INDEX = 1;

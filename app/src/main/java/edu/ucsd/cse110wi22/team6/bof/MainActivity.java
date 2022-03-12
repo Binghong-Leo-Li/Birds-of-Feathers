@@ -303,6 +303,7 @@ public class MainActivity extends NearbyActivity implements SessionChangeListene
 
     @Override
     public void onSessionModified(Session session) {
+        Log.d(TAG, "onSessionModified: " + session.getSessionId());
         updateBoFList();
     }
 
