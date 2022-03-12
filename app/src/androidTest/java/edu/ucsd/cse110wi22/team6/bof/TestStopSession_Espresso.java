@@ -36,7 +36,8 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
+//User Story 4 BDD Scenario Test
+// Important: Wipe data first before running test
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class TestStopSession_Espresso {

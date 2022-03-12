@@ -50,6 +50,7 @@ import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
 
 //User Story BDD Scenario Test 7: Favorites list [2]
 //As a student I want my favorites to be shown in a list like the other lists so I can easily reference all my class friends
+// Important: Wipe data first before running test
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class TestStory7_EspressoV3 {
@@ -72,7 +73,7 @@ public class TestStory7_EspressoV3 {
         storage.setPhotoUrl("https://www.example.com");
         storage.setCourseList(Utilities.parseCourseList("2022 WI CSE 110,2021 FA CSE 100,2019 SP CSE 101,2021 WI SYN 2"));
         List<Course> courseList = Utilities.parseCourseList("2022 WI CSE 110,2021 FA ECE 65,2020 FA CSE 11");
-       
+
 
         // Ava's course sizes
         storage.registerCourse(Utilities.parseCourse("2021 FA CSE 100"), CourseSize.HUGE);
