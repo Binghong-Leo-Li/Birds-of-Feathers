@@ -2,6 +2,7 @@ package edu.ucsd.cse110wi22.team6.bof;
 
 import android.content.Context;
 
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -18,7 +19,6 @@ import java.util.UUID;
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 
 // BDD scenario tests for MS1-5 and MS1-6
-// TODO: fix this test
 @RunWith(AndroidJUnit4.class)
 public class TestStartStopSession {
     SessionManager manager;
@@ -52,15 +52,14 @@ public class TestStartStopSession {
         storage.setCourseList(Utilities.parseCourseList("2021 FA CSE 100,2019 SP CSE 101,2021 WI SYN 2"));
     }
 
-    private void resetState() {
+    private void resetState(NearbyActivity activity) {
         if (manager.isRunning()) {
-            manager.stopSession();
+            manager.stopSession(activity);
         }
-        manager.startNewSession(null);
+        manager.startNewSession(activity);
     }
 
     private void arrive(IPerson person) {
-        // TODO: fix me
         MockedMessagesClient.mockMessageArrival(new Message(MessageProcessor.Encoder.advertisePerson(person)), context);
     }
 
@@ -72,16 +71,19 @@ public class TestStartStopSession {
     // Then there should still be nobody in the session
     @Test
     public void testStop() {
-        // Given the current session is initially started
-        resetState();
-//        // And the user click stop
-//        manager.stopSession();
-//        // And then Olivia, Bob, and Abe arrives
-//        arrive(OLIVIA);
-//        arrive(BOB);
-//        arrive(ABE);
-//        // Then there should still be nobody in the session
-//        assertTrue(manager.getCurrentSession().getNearbyStudentList().isEmpty());
+        ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
+        scenario.onActivity(activity -> {
+            // Given the current session is initially started
+            resetState(activity);
+            // And the user click stop
+            manager.stopSession(activity);
+            // And then Olivia, Bob, and Abe arrives
+            arrive(OLIVIA);
+            arrive(BOB);
+            arrive(ABE);
+            // Then there should still be nobody in the session
+            assertTrue(manager.getCurrentSession().getNearbyStudentList().isEmpty());
+        });
     }
 
     // Scenario 1 for MS1-6
@@ -98,14 +100,17 @@ public class TestStartStopSession {
     // And Olivia should be the only other student in the current session
     @Test
     public void testStart() {
-        resetState();
-//        arrive(OLIVIA);
-//        manager.stopSession();
-//        arrive(BOB);
-//        manager.startSession(manager.getCurrentSession()); // Resume current session
-//        arrive(ABE);
-//        assertTrue(manager.getCurrentSession().getNearbyStudentList().contains(OLIVIA));
-//        assertFalse(manager.getCurrentSession().getNearbyStudentList().contains(BOB));
-//        assertTrue(manager.getCurrentSession().getNearbyStudentList().contains(ABE));
+        ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
+        scenario.onActivity(activity -> {
+            resetState(activity);
+            arrive(OLIVIA);
+            manager.stopSession(activity);
+            arrive(BOB);
+            manager.startSession(manager.getCurrentSession(), activity); // Resume current session
+            arrive(ABE);
+            assertTrue(manager.getCurrentSession().getNearbyStudentList().contains(OLIVIA));
+            assertFalse(manager.getCurrentSession().getNearbyStudentList().contains(BOB));
+            assertTrue(manager.getCurrentSession().getNearbyStudentList().contains(ABE));
+        });
     }
 }

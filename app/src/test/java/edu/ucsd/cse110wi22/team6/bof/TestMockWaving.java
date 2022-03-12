@@ -96,16 +96,16 @@ public class TestMockWaving {
     @Test
     public void testArrivalWithoutWave() {
         resetState();
-//        whenPasting(new String[]{BILL_CSV_NO_WAVE}, () -> {
-//            ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
-//
-//            scenario.onActivity(activity -> {
-//                RecyclerView view = activity.findViewById(R.id.bof_list);
-//                assertEquals(1, Objects.requireNonNull(view.getAdapter()).getItemCount());
-//                assertRow(view, 0, "Bill", 1);
-//                assertEquals(BILL_URL, activity.getPeopleList().get(0).getUrl());
-//            });
-//        });
+        whenPasting(new String[]{BILL_CSV_NO_WAVE}, () -> {
+            ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
+
+            scenario.onActivity(activity -> {
+                RecyclerView view = activity.findViewById(R.id.bof_list);
+                assertEquals(1, Objects.requireNonNull(view.getAdapter()).getItemCount());
+                assertRow(view, 0, "Bill", 1);
+                assertEquals(BILL_URL, activity.getPeopleList().get(0).getUrl());
+            });
+        });
     }
 
     // TODO: BDD scenario #2

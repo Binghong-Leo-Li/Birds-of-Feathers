@@ -67,8 +67,6 @@ public class AppStorageTest {
         assertTrue(storage.isFavorited(JACKSON));
     }
 
-    // TODO: add more tests to achieve better coverage
-    // Specifically
     @Test
     public void testGetCourseSize(){
         AppStorage storage = getFreshInstance();
