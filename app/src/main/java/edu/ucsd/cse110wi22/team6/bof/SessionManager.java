@@ -1,6 +1,5 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -33,16 +32,13 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
 
     private static final UUID NIL_UUID = new UUID(0,0);
 
-    @SuppressLint("StaticFieldLeak")
-    private static SessionManager INSTANCE;
-
-    private SessionManager(Context context) {
+    SessionManager(AppStorage storage) {
 //        this.context = context;
         MessageListener messageProcessor = new MessageProcessor(this);
         // Create a dummy session with no BoFs so that first launch will not crash
         this.currentSession = new Session(NIL_UUID, Calendar.getInstance().getTime());
         this.currentSessionChangeListeners = new HashSet<>();
-        this.storage = Utilities.getStorageInstance(context);
+        this.storage = storage;
         this.nearbyMessagesManager = new NearbyMessagesManager(this, messageProcessor);
     }
 
@@ -128,10 +124,7 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
 
     // Get the singleton instance
     public static SessionManager getInstance(Context context) {
-        if (INSTANCE == null)  {
-            INSTANCE = new SessionManager(context.getApplicationContext());
-        }
-        return INSTANCE;
+        return App.getInstance(context).getSessionManager();
     }
 
     private void foundNearbyStudent(IPerson person) {

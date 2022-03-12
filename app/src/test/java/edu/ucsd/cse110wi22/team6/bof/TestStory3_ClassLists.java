@@ -88,7 +88,7 @@ public class TestStory3_ClassLists {
     // Setting up persisted storage
     @Before
     public void setup() {
-        Utilities.setPersistence(false);
+        App.resetInstance(false);
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         storage = Utilities.getStorageInstance(context);
         storage.setInitialized(true);

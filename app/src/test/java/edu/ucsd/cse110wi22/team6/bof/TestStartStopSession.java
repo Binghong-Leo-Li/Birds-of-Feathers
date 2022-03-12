@@ -41,7 +41,7 @@ public class TestStartStopSession {
 
     @Before
     public void setup() {
-        Utilities.setPersistence(false);
+        App.resetInstance(false);
         context = InstrumentationRegistry
                 .getInstrumentation().getTargetContext();
         manager = SessionManager.getInstance(context);
@@ -61,7 +61,7 @@ public class TestStartStopSession {
 
     private void arrive(IPerson person) {
         // TODO: fix me
-        MockedMessagesClient.mockMessageArrival(new Message(MessageProcessor.Encoder.advertisePerson(person)));
+        MockedMessagesClient.mockMessageArrival(new Message(MessageProcessor.Encoder.advertisePerson(person)), context);
     }
 
     // Scenario 1 for MS1-5
