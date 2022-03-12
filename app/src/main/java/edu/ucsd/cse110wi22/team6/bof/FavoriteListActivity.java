@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 
+// Class handling displaying Favorite Student List
 public class FavoriteListActivity extends NearbyActivity {
     private static final String TAG = "FavoriteListActivity";
     protected RecyclerView bofRecyclerView;

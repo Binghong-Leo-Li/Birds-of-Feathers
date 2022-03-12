@@ -14,6 +14,7 @@ public class CourseComparator implements Comparator<Course> {
     }
 
     // Obtaining the chronological order of the two courses, which is earlier and which is later
+    // @return 1 if c1 is larger in priority, 0 if the same, -1 if c1 has smaller priority
     @Override
     public int compare(Course c1, Course c2) {
         int result = Integer.compare(c1.getYear(), c2.getYear()); // comparing year

@@ -23,7 +23,7 @@ public class CourseEntryActivity extends AppCompatActivity {
     private RecyclerView courseListRecyclerView;
     private LinearLayoutManager courseLayoutManager;
     private final List<Course> courses = new ArrayList<>();
-    private CourseViewAdapter courseViewAdapter; // TODO: Allow deleting courses
+    private CourseViewAdapter courseViewAdapter; // TODO: Allow deleting courses [extra feature]
     private Course previousEntry;
 
     // Checking if we have saved data from add new course activity
@@ -33,7 +33,7 @@ public class CourseEntryActivity extends AppCompatActivity {
                 // only update if we have received another new course from AddNewCourseActivity
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
-                    assert data != null;
+                    assert data != null; // data should never be null, as we have RESULT_OK
                     Course newCourse = Utilities.parseCourse(data.getStringExtra("course"));
                     Log.d(TAG, "Adding course " + newCourse);
 
@@ -76,14 +76,13 @@ public class CourseEntryActivity extends AppCompatActivity {
         Button addOneClassButton = findViewById(R.id.add_one_class_button);
         addOneClassButton.setOnClickListener(this::onAddCourse);
 
+        // setting up recycler view
         courseListRecyclerView = findViewById(R.id.added_course_list);
-
         courseLayoutManager = new LinearLayoutManager(this);
-        // setting layout
+                                            // setting layout
         courseListRecyclerView.setLayoutManager(courseLayoutManager);
-
         courseViewAdapter = new CourseViewAdapter(courses);
-        // updating the new view
+                                            // updating the new view
         courseListRecyclerView.setAdapter(courseViewAdapter);
     }
 

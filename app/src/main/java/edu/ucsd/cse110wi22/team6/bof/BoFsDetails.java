@@ -1,8 +1,5 @@
 package edu.ucsd.cse110wi22.team6.bof;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +7,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +38,8 @@ public class BoFsDetails extends NearbyActivity {
         Bundle extras = getIntent().getExtras();
                                     // extracting information from previously passed-in parameters
                                     // we parse the information accordingly below
+
+        // obtaining information of the profile that is desired to be viewed
         UUID uuid = UUID.fromString(extras.getString("uuid", ""));
         String name = extras.getString("name", "User do not exist");
         setTitle(name);
@@ -49,13 +47,17 @@ public class BoFsDetails extends NearbyActivity {
         List<Course> courseList = Utilities.parseCourseList(courseListParsing);
         String url = extras.getString("url");
 
+        // initialization of the person
         bof = new Person(uuid, name, courseList, url);
         ImageButton btn = (ImageButton)findViewById(R.id.wave_button);
+
+        // checking if already waved, if yes then full hand else hollow hand
         if (storage.getWaveToList().contains(bof)){
             btn.setBackgroundResource(R.drawable.wave_hand_full);
             btn.requestLayout();
         }
 
+        // Profile image
         ImageView image = findViewById(R.id.imageView);
         Glide.with(this) // Using glide library to load image from url
                 .load(url)
@@ -74,11 +76,13 @@ public class BoFsDetails extends NearbyActivity {
         updateUI();
     }
 
+    // Help to convert size, may be used for easier calculation of the image size
     public static int dpToPx(int dp, Context context) {
         float density = context.getResources().getDisplayMetrics().density;
         return Math.round((float) dp * density);
     }
 
+    // Updating the state of favorite mark
     void updateUI() {
         favoriteButton.setImageResource(storage.isFavorited(bof) ?
                 android.R.drawable.btn_star_big_on :
@@ -90,6 +94,7 @@ public class BoFsDetails extends NearbyActivity {
         finish();
     }
 
+    // Handling clicking favorite
     public void onFavoriteClicked(View view) {
         if (storage.isFavorited(bof)) {
             Toast.makeText(this, "Removed from Favorites",
