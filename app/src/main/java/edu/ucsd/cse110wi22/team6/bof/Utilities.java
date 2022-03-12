@@ -30,14 +30,18 @@ public class Utilities {
 
     // Helper function to extract device storage if persistence is set
     public static AppStorage getStorageInstance(Context context) {
-        return new AppStorage(persistence ? new SharedPreferencesMapping(
-                context.getSharedPreferences(Constants.PREFERENCE_STRING, MODE_PRIVATE)
-        ) : InMemoryMapping.getInstance());
+        assert context != null;
+        return App.getInstance(context).getStorage();
     }
 
-    // Initializing the persistence setting
+    // DEPRECATED: "Use App.resetInstance instead"
+    @Deprecated
     public static void setPersistence(boolean persistence) {
         Utilities.persistence = persistence;
+    }
+
+    public static boolean getPersistence() {
+        return persistence;
     }
 
     // Helper function to decode the encoded courseList string to retrieve list of courses

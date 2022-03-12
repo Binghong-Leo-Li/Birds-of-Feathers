@@ -21,7 +21,6 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 // A mocked version of Android's Nearby messages API client
 public class MockedMessagesClient implements MessagesClient {
@@ -29,7 +28,6 @@ public class MockedMessagesClient implements MessagesClient {
 
     private final MessagesClient realClient;
     private final Activity activity;
-    // TODO: make this resettable across tests (instance field of App?)
     private static final Collection<MessageListener> listeners = new ArrayList<>();
 
 //    private static MockedMessagesClient instance;
@@ -55,14 +53,18 @@ public class MockedMessagesClient implements MessagesClient {
         return new MockedMessagesClient(activity);
     }
 
-    public static void mockMessageArrival(Message message) {
-        for (MessageListener listener : listeners) {
+    public static void mockMessageArrival(Message message, Context context) {
+        for (MessageListener listener : App.getInstance(context).getMockingListeners()) {
             listener.onFound(message);
         }
     }
 
     private void logListeners() {
-        Log.d(TAG, "List of listeners right now: " + listeners);
+        Log.d(TAG, "List of listeners right now: " + getMockingListeners());
+    }
+
+    private Collection<MessageListener> getMockingListeners() {
+        return App.getInstance(activity).getMockingListeners();
     }
 
     @NonNull
@@ -90,7 +92,7 @@ public class MockedMessagesClient implements MessagesClient {
     @Override
     public Task<Void> subscribe(@NonNull MessageListener messageListener) {
         Log.d(TAG, activity + " subscribe(" + messageListener + ")");
-        listeners.add(messageListener);
+        getMockingListeners().add(messageListener);
         logListeners();
         return realClient.subscribe(messageListener);
     }
@@ -118,7 +120,7 @@ public class MockedMessagesClient implements MessagesClient {
     @Override
     public Task<Void> unsubscribe(@NonNull MessageListener messageListener) {
         Log.d(TAG, activity + " unsubscribe(" + messageListener + ")");
-        listeners.remove(messageListener);
+        getMockingListeners().remove(messageListener);
         logListeners();
         return realClient.unsubscribe(messageListener);
     }
