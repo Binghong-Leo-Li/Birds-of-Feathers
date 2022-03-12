@@ -23,11 +23,14 @@
         android:id="@+id/returnHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="162dp"
+        android:layout_marginEnd="45dp"
         android:layout_marginBottom="16dp"
         android:onClick="onGoBackClicked"
         android:text="Home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/wave_button"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -56,33 +59,30 @@
 
     <ImageButton
         android:id="@+id/favoriteButton"
-        android:contentDescription="add to favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="45dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:onClick="onFavoriteClicked"
         android:layout_marginBottom="194dp"
+        android:contentDescription="add to favorite"
+        android:onClick="onFavoriteClicked"
         app:layout_constraintBottom_toTopOf="@+id/bof_courses_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_on" />
 
-    <Button
-        android:id="@+id/waveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="22dp"
-        android:layout_marginBottom="17dp"
+    <ImageButton
+        android:id="@+id/wave_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="57dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/wave"
         android:onClick="onWaveClicked"
-        android:text="Wave"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/returnHome"
-        app:layout_constraintTop_toBottomOf="@+id/bof_courses_info" />
+        app:layout_constraintStart_toEndOf="@+id/returnHome" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
