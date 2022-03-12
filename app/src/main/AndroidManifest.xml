@@ -30,7 +30,7 @@
 
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
-            android:value="AIzaSyDFUQcSTphq_Cq0BitQW4zLx12twjva3SY" />
+            android:value="AIzaSyB3rm1meRMt8iF8fSdKKuVKnujE26PbOh4" />
 
         <activity
             android:name=".BoFsDetails"
