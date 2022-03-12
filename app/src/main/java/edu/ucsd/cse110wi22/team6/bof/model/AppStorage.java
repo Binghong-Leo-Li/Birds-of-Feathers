@@ -19,6 +19,8 @@ import edu.ucsd.cse110wi22.team6.bof.Utilities;
 
 // A class for storing the persistent state of this app
 public class AppStorage implements IUserInfoStorage, SessionChangeListener {
+
+    // Storing 4 key maps: KeyValud, Course, People and Session in each storage
     private final IKeyValueStore kvMapping;
     private final IDMapping<CourseData> courseMap;
     private final IDMapping<IPerson> peopleMap;
@@ -46,12 +48,12 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     }
 
     public void addToFavorites(IPerson person) {
-        assert !isFavorited(person);
+        assert !isFavorited(person); // Person that already in favorite list cannot be added again
         mutateSet(favorites -> favorites.add(person.getStringID()), FAVORITE_LIST);
     }
 
     public void removeFromFavorites(IPerson person) {
-        assert isFavorited(person);
+        assert isFavorited(person); // Person that already in favorite list can be removed
         mutateSet(favorites -> favorites.remove(person.getStringID()), FAVORITE_LIST);
     }
 
@@ -85,7 +87,7 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
     // The name of an existing session whose name is not null
 
     public boolean isSessionNameTaken(String name) {
-        assert name != null;
+        assert name != null; // Only stored(valid) name can be taken
         return getSessionList().stream().anyMatch(session -> name.equals(session.getName()));
     }
 

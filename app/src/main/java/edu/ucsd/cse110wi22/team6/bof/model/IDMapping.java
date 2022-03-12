@@ -2,8 +2,8 @@ package edu.ucsd.cse110wi22.team6.bof.model;
 
 // An abstract String ID -> Identifiable mapping
 public class IDMapping<T extends Identifiable> {
-    private final String namespace;
-    private final IKeyValueStore storage;
+    private final String namespace;  // Name for each IDMapping class object
+    private final IKeyValueStore storage; //Corresponding storage value for each IDMapping class object
     private final IdentifiableFactory<T> factory;
     private static final String SEPARATOR = ":";
 

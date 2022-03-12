@@ -6,7 +6,7 @@ import java.util.Set;
 
 // Adapter from Map to IKeyValueStore
 public class InMemoryMapping implements IKeyValueStore {
-    private final Map<String, Object> map;
+    private final Map<String, Object> map;  // Mapping the String id to its Object
     private static final InMemoryMapping INSTANCE = new InMemoryMapping(new HashMap<>());
 
     // In memory mapping singleton to unify the data seen from different clients
@@ -31,7 +31,7 @@ public class InMemoryMapping implements IKeyValueStore {
     }
 
     private void putValue(String key, Object value) {
-        map.put(key, value);
+        map.put(key, value); // Updating the value of certain String id
     }
 
     @Override
@@ -52,16 +52,16 @@ public class InMemoryMapping implements IKeyValueStore {
 
     @Override
     public void putBoolean(String key, boolean value) {
-        putValue(key, value);
+        putValue(key, value); // Updating the boolean value of certain String id
     }
 
     @Override
     public void putString(String key, String value) {
-        putValue(key, value);
+        putValue(key, value);  // Updating the String value of certain String id
     }
 
     @Override
     public void putStringSet(String key, Set<String> values) {
-        putValue(key, values);
+        putValue(key, values);  // Updating the String set value of certain String id
     }
 }

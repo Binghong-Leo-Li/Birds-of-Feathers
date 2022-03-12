@@ -23,6 +23,7 @@ public class SizeComparator implements Comparator<IPerson> {
 
     @Override
     public int compare(IPerson a, IPerson b) {
+        // IPerson comparator based on double value of Person score
         return Double.compare(calculatePersonScore(a), calculatePersonScore(b));
     }
 
