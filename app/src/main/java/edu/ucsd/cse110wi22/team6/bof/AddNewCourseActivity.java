@@ -52,15 +52,15 @@ public class AddNewCourseActivity extends AppCompatActivity {
             yearsChoices[i] = String.valueOf(currentYear - i);
         }
 
+        // setting up size dropdown
         sizeDropDown=findViewById(R.id.dropdownClassSize);
         ArrayAdapter<CharSequence>sizeAdapter=ArrayAdapter.createFromResource(this, R.array.classSizes, android.R.layout.simple_spinner_item);
-
+        // setting up spinner with adapter
         sizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         sizeDropDown.setAdapter(sizeAdapter);
 
+        // setting the year dropdown with the choices
         yearDropDown = findViewById(R.id.year_dropdown);
-
-        // setting the dropdown with the choices
         ArrayAdapter<String> yearAdapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, yearsChoices);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -109,6 +109,7 @@ public class AddNewCourseActivity extends AppCompatActivity {
             Utilities.showAlert(this,
                     "Course number must be non blank and consist of numbers and " +
                             "uppercase letters only.");
+                                                  // if not show alert
             return;
         }
 

@@ -33,22 +33,21 @@ public class App {
         sessionManager = new SessionManager(storage);
     }
 
+    // getters
     public AppStorage getStorage() {
         return storage;
     }
-
     public SessionManager getSessionManager() {
         return sessionManager;
     }
-
     public InMemoryMapping getInMemoryMapping() {
         return inMemoryMapping;
     }
-
     public Collection<MessageListener> getMockingListeners() {
         return mockingListeners;
     }
 
+    // enabling getting the App state from anywhere
     public static App getInstance(Context context) {
         assert context != null;
         if (INSTANCE == null)  {
@@ -57,6 +56,7 @@ public class App {
         return INSTANCE;
     }
 
+    // resetting App state from anywhere
     public static void resetInstance(boolean newPersistence) {
         persistence = newPersistence;
         INSTANCE = null;

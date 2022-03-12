@@ -22,7 +22,7 @@ import java.util.Locale;
 
 import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 
-// The first activity started when the app is launched
+// The Home page of the app, started upon app launch given it is not first time setup
 public class HomeActivity extends NearbyActivity {
 
     private static final String TAG = "HomeActivity";
@@ -48,7 +48,7 @@ public class HomeActivity extends NearbyActivity {
             Log.d(TAG, "App has gone through first time setup already");
             manager.notifyNearbyMessageChanged(this);
         } else {
-            // First time setup
+            // First time setup triggers, prompt user to add personal info
             Log.d(TAG, "First time setup detected");
             Intent intent = new Intent(this, NameEntryActivity.class);
             startActivity(intent);
@@ -66,8 +66,10 @@ public class HomeActivity extends NearbyActivity {
 
         storage = Utilities.getStorageInstance(this);
 
+        // setups and linking for correct layout and functionality
         currentQuarterDropDown=findViewById(R.id.currentQuarter_dropdown);
-        ArrayAdapter<CharSequence> quarterAdapter=ArrayAdapter.createFromResource(this, R.array.currentQuarter, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> quarterAdapter = ArrayAdapter
+                .createFromResource(this, R.array.currentQuarter, android.R.layout.simple_spinner_item);
         currentQuarterDropDown.setAdapter(quarterAdapter);
 
         Button startButton = findViewById(R.id.buttonStart3);
@@ -83,12 +85,14 @@ public class HomeActivity extends NearbyActivity {
         datebutton = findViewById(R.id.date_mock_btn);
     }
 
+    // Handling BoF List button clicked, enabling starting mocking
     private void onButtonStart(View view) {
         // go to main
         Log.d(TAG, "start button called");
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
+        // get current quarter from dropdown
         int selectedQuarterIdx = currentQuarterDropDown.getSelectedItemPosition();
         String[] quarterCodes = getResources().getStringArray(R.array. quarter_list);
         String selectedQuarter = quarterCodes[selectedQuarterIdx];
@@ -98,6 +102,9 @@ public class HomeActivity extends NearbyActivity {
         startActivity(intent);
     }
 
+    // Handling adding new courses
+    // Current behavior clears all courses enter priorly to make testing easier
+    //                                      as currently this feature is postponed technically
     private void onButtonCourses(View view) {
         // go to courses
         Log.d(TAG, "courses button called");
@@ -106,13 +113,15 @@ public class HomeActivity extends NearbyActivity {
         startActivity(intent);
     }
 
+    // Handling favorite button clicked
     private void onButtonFavorites(View view) {
-        // go to favorites
+        // go to favorited list
         Intent intent = new Intent(this, FavoriteListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
+    // Display toast to signal successful new mocked date and time
     private void updateMock() {
         try {
             Date mockedTime = DATE_PARSER.parse(dateString + " " + timeString);
@@ -125,6 +134,7 @@ public class HomeActivity extends NearbyActivity {
         }
     }
 
+    // Mocking time
     public void initiateTimePicker(View view) {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener()
         {
@@ -150,6 +160,7 @@ public class HomeActivity extends NearbyActivity {
         timePickerDialog.show();
     }
 
+    // Mocking date
     public void initiateDatePicker(View view) {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
         {
@@ -171,7 +182,7 @@ public class HomeActivity extends NearbyActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        datePickerDialog = new DatePickerDialog(this,dateSetListener, thisYear, month, day);
+        datePickerDialog = new DatePickerDialog(this, dateSetListener, thisYear, month, day);
         datePickerDialog.show();
     }
 }

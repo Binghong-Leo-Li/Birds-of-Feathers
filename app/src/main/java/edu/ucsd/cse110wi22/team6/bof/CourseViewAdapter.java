@@ -31,6 +31,7 @@ public class CourseViewAdapter extends RecyclerView.Adapter<CourseViewAdapter.Vi
         return new ViewHolder(view);
     }
 
+    // binding course to position in recycler view
     @Override
     public void onBindViewHolder(@NonNull CourseViewAdapter.ViewHolder holder, int position) {
         holder.setCourse(courses.get(position));

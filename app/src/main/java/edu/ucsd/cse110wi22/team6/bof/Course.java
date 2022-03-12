@@ -50,8 +50,13 @@ public class Course {
     // Checking two courses are the same
     @Override
     public boolean equals(Object o) {
+        // if same object
         if (this == o) return true;
+
+        // null or not same class
         if (o == null || getClass() != o.getClass()) return false;
+
+        // else if content the same
         Course course = (Course) o;
         return year == course.year && quarter.equals(course.quarter)
                 && subject.equals(course.subject) && courseNumber.equals(course.courseNumber);

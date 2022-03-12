@@ -46,7 +46,7 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
         return new ViewHolder(user, view, starred, waved);
     }
 
-    // binding
+    // binding with person at specific location
     @Override
     public void onBindViewHolder(@NonNull BoFsViewAdapter.ViewHolder holder, int position) {
         holder.setPerson(people.get(position));
@@ -121,7 +121,9 @@ public class BoFsViewAdapter extends RecyclerView.Adapter<BoFsViewAdapter.ViewHo
                 this.numCommonCoursesView.setText( // displaying correct text on recycler view
                         String.valueOf(Utilities.numCoursesTogether(user, person)));
 
+            // handling isFavorite
             this.favorited.setVisibility(starred.test(person) ? View.VISIBLE : View.INVISIBLE);
+            // handling isWaved
             this.wavedView.setVisibility(waved.test(person) ? View.VISIBLE : View.INVISIBLE);
         }
 
