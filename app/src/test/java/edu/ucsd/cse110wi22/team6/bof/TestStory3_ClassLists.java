@@ -24,7 +24,7 @@ import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
 import edu.ucsd.cse110wi22.team6.bof.model.Session;
 
-
+// story 3 class lists bdd test
 @RunWith(AndroidJUnit4.class)
 public class TestStory3_ClassLists {
 
@@ -179,7 +179,7 @@ public class TestStory3_ClassLists {
         assertEquals("CSE 130", s3.getName());
 
 
-        // See who is in CSE 110 class list
+        // See who is in CSE 110 class list by selecting CSE 110 from class list to start
         manager.startSession(s1);
         ActivityScenario<MainActivity> scenario1 = ActivityScenario.launch(MainActivity.class);
         scenario1.onActivity(activity -> {
@@ -195,7 +195,7 @@ public class TestStory3_ClassLists {
         manager.stopSession();
 
 
-        // See who is in CSE 101 class list
+        // See who is in CSE 101 class list by selecting CSE 101 from class list to start
         manager.startSession(s2);
         ActivityScenario<MainActivity> scenario2 = ActivityScenario.launch(MainActivity.class);
         scenario2.onActivity(activity -> {
@@ -211,7 +211,7 @@ public class TestStory3_ClassLists {
         manager.stopSession();
 
 
-        // See who is in CSE 130 class list
+        // See who is in CSE 130 class list by selecting CSE 130 from class list to start
         manager.startSession(s3);
         ActivityScenario<MainActivity> scenario3 = ActivityScenario.launch(MainActivity.class);
         scenario3.onActivity(activity -> {
