@@ -9,6 +9,7 @@ import com.google.android.gms.nearby.messages.MessageListener;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+//Manager that handles listeners and message from nearby
 public class NearbyMessagesManager {
     private static final String TAG = NearbyMessagesManager.class.getSimpleName();
 //    private AppStorage storage;

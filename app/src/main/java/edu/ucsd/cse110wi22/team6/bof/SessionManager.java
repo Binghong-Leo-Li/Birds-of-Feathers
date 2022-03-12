@@ -154,6 +154,7 @@ public class SessionManager implements IProcessedMessageListener, SessionChangeL
         foundNearbyStudent(person);
     }
 
+    //handles waving between two persons
     @Override
     public void onWave(IPerson from, UUID[] to) {
         // In case an "advertise" message from this person is missed, add it nevertheless

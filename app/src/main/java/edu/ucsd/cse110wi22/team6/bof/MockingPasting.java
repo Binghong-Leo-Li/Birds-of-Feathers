@@ -32,6 +32,7 @@ public class MockingPasting extends NearbyActivity {
         uuidView.setText(Utilities.getStorageInstance(this).getUser().getStringID());
     }
 
+    //splits string into data for mocking bof
     private byte[] getMockedMessageContent(String csv) {
         IPerson originator;
         UUID waveUUID = null;

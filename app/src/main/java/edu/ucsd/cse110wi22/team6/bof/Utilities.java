@@ -23,6 +23,7 @@ import edu.ucsd.cse110wi22.team6.bof.model.AppStorage;
 import edu.ucsd.cse110wi22.team6.bof.model.InMemoryMapping;
 import edu.ucsd.cse110wi22.team6.bof.model.SharedPreferencesMapping;
 
+//Utilities class for various functionality with storage, persistence, and string encoding
 public class Utilities {
     // Device persistence status
     private static boolean persistence = true;

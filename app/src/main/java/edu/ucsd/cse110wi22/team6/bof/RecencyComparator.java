@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.Comparator;
 import java.util.List;
 
+
 public class RecencyComparator implements Comparator<IPerson> {
 
     IPerson user;
