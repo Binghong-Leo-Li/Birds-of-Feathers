@@ -148,6 +148,7 @@ public class AppStorage implements IUserInfoStorage, SessionChangeListener {
                 .collect(Collectors.toList());
     }
 
+    // call on change state, insert ...
     private void mutateSet(Consumer<Set<String>> mutator, String setKey) {
         Set<String> s = new HashSet<>(getStringSet(setKey));
         mutator.accept(s);
