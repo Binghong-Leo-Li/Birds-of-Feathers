@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.nearby.messages.Message;
 
 import java.nio.charset.StandardCharsets;
@@ -79,6 +77,6 @@ public class MockingPasting extends NearbyActivity {
             return;
         }
         Log.d(TAG, "Mocking message arrival: " + new String(data, StandardCharsets.UTF_8));
-        MockedMessagesClient.mockMessageArrival(new Message(data));
+        MockedMessagesClient.mockMessageArrival(new Message(data), this);
     }
 }

@@ -61,7 +61,7 @@ public class TestMockWaving {
     // Setting up the given clause for both scenarios
     @Before
     public void setup() {
-        Utilities.setPersistence(false);
+        App.resetInstance(false);
         context = InstrumentationRegistry
                 .getInstrumentation().getTargetContext();
         storage = Utilities.getStorageInstance(context);
