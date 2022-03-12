@@ -28,7 +28,6 @@ public class MockedMessagesClient implements MessagesClient {
 
     private final MessagesClient realClient;
     private final Activity activity;
-    private static final Collection<MessageListener> listeners = new ArrayList<>();
 
 //    private static MockedMessagesClient instance;
 

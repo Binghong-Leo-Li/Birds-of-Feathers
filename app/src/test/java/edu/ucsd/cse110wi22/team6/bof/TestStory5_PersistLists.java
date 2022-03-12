@@ -31,7 +31,7 @@ import edu.ucsd.cse110wi22.team6.bof.model.CourseSize;
 import edu.ucsd.cse110wi22.team6.bof.model.Session;
 
 
-// story 4 name class lists bdd test
+// story 5 persist lists bdd test
 @RunWith(AndroidJUnit4.class)
 public class TestStory5_PersistLists {
     // State of the app
@@ -146,7 +146,7 @@ public class TestStory5_PersistLists {
 
     /**
      *
-     * Story4 BDD Scenario:
+     * Story5 BDD Scenario:
      * [Given] Leo created three class lists
      * [And]   Leo saved the classes with names "CSE 110", "CSE 101", "CSE 130"
      * [When]  Leo clicks to select a class from list
