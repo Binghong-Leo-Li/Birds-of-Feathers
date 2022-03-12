@@ -2,6 +2,7 @@ package edu.ucsd.cse110wi22.team6.bof.model;
 
 import edu.ucsd.cse110wi22.team6.bof.Course;
 
+// handling data of the course to be stored into map
 public class CourseData implements Identifiable {
     private final Course identifier;
     private final CourseSize size;
